@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Home, List, BarChart2, User, Plus, Bell, ChevronRight, ChevronLeft,
   Calendar, Trophy, Flag, MapPin, Users, Star, Tag as TagIcon,
@@ -605,7 +605,14 @@ const playerOptions = [
 
 export default function App() {
   const [view, setView] = useState('home');
-  const [records, setRecords] = useState(initialRecords);
+  const [records, setRecords] = useState(() => {
+    try {
+      const storedRecords = localStorage.getItem('sanfrel-log-records');
+      return storedRecords ? JSON.parse(storedRecords) : initialRecords;
+    } catch {
+      return initialRecords;
+    }
+  });
   const [draft, setDraft] = useState(defaultDraft);
   const [editingRecordId, setEditingRecordId] = useState(null);
   const [selectedRecord, setSelectedRecord] = useState(null);
@@ -619,6 +626,9 @@ export default function App() {
       return null;
     }
   });
+  useEffect(() => {
+    localStorage.setItem('sanfrel-log-records', JSON.stringify(records));
+  }, [records]);
 
   const updateDraft = (updates) => {
     setDraft({ ...draft, ...updates });
