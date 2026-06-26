@@ -1,0 +1,4775 @@
+import React, { useState } from 'react';
+import {
+  Home, List, BarChart2, User, Plus, Bell, ChevronRight, ChevronLeft,
+  Calendar, Trophy, Flag, MapPin, Users, Star, Tag as TagIcon,
+  Image as ImageIcon,
+  Wallet, Ticket, ShoppingBag, Utensils, Train, MoreHorizontal,
+  Clock, Trash2, CheckCircle2, Bookmark, PenSquare, Shirt,
+  Sun, Tv, Shield, Menu, Medal, CirclePlus, Pencil, Building2
+} from 'lucide-react';
+
+const purple = '#3b1378';
+
+const initialRecords = [
+  {
+    id: 1,
+    date: '2027.04.03',
+    opponent: 'ヴィッセル神戸',
+    score: 'サンフレッチェ広島 3 - 1 ヴィッセル神戸',
+    stadium: 'ノエビアスタジアム神戸',
+    companion: '友達と観戦',
+    tag: '逆転勝利',
+    img: 'https://upload.wikimedia.org/wikipedia/commons/5/57/Inside_View_of_Kobe_Wing_Stadium.jpg'
+  },
+  {
+    id: 2,
+    date: '2026.08.15',
+    opponent: '浦和レッズ',
+    score: 'サンフレッチェ広島 1 - 1 浦和レッズ',
+    stadium: '埼玉スタジアム2002',
+    companion: '一人で観戦',
+    tag: '引き分けも価値ある勝ち点1',
+    img: 'https://lh3.googleusercontent.com/gps-cs-s/APNQkAGxp9dIFmLwY1gmp0hEPki3BXG7bvW7qivhNNUBecekE4C93MWHIW54PGhycTgEYDkOesVEqWN0YsygQn0wtwJ-bUAsKr8iSWu3C_dK6PX5BWzfnzudXUqmvPwRCMuDC7_eZaQa=s680-w680-h510-rw'
+  },
+  {
+    id: 3,
+    date: '2026.09.19',
+    opponent: 'アビスパ福岡',
+    score: 'サンフレッチェ広島 2 - 0 アビスパ福岡',
+    stadium: 'ベスト電器スタジアム',
+    companion: '友達と観戦',
+    tag: 'アウェイ勝利',
+    img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b8/Best_denki_stadium02.jpg/1280px-Best_denki_stadium02.jpg'
+  }
+];
+
+const defaultDraft = {
+  date: '2026-04-16',
+  tournament: '明治安田J1リーグ 第12節',
+  opponent: 'FC東京',
+  homeScore: 3,
+  awayScore: 1,
+  stadium: 'エディオンピースウイング広島',
+  seat: '',
+  weather: '晴れ',
+  companion: '友達',
+  watchType: '現地観戦',
+  venueType: 'HOME',
+  rating: 4,
+  mvp: '中村 草太',
+  memo: '0-1で負けていたけど、後半の圧巻の逆転劇！\nゴール裏の一体感が本当に最高だった。\n草太のゴール、みんなの声援、絶対忘れない！',
+  tags: ['逆転勝利', 'ゴール裏最高', '中村草太', '現地観戦'],
+  photos: [],
+  expenses: { ticket: 3500, goods: 4500, food: 1800, transport: 1000, other: 0 },
+
+  timeline: [
+    { id: 1, time: '13:00', desc: 'スタジアムに到着' },
+    { id: 2, time: '13:30', desc: 'スタグルを購入' },
+    { id: 3, time: '14:00', desc: 'キックオフ！' },
+    { id: 4, time: '15:20', desc: '中村草太が同点ゴール！！' },
+  ]
+
+};
+const defaultProfile = {
+  name: 'R',
+  photo: null,
+  favoritePlayer: '中村 草太',
+  favoriteStadium: 'エディオンピースウイング広島',
+};
+
+const sanfrecceTeam = {
+  name: 'サンフレッチェ広島',
+  short: '広島',
+  main: '#4b1c89',
+  sub: '#f1f1f1',
+  stadium: 'エディオンピースウイング広島',
+};
+
+const matchSchedule = [
+  {
+    section: 1,
+    date: '2026-08-08',
+    displayDate: '8.8 / 8.9',
+    day: '土日',
+    time: '未定',
+    opponent: 'ジェフユナイテッド千葉',
+    stadium: 'エディオンピースウイング広島',
+    venueType: 'HOME',
+  },
+  {
+    section: 2,
+    date: '2026-08-15',
+    displayDate: '8.15 / 8.16',
+    day: '土日',
+    time: '未定',
+    opponent: '浦和レッズ',
+    stadium: '埼玉スタジアム2002',
+    venueType: 'AWAY',
+  },
+  {
+    section: 3,
+    date: '2026-08-22',
+    displayDate: '8.22 / 8.23',
+    day: '土日',
+    time: '未定',
+    opponent: '川崎フロンターレ',
+    stadium: 'エディオンピースウイング広島',
+    venueType: 'HOME',
+  },
+  {
+    section: 4,
+    date: '2026-08-29',
+    displayDate: '8.29 / 8.30',
+    day: '土日',
+    time: '未定',
+    opponent: 'ガンバ大阪',
+    stadium: 'パナソニック スタジアム 吹田',
+    venueType: 'AWAY',
+  },
+  {
+    section: 5,
+    date: '2026-09-02',
+    displayDate: '9.2',
+    day: '水',
+    time: '未定',
+    opponent: '名古屋グランパス',
+    stadium: 'エディオンピースウイング広島',
+    venueType: 'HOME',
+  },
+  {
+    section: 6,
+    date: '2026-09-05',
+    displayDate: '9.5 / 9.6',
+    day: '土日',
+    time: '未定',
+    opponent: 'ファジアーノ岡山',
+    stadium: 'JFE晴れの国スタジアム',
+    venueType: 'AWAY',
+  },
+  {
+    section: 7,
+    date: '2026-09-12',
+    displayDate: '9.12 / 9.13',
+    day: '土日',
+    time: '未定',
+    opponent: 'セレッソ大阪',
+    stadium: 'エディオンピースウイング広島',
+    venueType: 'HOME',
+  },
+  {
+    section: 8,
+    date: '2026-09-19',
+    displayDate: '9.19 / 9.20',
+    day: '土日',
+    time: '未定',
+    opponent: 'アビスパ福岡',
+    stadium: 'ベスト電器スタジアム',
+    venueType: 'AWAY',
+  },
+  {
+    section: 9,
+    date: '2026-10-10',
+    displayDate: '10.10 / 10.11',
+    day: '土日',
+    time: '未定',
+    opponent: '東京ヴェルディ',
+    stadium: '味の素スタジアム',
+    venueType: 'AWAY',
+  },
+  {
+    section: 10,
+    date: '2026-10-17',
+    displayDate: '10.17 / 10.18',
+    day: '土日',
+    time: '未定',
+    opponent: '京都サンガF.C.',
+    stadium: 'エディオンピースウイング広島',
+    venueType: 'HOME',
+  },
+  {
+    section: 11,
+    date: '2026-10-21',
+    displayDate: '10.21',
+    day: '水',
+    time: '未定',
+    opponent: 'V・ファーレン長崎',
+    stadium: 'PEACE STADIUM Connected by SoftBank',
+    venueType: 'AWAY',
+  },
+  {
+    section: 12,
+    date: '2026-10-24',
+    displayDate: '10.24 / 10.25',
+    day: '土日',
+    time: '未定',
+    opponent: '清水エスパルス',
+    stadium: 'エディオンピースウイング広島',
+    venueType: 'HOME',
+  },
+  {
+    section: 13,
+    date: '2026-10-31',
+    displayDate: '10.31 / 11.1',
+    day: '土日',
+    time: '未定',
+    opponent: '水戸ホーリーホック',
+    stadium: 'ケーズデンキスタジアム水戸',
+    venueType: 'AWAY',
+  },
+  {
+    section: 14,
+    date: '2026-11-07',
+    displayDate: '11.7 / 11.8',
+    day: '土日',
+    time: '未定',
+    opponent: 'FC町田ゼルビア',
+    stadium: '町田GIONスタジアム',
+    venueType: 'AWAY',
+  },
+  {
+    section: 15,
+    date: '2026-11-21',
+    displayDate: '11.21 / 11.22',
+    day: '土日',
+    time: '未定',
+    opponent: '横浜F・マリノス',
+    stadium: 'エディオンピースウイング広島',
+    venueType: 'HOME',
+  },
+  {
+    section: 16,
+    date: '2026-11-25',
+    displayDate: '11.25',
+    day: '水',
+    time: '未定',
+    opponent: 'FC東京',
+    stadium: '味の素スタジアム',
+    venueType: 'AWAY',
+  },
+  {
+    section: 17,
+    date: '2026-11-28',
+    displayDate: '11.28 / 11.29',
+    day: '土日',
+    time: '未定',
+    opponent: '柏レイソル',
+    stadium: '三協フロンテア柏スタジアム',
+    venueType: 'AWAY',
+  },
+  {
+    section: 18,
+    date: '2026-12-05',
+    displayDate: '12.5 / 12.6',
+    day: '土日',
+    time: '未定',
+    opponent: 'ヴィッセル神戸',
+    stadium: 'エディオンピースウイング広島',
+    venueType: 'HOME',
+  },
+  {
+    section: 19,
+    date: '2026-12-12',
+    displayDate: '12.12 / 12.13',
+    day: '土日',
+    time: '未定',
+    opponent: '鹿島アントラーズ',
+    stadium: 'エディオンピースウイング広島',
+    venueType: 'HOME',
+  },
+  {
+    section: 20,
+    date: '2026-12-19',
+    displayDate: '12.19',
+    day: '土',
+    time: '未定',
+    opponent: '名古屋グランパス',
+    stadium: '豊田スタジアム',
+    venueType: 'AWAY',
+  },
+  {
+    section: 21,
+    date: '2027-02-13',
+    displayDate: '2027.2.13 / 2.14',
+    day: '土日',
+    time: '未定',
+    opponent: 'ファジアーノ岡山',
+    stadium: 'エディオンピースウイング広島',
+    venueType: 'HOME',
+  },
+  {
+    section: 22,
+    date: '2027-02-20',
+    displayDate: '2027.2.20 / 2.21',
+    day: '土日',
+    time: '未定',
+    opponent: '東京ヴェルディ',
+    stadium: 'エディオンピースウイング広島',
+    venueType: 'HOME',
+  },
+  {
+    section: 23,
+    date: '2027-02-27',
+    displayDate: '2027.2.27 / 2.28',
+    day: '土日',
+    time: '未定',
+    opponent: '清水エスパルス',
+    stadium: 'IAIスタジアム日本平',
+    venueType: 'AWAY',
+  },
+  {
+    section: 24,
+    date: '2027-03-06',
+    displayDate: '2027.3.6 / 3.7',
+    day: '土日',
+    time: '未定',
+    opponent: 'セレッソ大阪',
+    stadium: 'ヨドコウ桜スタジアム',
+    venueType: 'AWAY',
+  },
+  {
+    section: 25,
+    date: '2027-03-10',
+    displayDate: '2027.3.10',
+    day: '水',
+    time: '未定',
+    opponent: 'アビスパ福岡',
+    stadium: 'エディオンピースウイング広島',
+    venueType: 'HOME',
+  },
+  {
+    section: 26,
+    date: '2027-03-13',
+    displayDate: '2027.3.13 / 3.14',
+    day: '土日',
+    time: '未定',
+    opponent: '鹿島アントラーズ',
+    stadium: 'メルカリスタジアム',
+    venueType: 'AWAY',
+  },
+  {
+    section: 27,
+    date: '2027-03-20',
+    displayDate: '2027.3.20 / 3.21',
+    day: '土日',
+    time: '未定',
+    opponent: 'ガンバ大阪',
+    stadium: 'エディオンピースウイング広島',
+    venueType: 'HOME',
+  },
+  {
+    section: 28,
+    date: '2027-04-03',
+    displayDate: '2027.4.3 / 4.4',
+    day: '土日',
+    time: '未定',
+    opponent: 'ヴィッセル神戸',
+    stadium: 'ノエビアスタジアム神戸',
+    venueType: 'AWAY',
+  },
+  {
+    section: 29,
+    date: '2027-04-10',
+    displayDate: '2027.4.10 / 4.11',
+    day: '土日',
+    time: '未定',
+    opponent: '横浜F・マリノス',
+    stadium: '日産スタジアム',
+    venueType: 'AWAY',
+  },
+  {
+    section: 30,
+    date: '2027-04-16',
+    displayDate: '2027.4.16',
+    day: '金',
+    time: '未定',
+    opponent: 'FC東京',
+    stadium: 'エディオンピースウイング広島',
+    venueType: 'HOME',
+  },
+  {
+    section: 31,
+    date: '2027-04-24',
+    displayDate: '2027.4.24 / 4.25',
+    day: '土日',
+    time: '未定',
+    opponent: 'FC町田ゼルビア',
+    stadium: 'エディオンピースウイング広島',
+    venueType: 'HOME',
+  },
+  {
+    section: 32,
+    date: '2027-04-29',
+    displayDate: '2027.4.29',
+    day: '木祝',
+    time: '未定',
+    opponent: 'ジェフユナイテッド千葉',
+    stadium: 'フクダ電子アリーナ',
+    venueType: 'AWAY',
+  },
+  {
+    section: 33,
+    date: '2027-05-03',
+    displayDate: '2027.5.3 / 5.4',
+    day: '月火',
+    time: '未定',
+    opponent: '浦和レッズ',
+    stadium: 'エディオンピースウイング広島',
+    venueType: 'HOME',
+  },
+  {
+    section: 34,
+    date: '2027-05-09',
+    displayDate: '2027.5.9',
+    day: '日',
+    time: '未定',
+    opponent: 'V・ファーレン長崎',
+    stadium: 'エディオンピースウイング広島',
+    venueType: 'HOME',
+  },
+  {
+    section: 35,
+    date: '2027-05-15',
+    displayDate: '2027.5.15 / 5.16',
+    day: '土日',
+    time: '未定',
+    opponent: '京都サンガF.C.',
+    stadium: 'サンガスタジアム by KYOCERA',
+    venueType: 'AWAY',
+  },
+  {
+    section: 36,
+    date: '2027-05-22',
+    displayDate: '2027.5.22 / 5.23',
+    day: '土日',
+    time: '未定',
+    opponent: '柏レイソル',
+    stadium: 'エディオンピースウイング広島',
+    venueType: 'HOME',
+  },
+  {
+    section: 37,
+    date: '2027-05-29',
+    displayDate: '2027.5.29 / 5.30',
+    day: '土日',
+    time: '未定',
+    opponent: '水戸ホーリーホック',
+    stadium: 'エディオンピースウイング広島',
+    venueType: 'HOME',
+  },
+  {
+    section: 38,
+    date: '2027-06-06',
+    displayDate: '2027.6.6',
+    day: '日',
+    time: '未定',
+    opponent: '川崎フロンターレ',
+    stadium: 'Uvanceとどろきスタジアム by Fujitsu',
+    venueType: 'AWAY',
+  },
+];
+
+const getNextMatch = () => {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  const upcomingMatches = matchSchedule
+    .filter((match) => {
+      const matchDate = new Date(match.date);
+      return matchDate >= today;
+    })
+    .sort((a, b) => new Date(a.date) - new Date(b.date));
+
+  return upcomingMatches[0] || null;
+};
+const opponentTeams = [
+  { name: '鹿島アントラーズ', short: '鹿島', main: '#b91c1c', sub: '#0f172a', stadium: 'メルカリスタジアム' },
+  { name: '水戸ホーリーホック', short: '水戸', main: '#2563eb', sub: '#facc15', stadium: 'ケーズデンキスタジアム水戸' },
+  { name: '浦和レッズ', short: '浦和', main: '#dc2626', sub: '#111827', stadium: '埼玉スタジアム2002' },
+  { name: 'ジェフユナイテッド千葉', short: '千葉', main: '#facc15', sub: '#16a34a', stadium: 'フクダ電子アリーナ' },
+  { name: '柏レイソル', short: '柏', main: '#facc15', sub: '#111827', stadium: '三協フロンテア柏スタジアム' },
+  { name: 'FC東京', short: 'FC東京', main: '#1e3a8a', sub: '#dc2626', stadium: '味の素スタジアム' },
+  { name: '東京ヴェルディ', short: '東京V', main: '#15803d', sub: '#111827', stadium: '味の素スタジアム' },
+  { name: 'FC町田ゼルビア', short: '町田', main: '#1d4ed8', sub: '#111827', stadium: '町田GIONスタジアム' },
+  { name: '川崎フロンターレ', short: '川崎F', main: '#38bdf8', sub: '#111827', stadium: 'Uvanceとどろきスタジアム by Fujitsu' },
+  { name: '横浜F・マリノス', short: '横浜FM', main: '#1d4ed8', sub: '#dc2626', stadium: '日産スタジアム' },
+  { name: '清水エスパルス', short: '清水', main: '#f97316', sub: '#2563eb', stadium: 'IAIスタジアム日本平' },
+  { name: '名古屋グランパス', short: '名古屋', main: '#dc2626', sub: '#f97316', stadium: '豊田スタジアム' },
+  { name: '京都サンガF.C.', short: '京都', main: '#6d28d9', sub: '#dc2626', stadium: 'サンガスタジアム by KYOCERA' },
+  { name: 'ガンバ大阪', short: 'G大阪', main: '#1d4ed8', sub: '#111827', stadium: 'パナソニック スタジアム 吹田' },
+  { name: 'セレッソ大阪', short: 'C大阪', main: '#ec4899', sub: '#1d4ed8', stadium: 'ヨドコウ桜スタジアム' },
+  { name: 'ヴィッセル神戸', short: '神戸', main: '#7f1d1d', sub: '#111827', stadium: 'ノエビアスタジアム神戸' },
+  { name: 'ファジアーノ岡山', short: '岡山', main: '#7f1d1d', sub: '#2563eb', stadium: 'JFE晴れの国スタジアム' },
+  { name: 'アビスパ福岡', short: '福岡', main: '#1e3a8a', sub: '#9ca3af', stadium: 'ベスト電器スタジアム' },
+  { name: 'V・ファーレン長崎', short: '長崎', main: '#2563eb', sub: '#f97316', stadium: 'PEACE STADIUM Connected by SoftBank' },
+];
+const stadiumImages = {
+  'エディオンピースウイング広島':
+    'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f1/%E3%82%A8%E3%83%87%E3%82%A3%E3%82%AA%E3%83%B3%E3%83%94%E3%83%BC%E3%82%B9%E3%82%A6%E3%82%A4%E3%83%B3%E3%82%B0%E5%BA%83%E5%B3%B6.jpg/1920px-%E3%82%A8%E3%83%87%E3%82%A3%E3%82%AA%E3%83%B3%E3%83%94%E3%83%BC%E3%82%B9%E3%82%A6%E3%82%A4%E3%83%B3%E3%82%B0%E5%BA%83%E5%B3%B6.jpg',
+
+  'メルカリスタジアム':
+    'https://upload.wikimedia.org/wikipedia/commons/thumb/f/ff/Kashima_Stadium_1.JPG/1920px-Kashima_Stadium_1.JPG',
+
+  'ケーズデンキスタジアム水戸':
+    'https://upload.wikimedia.org/wikipedia/commons/thumb/0/01/Ksdenkistadium10050501.jpg/1280px-Ksdenkistadium10050501.jpg',
+
+  '埼玉スタジアム2002':
+    'https://lh3.googleusercontent.com/gps-cs-s/APNQkAGxp9dIFmLwY1gmp0hEPki3BXG7bvW7qivhNNUBecekE4C93MWHIW54PGhycTgEYDkOesVEqWN0YsygQn0wtwJ-bUAsKr8iSWu3C_dK6PX5BWzfnzudXUqmvPwRCMuDC7_eZaQa=s680-w680-h510-rw',
+
+  'フクダ電子アリーナ':
+    'https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/Fukuda_Denshi_Arena_2015-06-14.jpg/1920px-Fukuda_Denshi_Arena_2015-06-14.jpg',
+
+  '三協フロンテア柏スタジアム':
+    'https://upload.wikimedia.org/wikipedia/commons/thumb/3/35/Kashiwa20120311-1_%28cropped%29.jpg/1920px-Kashiwa20120311-1_%28cropped%29.jpg',
+
+  '味の素スタジアム':
+    'https://upload.wikimedia.org/wikipedia/commons/thumb/3/31/Ajinomoto_Stadium_20101120.JPG/1280px-Ajinomoto_Stadium_20101120.JPG',
+
+  '国立競技場':
+    'https://cdn-xtech.nikkei.com/atcl/nxt/column/18/01330/00001/01.jpg?__scale=w:800,h:533&_sh=0970610940',
+
+  '町田GIONスタジアム':
+    'https://upload.wikimedia.org/wikipedia/commons/thumb/7/71/Machida-Gion_20211003.jpg/1920px-Machida-Gion_20211003.jpg',
+
+  'Uvanceとどろきスタジアム by Fujitsu':
+    'https://upload.wikimedia.org/wikipedia/commons/thumb/0/04/Todoroki_15031401.JPG/1280px-Todoroki_15031401.JPG',
+
+  '日産スタジアム':
+    'https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Nissan_International_Stadium_Yokohama.jpg/1920px-Nissan_International_Stadium_Yokohama.jpg',
+
+  'IAIスタジアム日本平':
+    'https://upload.wikimedia.org/wikipedia/commons/thumb/6/66/Nihondaira_stadium20090412a.jpg/1280px-Nihondaira_stadium20090412a.jpg',
+
+  '豊田スタジアム':
+    'https://upload.wikimedia.org/wikipedia/commons/thumb/4/42/Nagoya_Grampus_game_in_Toyota_Stadium_100814.JPG/1280px-Nagoya_Grampus_game_in_Toyota_Stadium_100814.JPG',
+
+  'サンガスタジアム by KYOCERA':
+    'https://upload.wikimedia.org/wikipedia/commons/thumb/a/ad/Sanga_stadium_by_kyocera05.jpg/1920px-Sanga_stadium_by_kyocera05.jpg',
+
+  'パナソニック スタジアム 吹田':
+    'https://upload.wikimedia.org/wikipedia/commons/thumb/5/58/%E3%83%91%E3%83%8A%E3%82%BD%E3%83%8B%E3%83%83%E3%82%AF%E3%82%B9%E3%82%BF%E3%82%B8%E3%82%A2%E3%83%A0%E5%90%B9%E7%94%B0_2023%E5%B9%B45%E6%9C%883%E6%97%A5%E3%82%BB%E3%83%AC%E3%83%83%E3%82%BD%E5%A4%A7%E9%98%AA%E6%88%A6.jpg/1920px-%E3%83%91%E3%83%8A%E3%82%BD%E3%83%8B%E3%83%83%E3%82%AF%E3%82%B9%E3%82%BF%E3%82%B8%E3%82%A2%E3%83%A0%E5%90%B9%E7%94%B0_2023%E5%B9%B45%E6%9C%883%E6%97%A5%E3%82%BB%E3%83%AC%E3%83%83%E3%82%BD%E5%A4%A7%E9%98%AA%E6%88%A6.jpg',
+
+  'ヨドコウ桜スタジアム':
+    'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e8/NagaiBallField220226.jpg/1280px-NagaiBallField220226.jpg',
+
+  'ノエビアスタジアム神戸':
+    'https://upload.wikimedia.org/wikipedia/commons/5/57/Inside_View_of_Kobe_Wing_Stadium.jpg',
+
+  'JFE晴れの国スタジアム':
+    'https://upload.wikimedia.org/wikipedia/commons/8/81/Momotaro_Stadium_01.jpg',
+
+  'ベスト電器スタジアム':
+    'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b8/Best_denki_stadium02.jpg/1280px-Best_denki_stadium02.jpg',
+
+  'PEACE STADIUM Connected by SoftBank':
+    'https://upload.wikimedia.org/wikipedia/commons/thumb/1/1e/PEACE-STADIUM-Connected-by-SoftBank_6-Oct-2024.jpg/1280px-PEACE-STADIUM-Connected-by-SoftBank_6-Oct-2024.jpg',
+
+  default:
+    'https://images.unsplash.com/photo-1522778119026-d647f0596c20?auto=format&fit=crop&w=600&q=80',
+};
+
+
+
+const getStadiumImage = (stadium) => {
+  return stadiumImages[stadium] || stadiumImages.default;
+};
+
+const playerOptions = [
+  { name: '大迫 敬介', number: '1', position: 'GK' },
+  { name: '田中 雄大', number: '21', position: 'GK' },
+  { name: '小川 煌', number: '43', position: 'GK' },
+  { name: '大内 一生', number: '99', position: 'GK' },
+
+  { name: '山崎 大地', number: '3', position: 'DF' },
+  { name: '荒木 隼人', number: '4', position: 'DF' },
+  { name: '新井 直人', number: '13', position: 'DF' },
+  { name: '中野 就斗', number: '15', position: 'DF' },
+  { name: '志知 孝明', number: '16', position: 'DF' },
+  { name: '佐々木 翔', number: '19', position: 'DF' },
+  { name: '塩谷 司', number: '33', position: 'DF' },
+  { name: 'キム ジュソン', number: '37', position: 'DF' },
+
+  { name: '川辺 駿', number: '6', position: 'MF' },
+  { name: '松本 泰志', number: '14', position: 'MF' },
+  { name: '菅 大輝', number: '18', position: 'MF' },
+  { name: '東 俊希', number: '24', position: 'MF' },
+  { name: '越道 草太', number: '32', position: 'MF' },
+  { name: '中島 洋太朗', number: '35', position: 'MF' },
+  { name: '小林 志紋', number: '45', position: 'MF' },
+
+  { name: '鈴木 章斗', number: '10', position: 'FW' },
+  { name: '加藤 陸次樹', number: '11', position: 'FW' },
+  { name: '鮎川 峻', number: '23', position: 'FW' },
+  { name: '中村 草太', number: '39', position: 'FW' },
+  { name: '前田 直輝', number: '41', position: 'FW' },
+];
+
+export default function App() {
+  const [view, setView] = useState('home');
+  const [records, setRecords] = useState(initialRecords);
+  const [draft, setDraft] = useState(defaultDraft);
+  const [editingRecordId, setEditingRecordId] = useState(null);
+  const [selectedRecord, setSelectedRecord] = useState(null);
+  const [detailBackView, setDetailBackView] = useState('home');
+  const [profile, setProfile] = useState(defaultProfile);
+  const [savedDraft, setSavedDraft] = useState(() => {
+    try {
+      const storedDraft = localStorage.getItem('sanfrel-log-draft');
+      return storedDraft ? JSON.parse(storedDraft) : null;
+    } catch {
+      return null;
+    }
+  });
+
+  const updateDraft = (updates) => {
+    setDraft({ ...draft, ...updates });
+  };
+
+  const handleStartCreate = () => {
+    setEditingRecordId(null);
+    setDraft(defaultDraft);
+    setView('step1');
+  };
+
+  const handleEditRecord = (record) => {
+    setEditingRecordId(record.id);
+
+    setDraft({
+      ...defaultDraft,
+      ...(record.draftData || {}),
+      date: record.draftData?.date || record.date.replaceAll('.', '-'),
+      opponent: record.opponent || defaultDraft.opponent,
+      stadium: record.stadium || defaultDraft.stadium,
+      companion: record.companion
+        ? record.companion.replace('と観戦', '')
+        : defaultDraft.companion,
+      tags: record.tag ? [record.tag] : defaultDraft.tags,
+    });
+
+    setView('step1');
+  };
+  const openRecordDetail = (record, backView = 'home') => {
+    setSelectedRecord(record);
+    setDetailBackView(backView);
+    setView('recordDetail');
+  };
+
+  const saveProfile = (nextProfile) => {
+    setProfile(nextProfile);
+    setView('mypage');
+  };
+  const toggleFavorite = (id) => {
+    setRecords(
+      records.map((record) =>
+        record.id === id
+          ? { ...record, favorite: !record.favorite }
+          : record
+      )
+    );
+  };
+  const saveCurrentDraft = () => {
+    const draftToSave = {
+      ...draft,
+      savedAt: new Date().toLocaleString('ja-JP', {
+        month: '2-digit',
+        day: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit',
+      }),
+    };
+
+    localStorage.setItem('sanfrel-log-draft', JSON.stringify(draftToSave));
+    setSavedDraft(draftToSave);
+    alert('下書きを保存しました');
+    setView('home');
+  };
+
+  const continueSavedDraft = () => {
+    if (!savedDraft) return;
+
+    setEditingRecordId(null);
+    setDraft({
+      ...defaultDraft,
+      ...savedDraft,
+    });
+    setView('step1');
+  };
+
+  const deleteSavedDraft = () => {
+    localStorage.removeItem('sanfrel-log-draft');
+    setSavedDraft(null);
+  };
+  const handleSave = () => {
+    const savedRecord = {
+      id: editingRecordId || Date.now(),
+      date: draft.date.replaceAll('-', '.'),
+      opponent: draft.opponent,
+      score: `サンフレッチェ広島 ${draft.homeScore} - ${draft.awayScore} ${draft.opponent}`,
+      stadium: draft.stadium,
+      companion: `${draft.companion}と観戦`,
+      tag: draft.tags[0] || '観戦記録',
+      img: getStadiumImage(draft.stadium),
+      favorite: false,
+      draftData: { ...draft },
+    };
+
+    if (editingRecordId) {
+      setRecords(
+        records.map((record) =>
+          record.id === editingRecordId
+            ? {
+              ...record,
+              ...savedRecord,
+              favorite: record.favorite || false,
+            }
+            : record
+        )
+      );
+    } else {
+      setRecords([
+        {
+          ...savedRecord,
+          favorite: false,
+        },
+        ...records,
+      ]);
+    }
+
+    localStorage.removeItem('sanfrel-log-draft');
+    setSavedDraft(null);
+    setEditingRecordId(null);
+    setDraft(defaultDraft);
+    setView('home');
+  };
+
+  return (
+    <div className="min-h-screen bg-[#e9e7ef]">
+      <div className="max-w-md mx-auto min-h-screen bg-[#f8f7fb] relative overflow-x-hidden shadow-2xl text-[#171425] pb-20">
+
+        {view === 'home' && (
+          <HomeView
+            records={records}
+            setView={setView}
+            savedDraft={savedDraft}
+            onStartCreate={handleStartCreate}
+            onContinueDraft={continueSavedDraft}
+            onDeleteDraft={deleteSavedDraft}
+            onEdit={handleEditRecord}
+            onToggleFavorite={toggleFavorite}
+            onOpenDetail={openRecordDetail}
+          />
+        )}
+        {view === 'stats' && <StatsView records={records} setView={setView} />}
+        {view === 'mypage' && <MyPageView records={records} setView={setView} profile={profile} />}
+        {view === 'records' && (
+          <RecordsView
+            setView={setView}
+            records={records}
+            onEdit={handleEditRecord}
+            onToggleFavorite={toggleFavorite}
+            onOpenDetail={openRecordDetail}
+          />
+        )}
+        {view === 'recordDetail' && selectedRecord && (
+          <RecordDetailView
+            record={records.find((record) => record.id === selectedRecord.id) || selectedRecord}
+            setView={setView}
+            backTo={detailBackView}
+            onEdit={handleEditRecord}
+            onToggleFavorite={toggleFavorite}
+          />
+        )}
+
+        {view === 'profileSettings' && (
+          <ProfileSettingsView
+            profile={profile}
+            setView={setView}
+            onSaveProfile={saveProfile} />
+
+        )}
+        {view === 'favoriteRecords' && (
+          <FavoriteRecordsView
+            setView={setView}
+            records={records}
+            onEdit={handleEditRecord}
+            onToggleFavorite={toggleFavorite}
+            onOpenDetail={openRecordDetail}
+          />
+        )}
+
+        {view === 'step1' && (
+          <CreateStep1
+            setView={setView}
+            draft={draft}
+            updateDraft={updateDraft}
+            onSaveDraft={saveCurrentDraft}
+          />
+        )}
+
+        {view === 'step2' && (
+          <CreateStep2
+            setView={setView}
+            draft={draft}
+            updateDraft={updateDraft}
+            onSaveDraft={saveCurrentDraft}
+          />
+        )}
+
+        {view === 'step3' && (
+          <CreateStep3
+            setView={setView}
+            draft={draft}
+            updateDraft={updateDraft}
+            onSaveDraft={saveCurrentDraft}
+          />
+        )}
+
+        {view === 'confirm' && (
+          <ConfirmView
+            setView={setView}
+            draft={draft}
+            onSave={handleSave}
+            onSaveDraft={saveCurrentDraft}
+          />
+        )}
+
+        {(view === 'home' || view === 'records' || view === 'stats' || view === 'mypage') && (
+          <BottomNav
+            setView={setView}
+            view={view}
+            onStartCreate={handleStartCreate}
+          />
+        )}
+
+        <StyleHelper />
+      </div>
+    </div>
+  );
+}
+
+function BrandHeader({ back, setView = () => { } }) {
+  const [noticeOpen, setNoticeOpen] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const nextMatch = getNextMatch();
+
+  const movePage = (page) => {
+    setView(page);
+    setMenuOpen(false);
+    setNoticeOpen(false);
+  };
+
+  return (
+    <header className="relative h-[70px] bg-gradient-to-r from-[#2b0b63] via-[#4b1c89] to-[#35106f] text-white z-50 shadow-md shadow-purple-900/15 overflow-visible">
+      {/* うっすら装飾 */}
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_25%_20%,rgba(255,255,255,0.18),transparent_28%),radial-gradient(circle_at_85%_30%,rgba(250,204,21,0.16),transparent_24%)]"></div>
+      <div className="pointer-events-none absolute left-0 bottom-0 h-[3px] w-full bg-yellow-300/80"></div>
+
+      <div className="relative z-10 h-full px-5 flex items-center justify-between">
+        {/* 左側 */}
+        <div className="flex items-center gap-3 min-w-0">
+          {back ? (
+            <button
+              type="button"
+              onClick={() => setView(back)}
+              className="w-9 h-9 rounded-full bg-white/12 border border-white/15 flex items-center justify-center active:scale-95"
+            >
+              <ChevronLeft size={25} strokeWidth={2.6} />
+            </button>
+          ) : null}
+
+          <div className="text-left">
+            {/* ↓ 一体感を出すために gap-2 を gap-1 に変更 */}
+            <div className="flex items-baseline gap-1 leading-none">
+              <span className="text-[25px] font-black tracking-[-0.1em] text-white drop-shadow-sm">
+                SANFRE
+              </span>
+
+              {/* ↓ font-extralight を font-black に変更し、少し明るく(white/90)しました */}
+              <span className="text-[20px] font-black tracking-[-0.06em] text-white/90 drop-shadow-sm">
+                LOG
+              </span>
+            </div>
+
+            <div className="mt-2 flex items-center gap-1">
+              <div className="h-[2px] w-12 rounded-full bg-yellow-300"></div>
+              <span className="text-[8px] font-black tracking-[0.1em] text-yellow-300 whitespace-nowrap">
+                MATCH MEMORY
+              </span>
+
+              <div className="h-[2px] w-10 rounded-full bg-yellow-300"></div>
+            </div>
+          </div>
+        </div>
+
+        {/* 右側 */}
+        <div className="flex items-center gap-3">
+          <button
+            type="button"
+            onClick={() => {
+              setNoticeOpen(!noticeOpen);
+              setMenuOpen(false);
+            }}
+            className="relative w-10 h-10 rounded-full bg-white/10 border border-white/10 flex items-center justify-center active:scale-95"
+          >
+            <Bell size={18} strokeWidth={2.0} />
+            <span className="absolute top-1.5 right-1.5 w-1.5 h-1.5 rounded-full bg-yellow-300"></span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => {
+              setMenuOpen(!menuOpen);
+              setNoticeOpen(false);
+            }}
+            className="w-10 h-10 rounded-full bg-white/10 border border-white/10 flex items-center justify-center active:scale-95"
+          >
+            <Menu size={18} strokeWidth={2.0} />
+          </button>
+        </div>
+      </div>
+
+      {/* お知らせ */}
+      {noticeOpen && (
+        <div className="absolute right-4 top-[82px] w-[295px] bg-white text-[#171425] rounded-2xl shadow-2xl border border-gray-100 p-4 z-[999]">
+          <div className="flex items-center justify-between mb-3">
+            <div className="font-black text-[#4b1c89] flex items-center gap-2">
+              <Bell size={18} />
+              お知らせ
+            </div>
+
+            <button
+              type="button"
+              onClick={() => setNoticeOpen(false)}
+              className="text-xs font-black text-gray-400"
+            >
+              閉じる
+            </button>
+          </div>
+
+          <div className="space-y-3">
+            <div className="bg-purple-50 rounded-2xl p-3 border border-purple-100">
+              <div className="text-xs font-black text-[#4b1c89]">
+                次の試合
+              </div>
+              <div className="flex items-center gap-2 mt-1">
+                <div className="text-sm font-black">
+                  {nextMatch
+                    ? `${nextMatch.displayDate} vs ${nextMatch.opponent}`
+                    : '次の試合は未定'}
+                </div>
+
+                {nextMatch && (
+                  <span
+                    className={`text-[10px] font-black px-2 py-0.5 rounded-full ${nextMatch.venueType === 'HOME'
+                      ? 'bg-purple-100 text-[#4b1c89]'
+                      : 'bg-yellow-100 text-yellow-700'
+                      }`}
+                  >
+                    {nextMatch.venueType}
+                  </span>
+                )}
+              </div>
+
+              <div className="text-xs text-gray-500 font-bold mt-1">
+                {nextMatch
+                  ? `${nextMatch.time} キックオフ / ${nextMatch.stadium.includes('エディオン') ? 'Eピース' : nextMatch.stadium}`
+                  : '試合予定を追加してください'}
+              </div>
+            </div>
+
+            <div className="bg-yellow-50 rounded-2xl p-3 border border-yellow-100">
+              <div className="text-xs font-black text-yellow-700">
+                記録のヒント
+              </div>
+              <div className="text-sm font-black mt-1">
+                試合後にMVPとメモを残してみよう！
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* 三本線メニュー */}
+      {menuOpen && (
+        <div className="absolute right-4 top-[82px] w-[275px] bg-white text-[#171425] rounded-2xl shadow-2xl border border-gray-100 p-4 z-[999]">
+          <div className="flex items-center justify-between mb-4">
+            <div>
+              <div className="text-xs font-black text-[#4b1c89]">
+                SANFRE LOG
+              </div>
+              <div className="text-lg font-black">
+                メニュー
+              </div>
+            </div>
+
+            <button
+              type="button"
+              onClick={() => setMenuOpen(false)}
+              className="text-xs font-black text-gray-400"
+            >
+              閉じる
+            </button>
+          </div>
+
+          <div className="space-y-2">
+            <HeaderMenuItem
+              icon={<Home size={18} />}
+              label="ホーム"
+              onClick={() => movePage('home')}
+            />
+
+            <HeaderMenuItem
+              icon={<List size={18} />}
+              label="記録一覧"
+              onClick={() => movePage('records')}
+            />
+
+            <HeaderMenuItem
+              icon={<Calendar size={18} />}
+              label="観戦記録を作成"
+              onClick={() => movePage('step1')}
+            />
+
+            <HeaderMenuItem
+              icon={<Bookmark size={18} />}
+              label="お気に入り記録"
+              onClick={() => movePage('favoriteRecords')}
+            />
+
+            <HeaderMenuItem
+              icon={<BarChart2 size={18} />}
+              label="統計"
+              onClick={() => movePage('stats')}
+            />
+
+            <HeaderMenuItem
+              icon={<User size={18} />}
+              label="マイページ"
+              onClick={() => movePage('mypage')}
+            />
+
+            <HeaderMenuItem
+              icon={<Shield size={18} />}
+              label="プロフィール設定"
+              onClick={() => movePage('profileSettings')}
+            />
+          </div>
+        </div>
+      )}
+    </header>
+  );
+}
+function HeaderMenuItem({ icon, label, onClick }) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className="w-full flex items-center gap-3 bg-[#f8f7fb] hover:bg-purple-50 rounded-2xl p-3 text-left border border-gray-100 transition"
+    >
+      <div className="w-10 h-10 rounded-xl bg-white text-[#4b1c89] flex items-center justify-center shadow-sm shrink-0">
+        {icon}
+      </div>
+
+      <div className="flex-1 font-black text-sm text-[#171425]">
+        {label}
+      </div>
+
+      <ChevronRight size={18} className="text-gray-400" />
+    </button>
+  );
+}
+function HomeView({
+  records,
+  setView,
+  savedDraft,
+  onStartCreate,
+  onContinueDraft,
+  onDeleteDraft,
+  onEdit,
+  onToggleFavorite,
+  onOpenDetail,
+}) {
+  const [showAllRecords, setShowAllRecords] = useState(false);
+  const [scheduleOpen, setScheduleOpen] = useState(false);
+
+  const visibleRecords = showAllRecords ? records : records.slice(0, 3);
+  const winCount = records.filter((record) => {
+    const data = record.draftData || {};
+    const scoreMatch = record.score?.match(/(\d+)\s*-\s*(\d+)/);
+
+    const sanfrecceScore =
+      data.homeScore !== undefined
+        ? Number(data.homeScore)
+        : Number(scoreMatch?.[1] || 0);
+
+    const opponentScore =
+      data.awayScore !== undefined
+        ? Number(data.awayScore)
+        : Number(scoreMatch?.[2] || 0);
+
+    return sanfrecceScore > opponentScore;
+  }).length;
+  const nextMatch = getNextMatch();
+
+  return (
+    <div>
+      <section className="relative bg-[#381078] text-white overflow-visible">
+        <BrandHeader setView={setView} />
+
+        {/* メインビジュアル */}
+        <div className="relative h-[250px] overflow-hidden">
+          <img
+            src="https://images.unsplash.com/photo-1522778119026-d647f0596c20?auto=format&fit=crop&w=1200&q=80"
+            className="absolute inset-0 w-full h-full object-cover opacity-60 scale-105"
+            alt="stadium"
+          />
+
+          <div className="absolute inset-0 bg-gradient-to-b from-[#26095a]/40 via-[#3b1378]/65 to-[#3b1378]/95"></div>
+          <div className="absolute inset-0 bg-[linear-gradient(120deg,rgba(255,255,255,0.08)_0%,transparent_35%,transparent_65%,rgba(250,204,21,0.12)_100%)]"></div>
+
+          <div className="absolute left-5 right-5 top-8">
+            <div className="inline-flex items-center gap-2 bg-white/15 backdrop-blur-md border border-white/15 text-white px-3 py-1.5 rounded-lg text-xs font-black mb-4 shadow-lg">
+              <Medal size={14} className="text-yellow-300" />
+              FORZA VIOLA ALE'
+            </div>
+
+            <h1 className="text-[26px] font-black leading-snug tracking-tight drop-shadow-md">
+              今日も、紫の記憶を残そう。
+            </h1>
+
+            <p className="mt-4 text-sm text-white/95 font-bold leading-7 drop-shadow-sm">
+              サンフレッチェのある日常を、<br />
+              あなただけのアルバムに。
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* 情報カード */}
+      <div className="-mt-10 px-3 relative z-30">
+        <div className="bg-white rounded-2xl shadow-2xl shadow-purple-950/15 p-4 grid grid-cols-3 divide-x divide-gray-200 border border-white/80">
+          <MiniStat icon={<Ticket size={14} />} label="観戦数" value={records.length} unit="試合" />
+          <MiniStat icon={<Trophy size={14} />} label="勝利" value={winCount} unit="試合" />
+          <div className="px-3">
+            <button
+              type="button"
+              onClick={() => setScheduleOpen(true)}
+              className="flex items-center gap-1 text-[#3b1378] text-xs font-black mb-2 active:scale-95"
+            >
+              <Calendar size={14} className="shrink-0" />
+              次の試合
+            </button>
+            {nextMatch ? (
+              <div className="min-w-0">
+                <div className="flex items-center gap-1 min-w-0">
+                  <div className="text-[12px] font-black whitespace-nowrap">
+                    {nextMatch.displayDate}
+                  </div>
+
+                  <span
+                    className={`text-[8px] font-black px-1.5 py-0.5 rounded-full shrink-0 ${nextMatch.venueType === 'HOME'
+                      ? 'bg-purple-100 text-[#4b1c89]'
+                      : 'bg-yellow-100 text-yellow-700'
+                      }`}
+                  >
+                    {nextMatch.venueType}
+                  </span>
+                </div>
+
+                <div className="text-[10px] font-bold mt-1 leading-tight truncate">
+                  {nextMatch.time} vs {nextMatch.opponent}
+                </div>
+
+                <div className="text-[9px] text-gray-500 mt-1 flex items-center gap-1 min-w-0">
+                  <MapPin size={10} className="shrink-0" />
+                  <span className="truncate">
+                    {nextMatch.stadium.includes('エディオン')
+                      ? 'Eピース'
+                      : nextMatch.stadium}
+                  </span>
+                </div>
+              </div>
+            ) : (
+              <>
+                <div className="text-sm font-black">未定</div>
+                <div className="text-[11px] font-bold mt-1 leading-5">
+                  次の試合予定はありません
+                </div>
+              </>
+            )}
+          </div>
+        </div>
+      </div>
+      {scheduleOpen && (
+        <MatchScheduleModal onClose={() => setScheduleOpen(false)} />
+      )}
+
+      {/* 記録ボタン */}
+      {savedDraft && (
+        <div className="px-5 mt-5">
+          <div className="bg-white rounded-[1.4rem] border border-yellow-200 shadow-sm p-4">
+            <div className="flex items-start justify-between gap-3">
+              <div>
+                <div className="inline-flex items-center gap-1 bg-yellow-100 text-yellow-700 text-[10px] font-black px-3 py-1 rounded-full">
+                  <PenSquare size={12} />
+                  下書きがあります
+                </div>
+
+                <div className="font-black text-[#171425] mt-3 text-sm">
+                  vs {savedDraft.opponent}
+                </div>
+
+                <div className="text-xs text-gray-500 font-bold mt-1 flex items-center gap-1">
+                  <MapPin size={12} />
+                  {savedDraft.stadium}
+                </div>
+
+                <div className="text-[11px] text-gray-400 font-bold mt-1">
+                  保存日時：{savedDraft.savedAt || '未設定'}
+                </div>
+              </div>
+
+              <div className="w-20 h-16 rounded-2xl overflow-hidden bg-purple-50 shrink-0">
+                <img
+                  src={getStadiumImage(savedDraft.stadium)}
+                  alt={savedDraft.stadium}
+                  className="w-full h-full object-cover"
+                />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-[1fr_auto] gap-2 mt-4">
+              <button
+                type="button"
+                onClick={onContinueDraft}
+                className="bg-[#4b1c89] text-white text-xs font-black py-3 rounded-2xl active:scale-95"
+              >
+                続きを書く
+              </button>
+
+              <button
+                type="button"
+                onClick={onDeleteDraft}
+                className="bg-gray-100 text-gray-500 text-xs font-black px-4 rounded-2xl active:scale-95"
+              >
+                削除
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+      <div className="px-6 mt-5">
+        <button
+          onClick={onStartCreate}
+          className="interactive-card w-full bg-gradient-to-r from-[#4b1c89] to-[#5d20a8] text-white py-4 rounded-full font-black shadow-xl shadow-purple-900/25 flex items-center justify-center gap-2 active:scale-95 transition"
+        >
+          <Plus size={18} strokeWidth={3} />
+          新たに紫を彩る
+        </button>
+      </div>
+
+      <section className="px-5 mt-10">
+        <div className="flex items-center justify-between mb-4">
+          <div>
+            <h2 className="font-black text-lg">最近の観戦記録</h2>
+            <p className="text-xs text-gray-500 font-bold mt-1">
+              {showAllRecords ? 'すべての記録を表示中' : '最新3件を表示中'}
+            </p>
+
+            <p className="text-[11px] text-[#4b1c89] font-black mt-1">
+              タップで詳細・編集できます。
+            </p>
+          </div>
+
+          <button
+            type="button"
+            onClick={() => setShowAllRecords(!showAllRecords)}
+            className="interactive-icon text-[#4b1c89] text-xs font-black flex items-center"
+          >
+            {showAllRecords ? '閉じる' : 'すべて見る'}
+            <ChevronRight
+              size={15}
+              className={showAllRecords ? '-rotate-90' : ''}
+            />
+          </button>
+        </div>
+
+        <div className="space-y-4">
+          {visibleRecords.map((record) => (
+            <div
+              key={record.id}
+              onClick={() => onOpenDetail(record, 'home')}
+              className="interactive-card bg-white rounded-2xl p-3 shadow-sm border border-gray-100 flex gap-3 cursor-pointer"
+            >
+              <img
+                src={getStadiumImage(record.stadium)}
+                alt={record.stadium}
+                className="w-24 h-20 rounded-xl object-cover"
+              />
+
+              <div className="flex-1 min-w-0">
+                <div className="text-[11px] text-[#3b1378] font-black">
+                  {record.date}
+                </div>
+
+                <div className="font-black text-sm leading-snug mt-1">
+                  {record.score}
+                </div>
+
+                <div className="text-[11px] text-gray-500 mt-1 flex items-center gap-1">
+                  <MapPin size={11} /> {record.stadium}
+                </div>
+
+                <div className="text-[11px] text-gray-500 flex items-center gap-1">
+                  <Users size={11} /> {record.companion}
+                </div>
+
+                <span className="inline-block mt-2 bg-purple-100 text-[#4b1c89] text-[10px] font-black px-3 py-1 rounded-full">
+                  #{record.tag}
+                </span>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+    </div>
+  );
+}
+function MatchScheduleModal({ onClose }) {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  const groupedSchedule = matchSchedule.reduce((groups, match) => {
+    const monthKey = match.date.slice(0, 7).replace('-', '.');
+
+    if (!groups[monthKey]) {
+      groups[monthKey] = [];
+    }
+
+    groups[monthKey].push(match);
+    return groups;
+  }, {});
+
+  return (
+    <div
+      className="fixed inset-0 z-[1000] bg-black/45 px-5 flex items-center justify-center"
+      onClick={onClose}
+    >
+      <div
+        className="w-full max-w-sm max-h-[82vh] bg-white rounded-[1.8rem] shadow-2xl overflow-hidden"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className="bg-gradient-to-r from-[#2b0b63] to-[#4b1c89] text-white p-5">
+          <div className="flex items-center justify-between">
+            <div>
+              <div className="text-[11px] font-black text-yellow-300 tracking-widest">
+                MATCH CALENDAR
+              </div>
+
+              <div className="text-xl font-black mt-1">
+                試合カレンダー
+              </div>
+            </div>
+
+            <button
+              type="button"
+              onClick={onClose}
+              className="w-9 h-9 rounded-full bg-white/15 border border-white/15 text-xs font-black"
+            >
+              ×
+            </button>
+          </div>
+
+          <p className="text-xs text-white/80 font-bold mt-2">
+            2026/27シーズンの日程を確認できます
+          </p>
+        </div>
+
+        <div className="p-4 overflow-y-auto max-h-[62vh] space-y-5">
+          {Object.entries(groupedSchedule).map(([month, matches]) => (
+            <div key={month}>
+              <div className="sticky top-0 bg-white/95 backdrop-blur-sm py-2 text-[#4b1c89] text-sm font-black border-b border-purple-100">
+                {month}
+              </div>
+
+              <div className="space-y-2 mt-2">
+                {matches.map((match) => {
+                  const matchDate = new Date(match.date);
+                  matchDate.setHours(0, 0, 0, 0);
+
+                  const isNextMatch = matchDate >= today && match.section === getNextMatch()?.section;
+
+                  return (
+                    <div
+                      key={match.section}
+                      className={`rounded-2xl p-3 border ${isNextMatch
+                        ? 'bg-purple-50 border-purple-200'
+                        : 'bg-[#f8f7fb] border-gray-100'
+                        }`}
+                    >
+                      <div className="flex items-start gap-3">
+                        <div
+                          className={`w-12 h-12 rounded-2xl flex flex-col items-center justify-center shrink-0 ${match.venueType === 'HOME'
+                            ? 'bg-[#4b1c89] text-white'
+                            : 'bg-yellow-100 text-yellow-700'
+                            }`}
+                        >
+                          <div className="text-[10px] font-black">
+                            第{match.section}節
+                          </div>
+                          <div className="text-[9px] font-black mt-0.5">
+                            {match.venueType}
+                          </div>
+                        </div>
+
+                        <div className="min-w-0 flex-1">
+                          <div className="flex items-center gap-2">
+                            <div className="text-sm font-black text-[#171425]">
+                              {match.displayDate}
+                            </div>
+
+                            {isNextMatch && (
+                              <span className="bg-[#4b1c89] text-white text-[9px] font-black px-2 py-0.5 rounded-full">
+                                NEXT
+                              </span>
+                            )}
+                          </div>
+
+                          <div className="text-sm font-black mt-1 truncate">
+                            vs {match.opponent}
+                          </div>
+
+                          <div className="text-xs text-gray-500 font-bold mt-1 flex items-center gap-1 min-w-0">
+                            <MapPin size={12} className="shrink-0" />
+                            <span className="truncate">
+                              {match.stadium.includes('エディオン')
+                                ? 'Eピース'
+                                : match.stadium}
+                            </span>
+                          </div>
+
+                          <div className="text-[11px] text-gray-400 font-bold mt-1">
+                            {match.time} キックオフ
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+function RecordDetailView({ record, setView, backTo, onEdit, onToggleFavorite }) {
+  const data = record.draftData || {};
+  const expenses = data.expenses || {};
+  const photos = data.photos || [];
+  const timeline = data.timeline || [];
+  const tags = data.tags || [record.tag].filter(Boolean);
+
+  const totalExpense = Object.values(expenses).reduce(
+    (sum, value) => sum + Number(value || 0),
+    0
+  );
+
+  const scoreMatch = record.score?.match(/(\d+)\s*-\s*(\d+)/);
+  const homeScore = data.homeScore ?? (scoreMatch ? scoreMatch[1] : '-');
+  const awayScore = data.awayScore ?? (scoreMatch ? scoreMatch[2] : '-');
+
+  const selectedMvp =
+    playerOptions.find((player) => player.name === data.mvp) || null;
+  const opponentTeam =
+    opponentTeams.find((team) => team.name === record.opponent) ||
+    opponentTeams.find((team) => team.name === data.opponent) ||
+    opponentTeams.find((team) => team.name === 'FC東京');
+
+  return (
+    <div className="min-h-screen bg-[#f8f7fb] pb-28">
+      <BrandHeader back={backTo} setView={setView} />
+
+      <section className="px-5 py-6 space-y-4">
+        {/* メインカード */}
+        <div className="relative overflow-hidden rounded-[1.8rem] bg-gradient-to-br from-[#2a075f] via-[#4b1c89] to-[#6d28d9] text-white shadow-xl shadow-purple-900/25">
+          <img
+            src={record.img}
+            alt={record.stadium}
+            className="absolute inset-0 w-full h-full object-cover opacity-35"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#21054b] via-[#3b1378]/80 to-[#2a075f]/70"></div>
+
+          <div className="relative z-10 p-5">
+            <div className="flex items-center justify-between mb-5">
+              <div>
+                <div className="text-xs font-black text-yellow-300">
+                  MATCH DETAIL
+                </div>
+                <div className="text-sm font-black text-white/85 mt-1">
+                  {record.date}
+                </div>
+              </div>
+
+              <button
+                type="button"
+                onClick={() => onToggleFavorite(record.id)}
+                className="w-10 h-10 rounded-full bg-white/15 border border-white/20 flex items-center justify-center"
+              >
+                <Bookmark
+                  size={21}
+                  fill={record.favorite ? '#f6c400' : 'none'}
+                  className={record.favorite ? 'text-yellow-300' : 'text-white'}
+                  strokeWidth={2.4}
+                />
+              </button>
+            </div>
+
+            <div className="bg-white/12 backdrop-blur-md rounded-2xl p-4 border border-white/15">
+              <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-3">
+                <div className="text-center">
+                  <div className="w-12 h-12 mx-auto flex items-center justify-center">
+                    <TeamBadge team={sanfrecceTeam} size="small" />
+                  </div>
+                  <div className="text-xs font-black mt-2">
+                    広島
+                  </div>
+                </div>
+
+                <div className="text-center">
+                  <div className="text-[42px] font-black leading-none tracking-[-0.08em]">
+                    {homeScore}
+                    <span className="text-white/60 mx-1">-</span>
+                    {awayScore}
+                  </div>
+                  <div className="text-[10px] font-black text-yellow-300 mt-2 tracking-widest">
+                    FULL TIME
+                  </div>
+                </div>
+
+                <div className="text-center min-w-0">
+                  <div className="w-12 h-12 mx-auto flex items-center justify-center">
+                    <TeamBadge team={opponentTeam} size="small" />
+                  </div>
+                  <div className="text-xs font-black mt-2 truncate">
+                    {opponentTeam.short || record.opponent}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="mt-4 flex items-center gap-2 text-sm font-black">
+              <MapPin size={16} />
+              {record.stadium}
+            </div>
+          </div>
+        </div>
+
+        {/* 基本情報 */}
+        <Card>
+          <div className="grid grid-cols-2 gap-3">
+            <ConfirmMiniCard
+              icon={<Calendar size={16} />}
+              label="試合日"
+              value={record.date}
+            />
+            <ConfirmMiniCard
+              icon={<Sun size={16} />}
+              label="天気"
+              value={data.weather || '未入力'}
+            />
+            <ConfirmMiniCard
+              icon={<Users size={16} />}
+              label="同行者"
+              value={record.companion || '未入力'}
+            />
+            <ConfirmMiniCard
+              icon={<Ticket size={16} />}
+              label="座席"
+              value={data.seat || '未入力'}
+            />
+          </div>
+        </Card>
+
+        {/* 満足度・MVP・費用 */}
+        <Card>
+          <div className="grid grid-cols-3 gap-3">
+            <div className="text-center">
+              <div className="text-xs text-gray-500 font-black mb-2">
+                満足度
+              </div>
+              <div className="text-2xl font-black text-[#4b1c89]">
+                {data.rating || '-'}
+              </div>
+              <div className="flex justify-center mt-1">
+                {[1, 2, 3, 4, 5].map((star) => (
+                  <Star
+                    key={star}
+                    size={12}
+                    fill={star <= (data.rating || 0) ? '#f6c400' : '#e5e7eb'}
+                    className={star <= (data.rating || 0) ? 'text-yellow-400' : 'text-gray-200'}
+                  />
+                ))}
+              </div>
+            </div>
+
+            <div className="text-center border-x border-gray-100">
+              <div className="text-xs text-gray-500 font-black mb-2">
+                MVP
+              </div>
+              {selectedMvp ? (
+                <>
+                  <div className="w-12 h-12 mx-auto rounded-2xl bg-gradient-to-br from-[#4b1c89] to-[#2a075f] text-white flex flex-col items-center justify-center shadow-md">
+                    <div className="text-[9px] font-black text-white/70">No.</div>
+                    <div className="text-xl font-black leading-none">
+                      {selectedMvp.number}
+                    </div>
+                  </div>
+                  <div className="text-[11px] font-black text-[#4b1c89] mt-2 truncate">
+                    {selectedMvp.name}
+                  </div>
+                </>
+              ) : (
+                <div className="text-xs text-gray-400 font-bold mt-5">
+                  未入力
+                </div>
+              )}
+            </div>
+
+            <div className="text-center">
+              <div className="text-xs text-gray-500 font-black mb-2">
+                合計費用
+              </div>
+              <div className="text-xl font-black text-[#4b1c89] leading-tight">
+                ¥{totalExpense.toLocaleString()}
+              </div>
+              <div className="text-[10px] text-gray-400 font-bold mt-1">
+                観戦総額
+              </div>
+            </div>
+          </div>
+        </Card>
+
+        {/* メモ */}
+        <Card>
+          <div className="flex items-center gap-2 text-[#4b1c89] font-black mb-3">
+            <PenSquare size={17} />
+            思い出メモ
+          </div>
+          <p className="text-sm leading-relaxed whitespace-pre-wrap">
+            {data.memo || 'メモはありません'}
+          </p>
+        </Card>
+
+        {/* タグ */}
+        <Card>
+          <div className="flex items-center gap-2 text-[#4b1c89] font-black mb-3">
+            <TagIcon size={17} />
+            タグ
+          </div>
+
+          <div className="flex flex-wrap gap-2">
+            {tags.length > 0 ? (
+              tags.map((tag) => (
+                <span
+                  key={tag}
+                  className="bg-purple-100 text-[#4b1c89] text-xs font-black px-3 py-1.5 rounded-full"
+                >
+                  #{tag}
+                </span>
+              ))
+            ) : (
+              <span className="text-sm text-gray-400 font-bold">タグなし</span>
+            )}
+          </div>
+        </Card>
+
+        {/* 写真 */}
+        <Card>
+          <div className="flex items-center gap-2 text-[#4b1c89] font-black mb-3">
+            <ImageIcon size={17} />
+            写真
+          </div>
+
+          {photos.length > 0 ? (
+            <div className="grid grid-cols-3 gap-3">
+              {photos.map((photo) => (
+                <img
+                  key={photo.id}
+                  src={photo.url}
+                  alt={photo.name}
+                  className="w-full h-24 object-cover rounded-2xl border border-gray-200 shadow-sm"
+                />
+              ))}
+            </div>
+          ) : (
+            <div className="h-20 rounded-2xl bg-gray-50 border border-dashed border-gray-200 flex items-center justify-center text-sm text-gray-400 font-bold">
+              写真はありません
+            </div>
+          )}
+        </Card>
+
+        {/* タイムライン */}
+        <Card>
+          <div className="flex items-center gap-2 text-[#4b1c89] font-black mb-4">
+            <Clock size={17} />
+            タイムライン
+          </div>
+
+          {timeline.length > 0 ? (
+            <div className="relative ml-3 border-l-2 border-[#4b1c89] space-y-4">
+              {timeline.map((item) => (
+                <div key={item.id} className="relative pl-6">
+                  <div className="absolute -left-[9px] top-1 w-4 h-4 rounded-full border-2 border-[#4b1c89] bg-white"></div>
+                  <div className="bg-[#f8f7fb] rounded-2xl p-3 border border-gray-100">
+                    <div className="text-xs font-black text-[#4b1c89]">
+                      {item.time}
+                    </div>
+                    <div className="text-sm font-bold mt-1">
+                      {item.desc}
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="h-20 rounded-2xl bg-gray-50 border border-dashed border-gray-200 flex items-center justify-center text-sm text-gray-400 font-bold">
+              タイムラインはありません
+            </div>
+          )}
+        </Card>
+      </section>
+
+      <BottomAction>
+        <button onClick={() => setView(backTo)} className="secondary-btn">
+          <ChevronLeft size={20} />
+          戻る
+        </button>
+
+        <button onClick={() => onEdit(record)} className="primary-btn flex-[1.4]">
+          <Pencil size={18} />
+          編集する
+        </button>
+      </BottomAction>
+    </div>
+  );
+}
+
+function FavoriteRecordsView({ setView, records, onEdit, onToggleFavorite, onOpenDetail }) {
+  const favoriteRecords = records.filter((record) => record.favorite);
+
+  return (
+    <div className="min-h-screen bg-[#f8f7fb] pb-24">
+      <BrandHeader back="mypage" setView={setView} />
+
+      <section className="px-5 py-6">
+        <div className="mb-5">
+          <div className="flex items-center gap-2 text-[#4b1c89] font-black text-sm mb-1">
+            <Bookmark size={18} fill="currentColor" />
+            FAVORITE RECORDS
+          </div>
+
+          <h1 className="text-2xl font-black text-[#171425]">
+            お気に入り記録
+          </h1>
+
+          <p className="text-xs text-gray-500 font-bold mt-1">
+            お気に入り登録した観戦記録をまとめて表示
+          </p>
+        </div>
+
+        {favoriteRecords.length > 0 ? (
+          <div className="space-y-4">
+            {favoriteRecords.map((record) => (
+              <div
+                key={record.id}
+                onClick={() => onOpenDetail(record, 'favoriteRecords')}
+                className="bg-white rounded-2xl p-3 shadow-sm border border-gray-100 flex gap-3 cursor-pointer active:scale-[0.99] transition"
+              >
+                <img
+                  src={record.img}
+                  alt="record"
+                  className="w-24 h-20 rounded-xl object-cover"
+                />
+
+                <div className="flex-1 min-w-0">
+                  <div className="flex justify-between items-start gap-2">
+                    <div className="text-[11px] text-[#3b1378] font-black">
+                      {record.date}
+                    </div>
+
+                    <div className="flex items-center gap-2">
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          onEdit(record);
+                        }}
+                        className="text-[10px] font-black text-[#4b1c89] bg-purple-50 border border-purple-100 px-2 py-1 rounded-full flex items-center gap-1"
+                      >
+                        <Pencil size={12} />
+                        編集
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          onToggleFavorite(record.id);
+                        }}
+                        className="interactive-icon"
+                      >
+                        <Bookmark
+                          size={19}
+                          fill="#f6c400"
+                          className="text-yellow-400"
+                          strokeWidth={2.4}
+                        />
+                      </button>
+                    </div>
+                  </div>
+
+                  <div className="font-black text-sm leading-snug mt-1">
+                    {record.score}
+                  </div>
+
+                  <div className="text-[11px] text-gray-500 mt-1 flex items-center gap-1">
+                    <MapPin size={11} />
+                    {record.stadium}
+                  </div>
+
+                  <div className="text-[11px] text-gray-500 flex items-center gap-1">
+                    <Users size={11} />
+                    {record.companion}
+                  </div>
+
+                  <span className="inline-block mt-2 bg-yellow-100 text-yellow-700 text-[10px] font-black px-3 py-1 rounded-full">
+                    ★ お気に入り
+                  </span>
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div className="bg-white rounded-[1.8rem] border border-gray-100 p-8 text-center shadow-sm">
+            <div className="w-16 h-16 mx-auto rounded-2xl bg-purple-50 text-[#4b1c89] flex items-center justify-center mb-4">
+              <Bookmark size={30} />
+            </div>
+
+            <div className="text-lg font-black text-[#171425]">
+              まだお気に入りがありません
+            </div>
+
+            <p className="text-xs text-gray-500 font-bold leading-6 mt-2">
+              観戦記録の詳細ページでブックマークを押すと、ここに表示されます。
+            </p>
+
+            <button
+              type="button"
+              onClick={() => setView('home')}
+              className="mt-5 bg-[#4b1c89] text-white text-sm font-black px-5 py-3 rounded-full shadow-lg shadow-purple-900/20"
+            >
+              観戦記録を見る
+            </button>
+          </div>
+        )}
+      </section>
+    </div>
+  );
+}
+function RecordsView({ setView, records, onEdit, onToggleFavorite, onOpenDetail }) {
+  const [keyword, setKeyword] = useState('');
+  const [venueFilter, setVenueFilter] = useState('ALL');
+  const [resultFilter, setResultFilter] = useState('ALL');
+  const [favoriteOnly, setFavoriteOnly] = useState(false);
+
+  const homeStadium = 'エディオンピースウイング広島';
+
+  const getVenueType = (record) => {
+    const venue = record.draftData?.venueType;
+
+    if (venue === 'HOME' || venue === 'ホーム') return 'HOME';
+    if (venue === 'AWAY' || venue === 'アウェイ') return 'AWAY';
+
+    return record.stadium === homeStadium ? 'HOME' : 'AWAY';
+  };
+
+  const getResult = (record) => {
+    const data = record.draftData || {};
+
+    const homeScore =
+      data.homeScore !== undefined
+        ? Number(data.homeScore)
+        : Number(record.score?.match(/(\d+)\s*-\s*(\d+)/)?.[1] || 0);
+
+    const awayScore =
+      data.awayScore !== undefined
+        ? Number(data.awayScore)
+        : Number(record.score?.match(/(\d+)\s*-\s*(\d+)/)?.[2] || 0);
+
+    if (homeScore > awayScore) return 'WIN';
+    if (homeScore === awayScore) return 'DRAW';
+    return 'LOSE';
+  };
+
+  const filteredRecords = records.filter((record) => {
+    const searchText = [
+      record.opponent,
+      record.stadium,
+      record.tag,
+      record.score,
+      record.companion,
+      ...(record.draftData?.tags || []),
+    ]
+      .join(' ')
+      .toLowerCase();
+
+    const matchKeyword = searchText.includes(keyword.toLowerCase());
+    const matchVenue =
+      venueFilter === 'ALL' || getVenueType(record) === venueFilter;
+    const matchResult =
+      resultFilter === 'ALL' || getResult(record) === resultFilter;
+    const matchFavorite = !favoriteOnly || record.favorite;
+
+    return matchKeyword && matchVenue && matchResult && matchFavorite;
+  });
+
+  const resetFilters = () => {
+    setKeyword('');
+    setVenueFilter('ALL');
+    setResultFilter('ALL');
+    setFavoriteOnly(false);
+  };
+
+  return (
+    <div className="min-h-screen bg-[#f8f7fb] pb-24">
+      <BrandHeader setView={setView} />
+
+      <div className="px-5 pt-6">
+        <div className="flex items-center justify-between mb-5">
+          <div>
+            <h1 className="text-2xl font-black text-[#171425]">
+              観戦記録一覧
+            </h1>
+            <p className="text-xs text-gray-500 font-bold mt-1">
+              検索・絞り込みで記録を探せます
+            </p>
+          </div>
+
+          <button
+            type="button"
+            onClick={() => setView('home')}
+            className="text-xs font-black text-[#4b1c89] bg-purple-50 border border-purple-100 px-3 py-2 rounded-full"
+          >
+            ホームへ
+          </button>
+        </div>
+
+        {/* 検索・絞り込み */}
+        <div className="bg-white rounded-[1.6rem] p-4 border border-gray-100 shadow-sm mb-5">
+          <div className="flex items-center gap-2 text-[#4b1c89] font-black mb-3">
+            <List size={18} />
+            記録を探す
+          </div>
+
+          <input
+            value={keyword}
+            onChange={(e) => setKeyword(e.target.value)}
+            placeholder="対戦相手・スタジアム・タグで検索"
+            className="w-full h-12 rounded-2xl bg-[#f8f7fb] border border-gray-200 px-4 text-sm font-bold outline-none focus:border-[#4b1c89]"
+          />
+
+          <div className="mt-4">
+            <div className="text-xs text-gray-500 font-black mb-2">
+              開催地
+            </div>
+
+            <div className="grid grid-cols-3 gap-2">
+              {[
+                { label: 'すべて', value: 'ALL' },
+                { label: 'HOME', value: 'HOME' },
+                { label: 'AWAY', value: 'AWAY' },
+              ].map((item) => (
+                <button
+                  key={item.value}
+                  type="button"
+                  onClick={() => setVenueFilter(item.value)}
+                  className={`py-2 rounded-xl text-xs font-black border ${venueFilter === item.value
+                    ? 'bg-[#4b1c89] text-white border-[#4b1c89]'
+                    : 'bg-white text-gray-500 border-gray-200'
+                    }`}
+                >
+                  {item.label}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div className="mt-4">
+            <div className="text-xs text-gray-500 font-black mb-2">
+              試合結果
+            </div>
+
+            <div className="grid grid-cols-4 gap-2">
+              {[
+                { label: 'すべて', value: 'ALL' },
+                { label: '勝ち', value: 'WIN' },
+                { label: '引分', value: 'DRAW' },
+                { label: '負け', value: 'LOSE' },
+              ].map((item) => (
+                <button
+                  key={item.value}
+                  type="button"
+                  onClick={() => setResultFilter(item.value)}
+                  className={`py-2 rounded-xl text-xs font-black border ${resultFilter === item.value
+                    ? 'bg-[#4b1c89] text-white border-[#4b1c89]'
+                    : 'bg-white text-gray-500 border-gray-200'
+                    }`}
+                >
+                  {item.label}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div className="mt-4 flex items-center justify-between gap-3">
+            <button
+              type="button"
+              onClick={() => setFavoriteOnly(!favoriteOnly)}
+              className={`flex-1 py-3 rounded-2xl text-xs font-black border flex items-center justify-center gap-2 ${favoriteOnly
+                ? 'bg-yellow-300 text-[#3b1378] border-yellow-300'
+                : 'bg-white text-gray-500 border-gray-200'
+                }`}
+            >
+              <Bookmark
+                size={16}
+                fill={favoriteOnly ? 'currentColor' : 'none'}
+              />
+              お気に入りのみ
+            </button>
+
+            <button
+              type="button"
+              onClick={resetFilters}
+              className="px-4 py-3 rounded-2xl text-xs font-black bg-gray-100 text-gray-500"
+            >
+              リセット
+            </button>
+          </div>
+        </div>
+
+        <div className="flex items-center justify-between mb-3">
+          <div className="text-sm font-black text-[#171425]">
+            {filteredRecords.length}件の記録
+          </div>
+
+          <div className="text-xs text-gray-500 font-bold">
+            全{records.length}件中
+          </div>
+        </div>
+
+        {filteredRecords.length > 0 ? (
+          <div className="space-y-4">
+            {filteredRecords.map((record) => {
+              const venueType = getVenueType(record);
+              const result = getResult(record);
+
+              return (
+                <div
+                  key={record.id}
+                  onClick={() => onOpenDetail(record, 'records')}
+                  className="bg-white rounded-2xl p-3 shadow-sm border border-gray-100 flex gap-3 cursor-pointer active:scale-[0.99] transition"
+                >
+                  <img
+                    src={record.img}
+                    alt="record"
+                    className="w-24 h-20 rounded-xl object-cover"
+                  />
+
+                  <div className="flex-1 min-w-0">
+                    <div className="flex justify-between items-start gap-2">
+                      <div className="text-[11px] text-[#3b1378] font-black">
+                        {record.date}
+                      </div>
+
+                      <div className="flex items-center gap-2">
+                        <span
+                          className={`text-[10px] font-black px-2 py-1 rounded-full ${result === 'WIN'
+                            ? 'bg-purple-100 text-[#4b1c89]'
+                            : result === 'DRAW'
+                              ? 'bg-gray-100 text-gray-500'
+                              : 'bg-red-50 text-red-500'
+                            }`}
+                        >
+                          {result === 'WIN'
+                            ? '勝ち'
+                            : result === 'DRAW'
+                              ? '引分'
+                              : '負け'}
+                        </span>
+
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            onEdit(record);
+                          }}
+                          className="text-[10px] font-black text-[#4b1c89] bg-purple-50 border border-purple-100 px-2 py-1 rounded-full flex items-center gap-1"
+                        >
+                          <Pencil size={12} />
+                          編集
+                        </button>
+
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            onToggleFavorite(record.id);
+                          }}
+                          className="interactive-icon"
+                        >
+                          <Bookmark
+                            size={19}
+                            fill={record.favorite ? '#f6c400' : 'none'}
+                            className={record.favorite ? 'text-yellow-400' : 'text-gray-400'}
+                            strokeWidth={2.4}
+                          />
+                        </button>
+                      </div>
+                    </div>
+
+                    <div className="font-black text-sm leading-snug mt-1">
+                      {record.score}
+                    </div>
+
+                    <div className="text-[11px] text-gray-500 mt-1 flex items-center gap-1">
+                      <MapPin size={11} />
+                      {record.stadium}
+                    </div>
+
+                    <div className="text-[11px] text-gray-500 flex items-center gap-1">
+                      <Users size={11} />
+                      {record.companion}
+                    </div>
+
+                    <div className="flex items-center gap-2 mt-2">
+                      <span className="bg-purple-100 text-[#4b1c89] text-[10px] font-black px-3 py-1 rounded-full">
+                        #{record.tag}
+                      </span>
+
+                      <span className="bg-gray-100 text-gray-500 text-[10px] font-black px-3 py-1 rounded-full">
+                        {venueType}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        ) : (
+          <div className="bg-white rounded-[1.8rem] border border-gray-100 p-8 text-center shadow-sm">
+            <div className="w-16 h-16 mx-auto rounded-2xl bg-purple-50 text-[#4b1c89] flex items-center justify-center mb-4">
+              <List size={30} />
+            </div>
+
+            <div className="text-lg font-black text-[#171425]">
+              条件に合う記録がありません
+            </div>
+
+            <p className="text-xs text-gray-500 font-bold leading-6 mt-2">
+              検索ワードや絞り込み条件を変えてみてください。
+            </p>
+
+            <button
+              type="button"
+              onClick={resetFilters}
+              className="mt-5 bg-[#4b1c89] text-white text-sm font-black px-5 py-3 rounded-full shadow-lg shadow-purple-900/20"
+            >
+              条件をリセット
+            </button>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+function StatsView({ records, setView }) {
+  const homeStadium = 'エディオンピースウイング広島';
+
+  const parseScore = (record) => {
+    const draftData = record.draftData || {};
+
+    if (draftData.homeScore !== undefined && draftData.awayScore !== undefined) {
+      return {
+        home: Number(draftData.homeScore),
+        away: Number(draftData.awayScore),
+      };
+    }
+
+    const match = record.score?.match(/(\d+)\s*-\s*(\d+)/);
+
+    return {
+      home: match ? Number(match[1]) : 0,
+      away: match ? Number(match[2]) : 0,
+    };
+  };
+
+  const normalizeVenue = (record) => {
+    const venue = record.draftData?.venueType;
+
+    if (venue === 'AWAY' || venue === 'アウェイ') return 'AWAY';
+    if (venue === 'HOME' || venue === 'ホーム') return 'HOME';
+
+    return record.stadium === homeStadium ? 'HOME' : 'AWAY';
+  };
+
+  const sumExpenses = (expenses = {}) => {
+    return Object.values(expenses).reduce((sum, value) => sum + Number(value || 0), 0);
+  };
+
+  const countBy = (items) => {
+    return items.reduce((acc, item) => {
+      if (!item) return acc;
+      acc[item] = (acc[item] || 0) + 1;
+      return acc;
+    }, {});
+  };
+
+  const toRanking = (countObject) => {
+    return Object.entries(countObject)
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 3);
+  };
+
+  const results = records.map((record) => {
+    const score = parseScore(record);
+
+    return {
+      ...record,
+      homeScore: score.home,
+      awayScore: score.away,
+      venueType: normalizeVenue(record),
+      result:
+        score.home > score.away
+          ? 'win'
+          : score.home === score.away
+            ? 'draw'
+            : 'lose',
+    };
+  });
+
+  const totalGames = records.length;
+  const wins = results.filter((record) => record.result === 'win').length;
+  const draws = results.filter((record) => record.result === 'draw').length;
+  const losses = results.filter((record) => record.result === 'lose').length;
+  const winRate = totalGames > 0 ? ((wins / totalGames) * 100).toFixed(1) : '0.0';
+
+  const homeRecords = results.filter((record) => record.venueType === 'HOME');
+  const awayRecords = results.filter((record) => record.venueType === 'AWAY');
+
+  const totalExpense = records.reduce((sum, record) => {
+    return sum + sumExpenses(record.draftData?.expenses);
+  }, 0);
+
+  const averageExpense = totalGames > 0 ? Math.round(totalExpense / totalGames) : 0;
+
+  const stadiumRanking = toRanking(countBy(records.map((record) => record.stadium)));
+  const opponentRanking = toRanking(countBy(records.map((record) => record.opponent)));
+  const mvpRanking = toRanking(countBy(records.map((record) => record.draftData?.mvp)));
+
+  const expenseBreakdown = {
+    ticket: records.reduce((sum, record) => sum + Number(record.draftData?.expenses?.ticket || 0), 0),
+    goods: records.reduce((sum, record) => sum + Number(record.draftData?.expenses?.goods || 0), 0),
+    food: records.reduce((sum, record) => sum + Number(record.draftData?.expenses?.food || 0), 0),
+    transport: records.reduce((sum, record) => sum + Number(record.draftData?.expenses?.transport || 0), 0),
+    other: records.reduce((sum, record) => sum + Number(record.draftData?.expenses?.other || 0), 0),
+  };
+
+  return (
+    <div className="min-h-screen bg-[#f8f7fb] pb-24">
+      <BrandHeader setView={setView} />
+
+      <section className="px-5 py-6">
+        <div className="mb-5">
+          <div className="flex items-center gap-2 text-[#4b1c89] font-black text-sm mb-1">
+            <BarChart2 size={18} />
+            観戦データ
+          </div>
+          <h1 className="text-2xl font-black text-[#171425]">
+            統計
+          </h1>
+          <p className="text-xs text-gray-500 font-bold mt-1">
+            あなたの観戦傾向をまとめました
+          </p>
+        </div>
+
+        {/* メイン統計 */}
+        <div className="relative overflow-hidden rounded-[1.8rem] bg-gradient-to-br from-[#2a075f] via-[#4b1c89] to-[#6d28d9] text-white p-5 shadow-xl shadow-purple-900/25 mb-4">
+          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_80%_20%,rgba(250,204,21,0.2),transparent_28%)]"></div>
+
+          <div className="relative z-10">
+            <div className="flex items-center justify-between mb-5">
+              <div>
+                <div className="text-xs text-white/70 font-black">TOTAL MATCHES</div>
+                <div className="text-4xl font-black leading-none mt-1">
+                  {totalGames}
+                  <span className="text-base ml-1">試合</span>
+                </div>
+              </div>
+
+              <div className="w-20 h-20 rounded-3xl bg-white/10 border border-white/15 flex flex-col items-center justify-center">
+                <Trophy size={24} className="text-yellow-300" />
+                <div className="text-xs font-black mt-1">勝率</div>
+                <div className="text-lg font-black">{winRate}%</div>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-3 gap-3">
+              <div className="bg-white/10 rounded-2xl p-3 text-center border border-white/10">
+                <div className="text-2xl font-black">{wins}</div>
+                <div className="text-xs text-white/75 font-bold">勝利</div>
+              </div>
+
+              <div className="bg-white/10 rounded-2xl p-3 text-center border border-white/10">
+                <div className="text-2xl font-black">{draws}</div>
+                <div className="text-xs text-white/75 font-bold">引分</div>
+              </div>
+
+              <div className="bg-white/10 rounded-2xl p-3 text-center border border-white/10">
+                <div className="text-2xl font-black">{losses}</div>
+                <div className="text-xs text-white/75 font-bold">敗戦</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* HOME / AWAY */}
+        <Card>
+          <div className="flex items-center gap-2 text-[#4b1c89] font-black mb-4">
+            <Flag size={18} />
+            HOME / AWAY
+          </div>
+
+          <div className="grid grid-cols-2 gap-3">
+            <VenueStatCard label="HOME" records={homeRecords} />
+            <VenueStatCard label="AWAY" records={awayRecords} />
+          </div>
+        </Card>
+
+        <div className="h-4"></div>
+
+        {/* 費用 */}
+        <Card>
+          <div className="flex items-center gap-2 text-[#4b1c89] font-black mb-4">
+            <Wallet size={18} />
+            観戦費用
+          </div>
+
+          <div className="grid grid-cols-2 gap-3 mb-4">
+            <div className="bg-purple-50 rounded-2xl p-4">
+              <div className="text-xs text-gray-500 font-black">合計費用</div>
+              <div className="text-2xl font-black text-[#4b1c89] mt-1">
+                ¥{totalExpense.toLocaleString()}
+              </div>
+            </div>
+
+            <div className="bg-purple-50 rounded-2xl p-4">
+              <div className="text-xs text-gray-500 font-black">平均費用</div>
+              <div className="text-2xl font-black text-[#4b1c89] mt-1">
+                ¥{averageExpense.toLocaleString()}
+              </div>
+            </div>
+          </div>
+
+          <ExpenseStatRow label="チケット代" value={expenseBreakdown.ticket} />
+          <ExpenseStatRow label="グッズ代" value={expenseBreakdown.goods} />
+          <ExpenseStatRow label="ご飯・飲み物代" value={expenseBreakdown.food} />
+          <ExpenseStatRow label="交通費" value={expenseBreakdown.transport} />
+          <ExpenseStatRow label="その他" value={expenseBreakdown.other} />
+        </Card>
+
+        <div className="h-4"></div>
+
+        {/* ランキング */}
+        <RankingBlock
+          icon={<MapPin size={18} />}
+          title="よく行ったスタジアム"
+          items={stadiumRanking}
+          emptyText="まだスタジアム記録がありません"
+        />
+
+        <div className="h-4"></div>
+
+        <RankingBlock
+          icon={<Users size={18} />}
+          title="対戦相手ランキング"
+          items={opponentRanking}
+          emptyText="まだ対戦相手の記録がありません"
+        />
+
+        <div className="h-4"></div>
+
+        <RankingBlock
+          icon={<Star size={18} />}
+          title="MVPランキング"
+          items={mvpRanking}
+          emptyText="MVPが登録された記録がまだありません"
+        />
+      </section>
+    </div>
+  );
+}
+
+function VenueStatCard({ label, records }) {
+  const wins = records.filter((record) => record.result === 'win').length;
+  const draws = records.filter((record) => record.result === 'draw').length;
+  const losses = records.filter((record) => record.result === 'lose').length;
+
+  return (
+    <div className="bg-[#f8f7fb] rounded-2xl p-4 border border-gray-100">
+      <div className="text-xs text-gray-500 font-black">{label}</div>
+      <div className="text-3xl font-black text-[#4b1c89] mt-1">
+        {records.length}
+        <span className="text-sm text-gray-500 ml-1">試合</span>
+      </div>
+      <div className="text-xs font-bold text-gray-500 mt-2">
+        {wins}勝 {draws}分 {losses}敗
+      </div>
+    </div>
+  );
+}
+
+function ExpenseStatRow({ label, value }) {
+  return (
+    <div className="flex items-center justify-between py-2 border-b border-dashed border-gray-100">
+      <div className="text-sm font-bold text-gray-600">{label}</div>
+      <div className="text-sm font-black text-[#171425]">
+        ¥{Number(value).toLocaleString()}
+      </div>
+    </div>
+  );
+}
+
+function RankingBlock({ icon, title, items, emptyText }) {
+  return (
+    <Card>
+      <div className="flex items-center gap-2 text-[#4b1c89] font-black mb-4">
+        {icon}
+        {title}
+      </div>
+
+      {items.length > 0 ? (
+        <div className="space-y-3">
+          {items.map(([name, count], index) => (
+            <div
+              key={name}
+              className="flex items-center gap-3 bg-[#f8f7fb] rounded-2xl p-3 border border-gray-100"
+            >
+              <div
+                className={`w-8 h-8 rounded-full flex items-center justify-center font-black text-sm ${index === 0
+                  ? 'bg-yellow-300 text-[#3b1378]'
+                  : 'bg-purple-100 text-[#4b1c89]'
+                  }`}
+              >
+                {index + 1}
+              </div>
+
+              <div className="flex-1 min-w-0">
+                <div className="font-black text-sm truncate">{name}</div>
+                <div className="text-xs text-gray-500 font-bold mt-0.5">
+                  {count}回
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      ) : (
+        <div className="h-20 rounded-2xl bg-gray-50 border border-dashed border-gray-200 flex items-center justify-center text-sm text-gray-400 font-bold">
+          {emptyText}
+        </div>
+      )}
+    </Card>
+  );
+}
+function getSupporterTitle(matchCount) {
+  const level = Math.floor(matchCount / 10);
+
+  const titles = [
+    'SANFRECCE SUPPORTER',
+    '紫の記録者',
+    'Eピースの常連',
+    '紫の旅人',
+    'アウェイ遠征者',
+    'スタジアムマスター',
+    '勝利の目撃者',
+    '紫の戦術家',
+    'レジェンドサポーター',
+    '紫の永久サポーター',
+  ];
+
+  return titles[Math.min(level, titles.length - 1)];
+}
+function MyPageView({ records, setView, profile }) {
+  const supporterTitle = getSupporterTitle(records.length);
+  const nextTitleCount = (Math.floor(records.length / 10) + 1) * 10;
+  const remainingMatches = nextTitleCount - records.length;
+  const favoriteCount = records.filter((record) => record.favorite).length;
+
+  const totalExpense = records.reduce((sum, record) => {
+    const expenses = record.draftData?.expenses || {};
+    return (
+      sum +
+      Number(expenses.ticket || 0) +
+      Number(expenses.goods || 0) +
+      Number(expenses.food || 0) +
+      Number(expenses.transport || 0) +
+      Number(expenses.other || 0)
+    );
+  }, 0);
+
+  const countBy = (items) => {
+    return items.reduce((acc, item) => {
+      if (!item) return acc;
+      acc[item] = (acc[item] || 0) + 1;
+      return acc;
+    }, {});
+  };
+
+  const getTopItem = (items, fallback) => {
+    const ranking = Object.entries(countBy(items)).sort((a, b) => b[1] - a[1]);
+    return ranking[0]?.[0] || fallback;
+  };
+
+  const favoritePlayer = getTopItem(
+    records.map((record) => record.draftData?.mvp),
+    '中村 草太'
+  );
+
+  const favoriteStadium = getTopItem(
+    records.map((record) => record.stadium),
+    'エディオンピースウイング広島'
+  );
+
+  const latestRecord = records[0];
+  const displayName = profile?.name || 'R';
+  const displayPhoto = profile?.photo || null;
+  const displayFavoritePlayer = profile?.favoritePlayer || favoritePlayer;
+  const displayFavoriteStadium = profile?.favoriteStadium || favoriteStadium;
+
+  return (
+    <div className="min-h-screen bg-[#f8f7fb] pb-24">
+      <BrandHeader setView={setView} />
+
+      <section className="px-5 py-6">
+        {/* プロフィールカード */}
+        <div className="relative overflow-hidden rounded-[1.8rem] bg-gradient-to-br from-[#2a075f] via-[#4b1c89] to-[#6d28d9] text-white p-5 shadow-xl shadow-purple-900/25 mb-5">
+          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_85%_10%,rgba(250,204,21,0.22),transparent_28%)]"></div>
+          <div className="pointer-events-none absolute -right-10 -bottom-12 w-36 h-36 rounded-full border border-white/10"></div>
+
+          <div className="relative z-10 flex items-center gap-4">
+            <div className="w-20 h-20 rounded-3xl bg-white text-[#4b1c89] flex items-center justify-center shadow-xl border-2 border-yellow-300/70 overflow-hidden">
+              {displayPhoto ? (
+                <img
+                  src={displayPhoto}
+                  alt="profile"
+                  className="w-full h-full object-cover"
+                />
+              ) : (
+                <User size={38} strokeWidth={2.5} />
+              )}
+            </div>
+
+            <div className="flex-1 min-w-0">
+              <div className="text-xs font-black text-yellow-300 tracking-[0.2em]">
+                MY PROFILE
+              </div>
+
+              <h1 className="text-2xl font-black mt-1">
+                {displayName}さん
+              </h1>
+
+              <div className="inline-flex items-center gap-1 bg-yellow-300 text-[#3b1378] text-xs font-black px-3 py-1 rounded-full mt-2 shadow">
+                <Trophy size={13} fill="currentColor" />
+                {supporterTitle}
+              </div>
+
+              <p className="text-xs text-white/80 font-bold mt-2">
+                次の称号まであと {remainingMatches} 試合
+              </p>
+            </div>
+          </div>
+
+          <div className="relative z-10 grid grid-cols-3 gap-3 mt-5">
+            <MyPageStat label="観戦数" value={records.length} unit="試合" />
+            <MyPageStat label="お気に入り" value={favoriteCount} unit="件" />
+            <MyPageStat label="総費用" value={`¥${totalExpense.toLocaleString()}`} unit="" />
+          </div>
+        </div>
+
+        {/* 推し・よく行く場所 */}
+        <Card>
+          <div className="flex items-center gap-2 text-[#4b1c89] font-black mb-4">
+            <Star size={18} />
+            マイデータ
+          </div>
+
+          <div className="space-y-3">
+            <ProfileInfoRow
+              icon={<Trophy size={18} />}
+              label="推し選手"
+              value={displayFavoritePlayer}
+            />
+
+            <ProfileInfoRow
+              icon={<MapPin size={18} />}
+              label="好きなスタジアム"
+              value={displayFavoriteStadium}
+            />
+
+            <ProfileInfoRow
+              icon={<Bookmark size={18} />}
+              label="お気に入り記録"
+              value={`${favoriteCount}件`}
+            />
+          </div>
+        </Card>
+
+        <div className="h-4"></div>
+        {/* 観戦マップ */}
+        <StadiumMapSection records={records} />
+
+        <div className="h-4"></div>
+
+        {/* 遠征記録 */}
+        <AwayRecordSection records={records} />
+
+        <div className="h-4"></div>
+
+        {/* 最新の観戦記録 */}
+        <Card>
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center gap-2 text-[#4b1c89] font-black">
+              <Calendar size={18} />
+              最新の観戦記録
+            </div>
+
+            <button
+              type="button"
+              onClick={() => setView('home')}
+              className="text-xs font-black text-[#4b1c89] flex items-center gap-1"
+            >
+              ホームへ
+              <ChevronRight size={14} />
+            </button>
+          </div>
+
+          {latestRecord ? (
+            <div className="bg-[#f8f7fb] rounded-2xl p-3 border border-gray-100">
+              <div className="text-[11px] text-[#4b1c89] font-black">
+                {latestRecord.date}
+              </div>
+              <div className="font-black text-sm mt-1">
+                {latestRecord.score}
+              </div>
+              <div className="text-xs text-gray-500 font-bold mt-2 flex items-center gap-1">
+                <MapPin size={12} />
+                {latestRecord.stadium}
+              </div>
+              <span className="inline-block mt-3 bg-purple-100 text-[#4b1c89] text-[10px] font-black px-3 py-1 rounded-full">
+                #{latestRecord.tag}
+              </span>
+            </div>
+          ) : (
+            <div className="h-24 rounded-2xl bg-gray-50 border border-dashed border-gray-200 flex items-center justify-center text-sm text-gray-400 font-bold">
+              まだ観戦記録がありません
+            </div>
+          )}
+        </Card>
+
+        <div className="h-4"></div>
+
+        {/* メニュー */}
+        <Card>
+          <div className="flex items-center gap-2 text-[#4b1c89] font-black mb-4">
+            <Menu size={18} />
+            メニュー
+          </div>
+
+          <div className="space-y-2">
+            <MyPageMenuItem
+              icon={<Bookmark size={18} />}
+              title="お気に入り記録"
+              text="保存したお気に入りを確認"
+              onClick={() => setView('favoriteRecords')}
+            />
+
+            <MyPageMenuItem
+              icon={<ImageIcon size={18} />}
+              title="写真アルバム"
+              text="観戦写真をまとめて見る"
+            />
+
+            <MyPageMenuItem
+              icon={<BarChart2 size={18} />}
+              title="統計を見る"
+              text="観戦データをチェック"
+              onClick={() => setView('stats')}
+            />
+
+            <MyPageMenuItem
+              icon={<Shield size={18} />}
+              title="プロフィール設定"
+              text="名前や推し選手を編集"
+              onClick={() => setView('profileSettings')}
+            />
+          </div>
+        </Card>
+      </section>
+    </div>
+  );
+}
+
+const stadiumMapPoints = [
+
+  { name: 'エディオンピースウイング広島', short: 'Eピース', area: '広島', x: 37, y: 67 },
+  { name: 'JFE晴れの国スタジアム', short: '岡山', area: '岡山', x: 42, y: 65 },
+  { name: 'ヨドコウ桜スタジアム', short: '大阪', area: '大阪', x: 48, y: 63 },
+  { name: 'パナソニック スタジアム 吹田', short: '吹田', area: '大阪', x: 49, y: 61 },
+  { name: 'サンガスタジアム by KYOCERA', short: '京都', area: '京都', x: 51, y: 59 },
+  { name: 'ノエビアスタジアム神戸', short: '神戸', area: '兵庫', x: 46, y: 64 },
+  { name: 'ベスト電器スタジアム', short: '福岡', area: '福岡', x: 19, y: 63 },
+  { name: 'PEACE STADIUM Connected by SoftBank', short: '長崎', area: '長崎', x: 15, y: 72 },
+  { name: '豊田スタジアム', short: '豊田', area: '愛知', x: 58, y: 55 },
+  { name: 'IAIスタジアム日本平', short: '清水', area: '静岡', x: 66, y: 51 },
+  { name: '味の素スタジアム', short: '味スタ', area: '東京', x: 76, y: 42 },
+  { name: '国立競技場', short: '国立', area: '東京', x: 77, y: 41 },
+  { name: '町田GIONスタジアム', short: '町田', area: '東京', x: 74, y: 44 },
+  { name: 'Uvanceとどろきスタジアム by Fujitsu', short: '等々力', area: '神奈川', x: 76, y: 45 },
+  { name: '日産スタジアム', short: '日産', area: '神奈川', x: 75, y: 47 },
+  { name: '埼玉スタジアム2002', short: '埼スタ', area: '埼玉', x: 78, y: 38 },
+  { name: 'フクダ電子アリーナ', short: 'フクアリ', area: '千葉', x: 81, y: 45 },
+  { name: '三協フロンテア柏スタジアム', short: '柏', area: '千葉', x: 81, y: 40 },
+  { name: 'メルカリスタジアム', short: 'カシマ', area: '茨城', x: 85, y: 36 },
+  { name: 'ケーズデンキスタジアム水戸', short: '水戸', area: '茨城', x: 83, y: 33 },
+];
+
+
+function StadiumMapSection({ records }) {
+  const [selectedStadiumName, setSelectedStadiumName] = useState(null);
+
+  const visitedStadiums = records.reduce((acc, record) => {
+    const point = stadiumMapPoints.find((stadium) => stadium.name === record.stadium);
+    if (!point) return acc;
+
+    if (!acc[record.stadium]) {
+      acc[record.stadium] = {
+        ...point,
+        count: 0,
+        latestDate: record.date,
+        records: [],
+      };
+    }
+
+    acc[record.stadium].count += 1;
+    acc[record.stadium].records.push(record);
+    return acc;
+  }, {});
+
+  const visitedCount = Object.keys(visitedStadiums).length;
+
+  const selectedPoint =
+    stadiumMapPoints.find((stadium) => stadium.name === selectedStadiumName) || null;
+
+  const selectedVisit = selectedStadiumName
+    ? visitedStadiums[selectedStadiumName]
+    : null;
+
+  return (
+    <Card>
+      <div className="flex items-center justify-between mb-4">
+        <div className="flex items-center gap-2 text-[#4b1c89] font-black">
+          <MapPin size={18} />
+          観戦マップ
+        </div>
+
+        <div className="text-xs font-black text-gray-500">
+          {visitedCount}スタジアム訪問
+        </div>
+      </div>
+
+      <p className="text-xs text-gray-500 font-bold mb-4">
+        観戦したスタジアムが紫で表示されます。ピンを押すと記録を確認できます。
+      </p>
+
+      <div className="relative h-[340px] rounded-[1.8rem] overflow-hidden bg-gradient-to-br from-[#faf7ff] via-white to-[#fffaf0] border border-purple-100">
+        {/* タイトル */}
+        <div className="absolute left-4 top-4 z-20">
+          <div className="text-[10px] font-black text-[#4b1c89] tracking-[0.28em]">
+            SANFRE AWAY MAP
+          </div>
+          <div className="text-sm font-black text-[#171425] mt-1">
+            スタジアム遠征記録
+          </div>
+        </div>
+
+        {/* 凡例 */}
+        <div className="absolute right-4 top-4 z-20 bg-white/85 backdrop-blur-sm rounded-2xl px-3 py-2 border border-gray-100 shadow-sm">
+          <div className="flex items-center gap-2 text-[10px] font-black text-gray-500">
+            <span className="w-3 h-3 rounded-full bg-[#4b1c89] inline-block border border-yellow-300"></span>
+            訪問済み
+          </div>
+          <div className="flex items-center gap-2 text-[10px] font-black text-gray-400 mt-1">
+            <span className="w-3 h-3 rounded-full bg-white inline-block border border-gray-300"></span>
+            未訪問
+          </div>
+        </div>
+
+        {/* 地図 */}
+        {/* 地図 */}
+        <svg
+          viewBox="0 0 100 100"
+          className="absolute inset-0 w-full h-full"
+          preserveAspectRatio="xMidYMid meet"
+        >
+          <defs>
+            <filter id="mapShadow" x="-20%" y="-20%" width="140%" height="140%">
+              <feDropShadow
+                dx="0"
+                dy="1.5"
+                stdDeviation="1.4"
+                floodColor="#cdbcf0"
+                floodOpacity="0.35"
+              />
+            </filter>
+          </defs>
+
+          {/* 北海道 */}
+          <path
+            d="
+      M76 19
+      L78 15
+      L82 13
+      L86 12
+      L91 14
+      L94 17
+      L95 21
+      L92 24
+      L87 26
+      L82 25
+      L78 23
+      L75 21
+      Z
+    "
+            fill="#efe8fb"
+            stroke="#d7c8f3"
+            strokeWidth="0.85"
+            strokeLinejoin="round"
+            filter="url(#mapShadow)"
+          />
+
+          {/* 本州 */}
+          <path
+            d="
+      M22 68
+      L24 65
+      L23 63
+      L26 61
+      L29 62
+      L32 59
+      L36 58
+      L38 56
+      L43 56
+      L47 54
+      L50 53
+      L53 50
+      L57 49
+      L60 46
+      L63 45
+      L66 42
+      L70 41
+      L72 38
+      L75 37
+      L77 34
+      L80 32
+      L82 28
+      L85 25
+      L88 24
+      L90 26
+      L90 30
+      L88 33
+      L86 34
+      L84 38
+      L81 39
+      L79 43
+      L76 45
+      L74 49
+      L70 50
+      L67 54
+      L64 55
+      L61 59
+      L57 60
+      L54 63
+      L50 64
+      L46 67
+      L41 67
+      L37 69
+      L32 69
+      L29 71
+      L25 70
+      Z
+    "
+            fill="#efe8fb"
+            stroke="#d7c8f3"
+            strokeWidth="0.85"
+            strokeLinejoin="round"
+            filter="url(#mapShadow)"
+          />
+
+          {/* 四国 */}
+          <path
+            d="
+      M38 74
+      L41 72
+      L45 71
+      L49 72
+      L52 74
+      L50 76
+      L45 76
+      L42 75
+      Z
+    "
+            fill="#efe8fb"
+            stroke="#d7c8f3"
+            strokeWidth="0.75"
+            strokeLinejoin="round"
+            filter="url(#mapShadow)"
+          />
+
+          {/* 九州 */}
+          <path
+            d="
+      M12 72
+      L13 68
+      L15 65
+      L14 62
+      L17 60
+      L21 61
+      L24 60
+      L27 63
+      L29 66
+      L28 70
+      L26 73
+      L27 76
+      L23 78
+      L21 82
+      L17 82
+      L14 79
+      L12 75
+      Z
+    "
+            fill="#efe8fb"
+            stroke="#d7c8f3"
+            strokeWidth="0.85"
+            strokeLinejoin="round"
+            filter="url(#mapShadow)"
+          />
+
+          {/* 佐渡島っぽい島 */}
+          <path
+            d="
+      M67 36
+      L69 34
+      L72 35
+      L71 38
+      L68 39
+      Z
+    "
+            fill="#efe8fb"
+            stroke="#d7c8f3"
+            strokeWidth="0.55"
+            strokeLinejoin="round"
+          />
+
+          {/* 淡路島っぽい島 */}
+          <path
+            d="
+      M47 68
+      L49 68.5
+      L48 70.5
+      L46.5 70
+      Z
+    "
+            fill="#efe8fb"
+            stroke="#d7c8f3"
+            strokeWidth="0.45"
+            strokeLinejoin="round"
+          />
+
+          {/* 沖縄 */}
+          <circle cx="8" cy="88" r="0.8" fill="#efe8fb" stroke="#d7c8f3" strokeWidth="0.4" />
+          <circle cx="10.5" cy="90.5" r="0.6" fill="#efe8fb" stroke="#d7c8f3" strokeWidth="0.4" />
+          <circle cx="13" cy="92" r="0.45" fill="#efe8fb" stroke="#d7c8f3" strokeWidth="0.35" />
+
+          {/* 薄い内側ライン：地図っぽさ追加 */}
+          <path
+            d="M30 63 L36 61 L43 59 L50 56 L57 52 L64 48 L71 43 L78 36"
+            fill="none"
+            stroke="#ded2f5"
+            strokeWidth="0.45"
+            strokeDasharray="2 2"
+            opacity="0.8"
+          />
+
+          <path
+            d="M30 68 L36 67 L42 66 L49 64 L55 61"
+            fill="none"
+            stroke="#ded2f5"
+            strokeWidth="0.4"
+            strokeDasharray="2 2"
+            opacity="0.7"
+          />
+        </svg>
+
+        {/* マーカー */}
+        {stadiumMapPoints.map((point) => {
+          const visited = visitedStadiums[point.name];
+          const isSelected = selectedStadiumName === point.name;
+
+          return (
+            <React.Fragment key={point.name}>
+              <button
+                type="button"
+                onClick={() => setSelectedStadiumName(point.name)}
+                className="absolute -translate-x-1/2 -translate-y-1/2 z-30"
+                style={{ left: `${point.x}%`, top: `${point.y}%` }}
+              >
+                <div
+                  className={`rounded-full border-2 shadow-md flex items-center justify-center font-black transition-all ${visited
+                    ? 'w-8 h-8 bg-[#4b1c89] text-white border-yellow-300'
+                    : 'w-5 h-5 bg-white text-gray-300 border-gray-300'
+                    } ${isSelected ? 'scale-110 ring-4 ring-purple-200' : ''}`}
+                >
+                  {visited ? visited.count : ''}
+                </div>
+              </button>
+
+              {(visited || isSelected) && (
+                <div
+                  className="absolute -translate-x-1/2 -translate-y-1/2 z-20"
+                  style={{ left: `${point.lx}%`, top: `${point.ly}%` }}
+                >
+                  <div className="bg-white/95 border border-purple-100 rounded-full px-2.5 py-1 shadow-sm text-[9px] font-black text-[#4b1c89] whitespace-nowrap">
+                    {point.short}
+                  </div>
+                </div>
+              )}
+            </React.Fragment>
+          );
+        })}
+      </div>
+
+      {selectedPoint && (
+        <div className="mt-4 bg-[#f8f7fb] rounded-2xl p-4 border border-gray-100">
+          <div className="flex items-start justify-between gap-3">
+            <div>
+              <div className="text-xs text-gray-500 font-black">
+                選択中のスタジアム
+              </div>
+              <div className="text-sm font-black text-[#171425] mt-1">
+                {selectedPoint.name}
+              </div>
+              <div className="text-xs text-gray-500 font-bold mt-1">
+                {selectedPoint.area}
+              </div>
+            </div>
+
+            <div className="text-right">
+              <div className="text-2xl font-black text-[#4b1c89]">
+                {selectedVisit ? selectedVisit.count : 0}
+              </div>
+              <div className="text-[10px] text-gray-500 font-bold">
+                回観戦
+              </div>
+            </div>
+          </div>
+
+          {selectedVisit?.records?.length > 0 ? (
+            <div className="mt-4 space-y-2">
+              {selectedVisit.records.slice(0, 3).map((record) => (
+                <div
+                  key={record.id}
+                  className="bg-white rounded-2xl p-3 border border-gray-100"
+                >
+                  <div className="text-[11px] text-[#4b1c89] font-black">
+                    {record.date}
+                  </div>
+                  <div className="text-sm font-black text-[#171425] mt-1">
+                    vs {record.opponent}
+                  </div>
+                  <div className="text-xs text-gray-500 font-bold mt-1">
+                    {record.score}
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="mt-3 text-xs text-gray-400 font-bold">
+              まだこのスタジアムでの観戦記録はありません。
+            </div>
+          )}
+        </div>
+      )}
+    </Card>
+  );
+}
+
+function AwayRecordSection({ records }) {
+  const homeStadium = 'エディオンピースウイング広島';
+
+  const awayRecords = records.filter((record) => {
+    const venue = record.draftData?.venueType;
+
+    if (venue === 'AWAY' || venue === 'アウェイ') return true;
+    if (venue === 'HOME' || venue === 'ホーム') return false;
+
+    return record.stadium !== homeStadium;
+  });
+
+  const awayStadiumCount = new Set(awayRecords.map((record) => record.stadium)).size;
+
+  return (
+    <Card>
+      <div className="flex items-center justify-between mb-4">
+        <div className="flex items-center gap-2 text-[#4b1c89] font-black">
+          <Train size={18} />
+          遠征記録
+        </div>
+
+        <div className="text-xs font-black text-gray-500">
+          {awayRecords.length}試合
+        </div>
+      </div>
+
+      <div className="grid grid-cols-2 gap-3 mb-4">
+        <div className="bg-purple-50 rounded-2xl p-4">
+          <div className="text-xs text-gray-500 font-black">遠征試合数</div>
+          <div className="text-2xl font-black text-[#4b1c89] mt-1">
+            {awayRecords.length}
+            <span className="text-sm text-gray-500 ml-1">試合</span>
+          </div>
+        </div>
+
+        <div className="bg-purple-50 rounded-2xl p-4">
+          <div className="text-xs text-gray-500 font-black">訪問スタジアム</div>
+          <div className="text-2xl font-black text-[#4b1c89] mt-1">
+            {awayStadiumCount}
+            <span className="text-sm text-gray-500 ml-1">会場</span>
+          </div>
+        </div>
+      </div>
+
+      {awayRecords.length > 0 ? (
+        <div className="space-y-3">
+          {awayRecords.slice(0, 5).map((record) => (
+            <div
+              key={record.id}
+              className="bg-[#f8f7fb] rounded-2xl p-3 border border-gray-100"
+            >
+              <div className="flex items-center justify-between gap-3">
+                <div className="min-w-0">
+                  <div className="text-[11px] text-[#4b1c89] font-black">
+                    {record.date}
+                  </div>
+                  <div className="text-sm font-black text-[#171425] mt-1 truncate">
+                    vs {record.opponent}
+                  </div>
+                  <div className="text-xs text-gray-500 font-bold mt-1 flex items-center gap-1">
+                    <MapPin size={12} />
+                    {record.stadium}
+                  </div>
+                </div>
+
+                <div className="bg-white text-[#4b1c89] border border-purple-100 rounded-full px-3 py-1 text-[10px] font-black shrink-0">
+                  AWAY
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      ) : (
+        <div className="h-24 rounded-2xl bg-gray-50 border border-dashed border-gray-200 flex items-center justify-center text-sm text-gray-400 font-bold">
+          まだ遠征記録がありません
+        </div>
+      )}
+    </Card>
+  );
+}
+function ProfileSettingsView({ profile, setView, onSaveProfile }) {
+  const [form, setForm] = useState(profile);
+
+  const stadiumOptions = [
+    'エディオンピースウイング広島',
+    ...new Set(opponentTeams.map((team) => team.stadium)),
+    '国立競技場',
+    'ヨドコウ桜スタジアム',
+    'ヤマハスタジアム',
+    'デンカビッグスワンスタジアム',
+  ];
+
+  const updateForm = (updates) => {
+    setForm({ ...form, ...updates });
+  };
+
+  const handleProfilePhotoChange = (e) => {
+    const file = e.target.files?.[0];
+
+    if (!file) return;
+
+    const reader = new FileReader();
+
+    reader.onload = () => {
+      updateForm({ photo: reader.result });
+    };
+
+    reader.readAsDataURL(file);
+  };
+
+  const removeProfilePhoto = () => {
+    updateForm({ photo: null });
+  };
+
+  return (
+    <div className="min-h-screen bg-[#f8f7fb] pb-28">
+      <BrandHeader back="mypage" setView={setView} />
+
+      <section className="px-5 py-6">
+        <div className="mb-5">
+          <div className="flex items-center gap-2 text-[#4b1c89] font-black text-sm mb-1">
+            <Shield size={18} />
+            MY PROFILE
+          </div>
+
+          <h1 className="text-2xl font-black text-[#171425]">
+            プロフィール設定
+          </h1>
+
+          <p className="text-xs text-gray-500 font-bold mt-1">
+            名前や推し選手を変更できます
+          </p>
+        </div>
+
+        <Card>
+          <div className="space-y-5">
+            <InputBlock icon={<ImageIcon size={18} />} label="プロフィール写真">
+              <div className="flex items-center gap-4">
+                <div className="w-24 h-24 rounded-3xl bg-purple-50 text-[#4b1c89] border-2 border-purple-100 flex items-center justify-center overflow-hidden shrink-0">
+                  {form.photo ? (
+                    <img
+                      src={form.photo}
+                      alt="profile preview"
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <User size={40} />
+                  )}
+                </div>
+
+                <div className="flex-1">
+                  <label className="inline-flex items-center justify-center gap-2 bg-[#4b1c89] text-white text-sm font-black px-4 py-3 rounded-2xl shadow-lg shadow-purple-900/20 cursor-pointer active:scale-95">
+                    <ImageIcon size={17} />
+                    写真を選ぶ
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={handleProfilePhotoChange}
+                      className="hidden"
+                    />
+                  </label>
+
+                  {form.photo && (
+                    <button
+                      type="button"
+                      onClick={removeProfilePhoto}
+                      className="block mt-3 text-xs font-black text-red-500"
+                    >
+                      写真を削除
+                    </button>
+                  )}
+
+                  <p className="text-[11px] text-gray-500 font-bold mt-3 leading-5">
+                    選んだ写真がマイページのプロフィール画像になります。
+                  </p>
+                </div>
+              </div>
+            </InputBlock>
+            <InputBlock icon={<User size={18} />} label="名前">
+              <input
+                value={form.name}
+                onChange={(e) => updateForm({ name: e.target.value })}
+                className="field"
+                placeholder="名前を入力"
+              />
+            </InputBlock>
+
+            <InputBlock icon={<Trophy size={18} />} label="推し選手">
+              <select
+                value={form.favoritePlayer}
+                onChange={(e) => updateForm({ favoritePlayer: e.target.value })}
+                className="field"
+              >
+                {playerOptions.map((player) => (
+                  <option key={player.name} value={player.name}>
+                    No.{player.number} {player.name} / {player.position}
+                  </option>
+                ))}
+              </select>
+            </InputBlock>
+
+            <InputBlock icon={<MapPin size={18} />} label="好きなスタジアム">
+              <select
+                value={form.favoriteStadium}
+                onChange={(e) => updateForm({ favoriteStadium: e.target.value })}
+                className="field"
+              >
+                {stadiumOptions.map((stadium) => (
+                  <option key={stadium} value={stadium}>
+                    {stadium}
+                  </option>
+                ))}
+              </select>
+            </InputBlock>
+          </div>
+        </Card>
+
+        <div className="h-4"></div>
+
+        <Card>
+          <div className="text-xs font-black text-gray-500 mb-3">
+            プレビュー
+          </div>
+
+          <div className="relative overflow-hidden rounded-[1.5rem] bg-gradient-to-br from-[#2a075f] via-[#4b1c89] to-[#6d28d9] text-white p-4">
+            <div className="flex items-center gap-3">
+              <div className="w-16 h-16 rounded-2xl bg-white text-[#4b1c89] flex items-center justify-center border-2 border-yellow-300/70 overflow-hidden">
+                {form.photo ? (
+                  <img
+                    src={form.photo}
+                    alt="profile preview"
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <User size={32} />
+                )}
+              </div>
+
+              <div className="min-w-0">
+                <div className="text-xs font-black text-yellow-300 tracking-[0.2em]">
+                  MY SUPPORTER PROFILE
+                </div>
+
+                <div className="text-xl font-black mt-1">
+                  {form.name || 'R'} さん
+                </div>
+
+                <div className="text-xs text-white/80 font-bold mt-2 truncate">
+                  推し：{form.favoritePlayer}
+                </div>
+
+                <div className="text-xs text-white/80 font-bold mt-1 truncate">
+                  好きなスタジアム：{form.favoriteStadium}
+                </div>
+              </div>
+            </div>
+          </div>
+        </Card>
+      </section>
+
+      <BottomAction>
+        <button
+          type="button"
+          onClick={() => setView('mypage')}
+          className="secondary-btn"
+        >
+          <ChevronLeft size={20} />
+          戻る
+        </button>
+
+        <button
+          type="button"
+          onClick={() => onSaveProfile(form)}
+          className="primary-btn flex-[1.4]"
+        >
+          <CheckCircle2 size={18} />
+          保存する
+        </button>
+      </BottomAction>
+    </div>
+  );
+}
+function MyPageStat({ label, value, unit }) {
+  return (
+    <div className="bg-white/10 border border-white/10 rounded-2xl p-3 text-center">
+      <div className="text-lg font-black leading-none">
+        {value}
+      </div>
+      <div className="text-[10px] text-white/75 font-bold mt-1">
+        {label}{unit && ` / ${unit}`}
+      </div>
+    </div>
+  );
+}
+
+function ProfileInfoRow({ icon, label, value }) {
+  return (
+    <div className="flex items-center gap-3 bg-[#f8f7fb] rounded-2xl p-3 border border-gray-100">
+      <div className="w-10 h-10 rounded-xl bg-purple-100 text-[#4b1c89] flex items-center justify-center shrink-0">
+        {icon}
+      </div>
+
+      <div className="flex-1 min-w-0">
+        <div className="text-xs text-gray-500 font-black">
+          {label}
+        </div>
+        <div className="text-sm font-black text-[#171425] truncate mt-0.5">
+          {value}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function MyPageMenuItem({ icon, title, text, onClick }) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className="w-full flex items-center gap-3 bg-[#f8f7fb] rounded-2xl p-3 border border-gray-100 text-left hover:bg-purple-50"
+    >
+      <div className="w-10 h-10 rounded-xl bg-white text-[#4b1c89] flex items-center justify-center shadow-sm shrink-0">
+        {icon}
+      </div>
+
+      <div className="flex-1 min-w-0">
+        <div className="text-sm font-black text-[#171425]">
+          {title}
+        </div>
+        <div className="text-xs text-gray-500 font-bold mt-0.5">
+          {text}
+        </div>
+      </div>
+
+      <ChevronRight size={18} className="text-gray-400" />
+    </button>
+  );
+}
+function MiniStat({ icon, label, value, unit }) {
+  return (
+    <div className="px-2">
+      <div className="flex items-center gap-1 text-[#3b1378] text-xs font-bold mb-2">
+        {icon} {label}
+      </div>
+      <div className="text-3xl font-black text-[#3b1378]">
+        {value} <span className="text-xs text-gray-500 font-bold">{unit}</span>
+      </div>
+    </div>
+  );
+}
+
+function BottomNav({ setView, view, onStartCreate }) {
+  return (
+    <nav className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-md bg-white h-16 rounded-t-2xl shadow-[0_-6px_20px_rgba(0,0,0,0.08)] flex items-center justify-around z-50">
+      <NavItem
+        icon={<Home size={20} fill="currentColor" />}
+        label="ホーム"
+        active={view === 'home'}
+        onClick={() => setView('home')}
+      />
+
+      <NavItem
+        icon={<List size={20} />}
+        label="記録一覧"
+        active={view === 'records'}
+        onClick={() => setView('records')}
+      />
+
+      <button
+        type="button"
+        onClick={onStartCreate}
+        className="relative -top-5 w-16 h-16 rounded-full bg-[#4b1c89] flex items-center justify-center shadow-lg shadow-purple-900/25"
+      >
+        <div className="w-12 h-12 rounded-full bg-[#4b1c89] text-white flex flex-col items-center justify-center">
+          <Calendar size={20} />
+          <span className="text-[9px] font-bold">記録する</span>
+        </div>
+      </button>
+
+      <NavItem
+        icon={<BarChart2 size={20} />}
+        label="統計"
+        active={view === 'stats'}
+        onClick={() => setView('stats')}
+      />
+
+      <NavItem
+        icon={<User size={20} />}
+        label="マイページ"
+        active={view === 'mypage'}
+        onClick={() => setView('mypage')}
+      />
+    </nav>
+  );
+}
+
+function NavItem({ icon, label, active, onClick }) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className={`flex flex-col items-center gap-1 ${active ? 'text-[#4b1c89]' : 'text-gray-500'
+        }`}
+    >
+      {icon}
+      <span className="text-[10px] font-bold">{label}</span>
+    </button>
+  );
+}
+
+function CreateShell({ children, setView, backTo, step, onSaveDraft }) {
+  return (
+    <div className="min-h-screen bg-[#f8f7fb]">
+      <BrandHeader back={backTo} setView={setView} />
+
+      <div className="-mt-1 bg-white rounded-t-[2.2rem] min-h-screen px-4 pt-8 pb-28 shadow-[0_-10px_25px_rgba(24,7,55,0.08)]">
+        <h1 className="text-center text-[24px] font-black tracking-tight text-[#171425] mb-7">
+          観戦記録を作成
+        </h1>
+
+        <StepIndicator step={step} />
+        {onSaveDraft && (
+          <div className="mt-3 flex justify-end">
+            <button
+              type="button"
+              onClick={onSaveDraft}
+              className="bg-purple-50 text-[#4b1c89] border border-purple-200 rounded-full px-3 py-2 text-[11px] font-black flex items-center gap-1.5 active:scale-95 shadow-sm"
+            >
+              <PenSquare size={13} />
+              下書き保存
+            </button>
+          </div>
+        )}
+
+
+        <div className="mt-6">
+          {children}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function StepIndicator({ step }) {
+  const labels = ['試合情報を入力', '思い出を記録', '金額・タイムラインを入力', '確認'];
+
+  return (
+    <div className="mb-2">
+      <div className="flex items-center justify-between px-8 relative">
+        <div className="absolute left-12 right-12 top-4 h-[2px] bg-gray-200"></div>
+        <div
+          className="absolute left-12 top-4 h-[2px] bg-[#4b1c89] transition-all duration-300"
+          style={{
+            width:
+              step === 1 ? '0%' :
+                step === 2 ? '25%' :
+                  step === 3 ? '50%' :
+                    '75%'
+          }}
+        ></div>
+
+        {[1, 2, 3, 4].map((num) => (
+          <div key={num} className="relative z-10 flex flex-col items-center">
+            <div
+              className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-black shadow-sm transition-all ${step >= num
+                ? 'bg-[#4b1c89] text-white shadow-purple-900/30'
+                : 'bg-white text-gray-400 border-2 border-gray-300'
+                }`}
+            >
+              {num}
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <div className="grid grid-cols-4 text-center mt-3">
+        {labels.map((label, i) => (
+          <div
+            key={label}
+            className={`text-[10px] font-black leading-tight ${step === i + 1 ? 'text-[#4b1c89]' : 'text-gray-400'
+              }`}
+          >
+            {label}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function CreateStep1({ setView, draft, updateDraft, onSaveDraft }) {
+  const [teamOpen, setTeamOpen] = useState(false);
+  const selectedTeam =
+    opponentTeams.find((team) => team.name === draft.opponent) ||
+    opponentTeams.find((team) => team.name === 'FC東京');
+
+  const homeStadium = 'エディオンピースウイング広島';
+
+  const changeVenueType = (type) => {
+    const currentTeam =
+      opponentTeams.find((team) => team.name === draft.opponent) ||
+      opponentTeams.find((team) => team.name === 'FC東京');
+
+    updateDraft({
+      venueType: type,
+      stadium: type === 'HOME'
+        ? 'エディオンピースウイング広島'
+        : currentTeam.stadium,
+    });
+  };
+  return (
+    <CreateShell setView={setView} backTo="home" step={1} onSaveDraft={onSaveDraft}>
+      <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-4 space-y-5">
+        <div className="grid grid-cols-2 gap-2">
+          <InputBlock icon={<Calendar size={14} />} label="試合日">
+            <input
+              type="date"
+              value={draft.date}
+              onChange={(e) => updateDraft({ date: e.target.value })}
+              className="field mini-field date-mini-field"
+            />
+          </InputBlock>
+
+          <InputBlock icon={<Trophy size={14} />} label="大会">
+            <select className="field mini-field">
+              <option>明治安田J1リーグ</option>
+              <option>ルヴァンカップ</option>
+              <option>天皇杯</option>
+            </select>
+          </InputBlock>
+        </div>
+
+        <InputBlock icon={<Trophy size={18} />} label="大会・節">
+          <select
+            value={draft.tournament}
+            onChange={(e) => updateDraft({ tournament: e.target.value })}
+            className="field"
+          >
+            {Array.from({ length: 38 }, (_, i) => (
+              <option key={i + 1} value={`明治安田J1リーグ 第${i + 1}節`}>
+                明治安田J1リーグ 第{i + 1}節
+              </option>
+            ))}
+          </select>
+        </InputBlock>
+
+
+        <InputBlock icon={<Users size={18} />} label="対戦カード">
+          <div className="border border-gray-200 rounded-2xl p-4 bg-white">
+            <div className="flex items-center justify-between gap-3">
+
+              {/* サンフレ側 */}
+              <div className="flex-1 text-center">
+                <div className="w-14 h-14 mx-auto rounded-2xl bg-[#4b1c89] text-white flex items-center justify-center shadow-md">
+                  {/* ↓ strokeWidth={0} と className を右側に合わせる */}
+                  <Shield size={30} fill="currentColor" strokeWidth={0} className="text-white" />
+                </div>
+                <div className="text-xs font-black mt-2 leading-snug">
+                  サンフレッチェ広島
+                </div>
+              </div>
+
+              <div className="px-2">
+                <div className="w-10 h-10 rounded-full bg-[#f8f7fb] border border-gray-200 flex items-center justify-center font-black text-[#4b1c89]">
+                  VS
+                </div>
+              </div>
+
+              {/* 相手側 */}
+              <button
+                type="button"
+                onClick={() => setTeamOpen(!teamOpen)}
+                className="flex-1 text-center interactive-card rounded-xl p-2 hover:bg-purple-50"
+              >
+                <TeamBadge team={selectedTeam} />
+                <div className="text-xs font-black mt-2 leading-snug flex items-center justify-center gap-1">
+                  {selectedTeam.name}
+                  <ChevronRight size={14} className="rotate-90 text-[#4b1c89]" />
+                </div>
+              </button>
+            </div>
+
+            {teamOpen && (
+              <div className="mt-4 pt-4 border-t border-gray-100">
+                <div className="text-xs font-black text-gray-500 mb-3">
+                  相手チームを選択
+                </div>
+
+                <div className="grid grid-cols-2 gap-2 max-h-64 overflow-y-auto pr-1">
+                  {opponentTeams.map((team) => (
+                    <button
+                      key={team.name}
+                      type="button"
+                      onClick={() => {
+                        updateDraft({
+                          opponent: team.name,
+                          stadium: draft.venueType === 'AWAY'
+                            ? team.stadium
+                            : 'エディオンピースウイング広島',
+                        });
+                        setTeamOpen(false);
+                      }}
+                      className={`h-[58px] flex items-center gap-2 rounded-xl border px-2 py-2 text-left transition ${draft.opponent === team.name
+                        ? 'border-[#4b1c89] bg-purple-50'
+                        : 'border-gray-200 bg-white hover:bg-gray-50'
+                        }`}
+                    >
+                      <TeamBadge team={team} size="small" />
+
+                      <div className="min-w-0 flex-1 flex flex-col justify-center">
+                        <div className="text-[11px] font-black leading-tight truncate">
+                          {team.name}
+                        </div>
+                        <div className="text-[9px] text-gray-500 leading-tight truncate mt-1">
+                          {team.stadium}
+                        </div>
+                      </div>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+        </InputBlock>
+        <InputBlock icon={<MapPin size={18} />} label="開催地">
+          <div className="grid grid-cols-2 gap-3">
+            {['HOME', 'AWAY'].map((type) => (
+              <button
+                key={type}
+                type="button"
+                onClick={() => changeVenueType(type)}
+                className={`py-3 rounded-xl font-black border transition ${draft.venueType === type
+                  ? 'bg-[#4b1c89] text-white border-[#4b1c89] shadow-lg shadow-purple-900/20'
+                  : 'bg-white text-[#4b1c89] border-gray-200 hover:bg-purple-50'
+                  }`}
+              >
+                {type === 'HOME' ? 'HOME' : 'AWAY'}
+              </button>
+            ))}
+          </div>
+        </InputBlock>
+        <InputBlock icon={<Flag size={18} />} label="スコア">
+          <div className="flex justify-center items-center gap-10">
+            <input
+              type="number"
+              value={draft.homeScore}
+              onChange={(e) => updateDraft({ homeScore: e.target.value })}
+              className="w-24 h-16 border border-gray-200 rounded-xl text-center text-3xl font-black text-[#4b1c89] flex items-center justify-center leading-none pt-1"
+            />
+            <span className="font-black">-</span>
+            <input
+              type="number"
+              value={draft.awayScore}
+              onChange={(e) => updateDraft({ awayScore: e.target.value })}
+              className="w-24 h-16 border border-gray-200 rounded-xl text-center text-3xl font-black text-[#4b1c89] flex items-center justify-center leading-none pt-1"
+            />
+          </div>
+        </InputBlock>
+
+        <InputBlock icon={<Building2 size={18} />} label="スタジアム">
+          <div className="relative">
+            <MapPin
+              size={18}
+              className="absolute left-4 top-1/2 -translate-y-1/2 text-[#4b1c89] pointer-events-none z-10"
+            />
+            <select
+              value={draft.stadium}
+              onChange={(e) => updateDraft({ stadium: e.target.value })}
+              className="field"
+              style={{ paddingLeft: '52px' }}
+            >
+              <option>エディオンピースウイング広島</option>
+
+              {/* 北から順 */}
+
+
+              <option>ケーズデンキスタジアム水戸</option>
+              <option>メルカリスタジアム</option>
+              <option>三協フロンテア柏スタジアム</option>
+              <option>フクダ電子アリーナ</option>
+              <option>埼玉スタジアム2002</option>
+              <option>味の素スタジアム</option>
+              <option>国立競技場</option>
+              <option>町田GIONスタジアム</option>
+              <option>Uvanceとどろきスタジアム by Fujitsu</option>
+              <option>日産スタジアム</option>
+              <option>IAIスタジアム日本平</option>
+              <option>豊田スタジアム</option>
+              <option>サンガスタジアム by KYOCERA</option>
+              <option>パナソニック スタジアム 吹田</option>
+              <option>ノエビアスタジアム神戸</option>
+              <option>ベスト電器スタジアム</option>
+              <option>JFE晴れの国スタジアム</option>
+              <option>PEACE STADIUM Connected by SoftBank</option>
+
+              {/* 予備・よく使う会場 */}
+              <option>ヨドコウ桜スタジアム</option>
+              <option>ヤマハスタジアム</option>
+              <option>デンカビッグスワンスタジアム</option>
+            </select>
+          </div>
+        </InputBlock>
+
+
+        <InputBlock icon={<Ticket size={18} />} label="座席">
+          <input
+            value={draft.seat}
+            onChange={(e) => updateDraft({ seat: e.target.value })}
+            className="field"
+            placeholder="例：バックスタンド 上層 B5ブロック 23列 128"
+          />
+        </InputBlock>
+
+        <div className="grid grid-cols-2 gap-4">
+          <InputBlock icon={<Sun size={18} />} label="天気">
+            <select
+              value={draft.weather}
+              onChange={(e) => updateDraft({ weather: e.target.value })}
+              className="field"
+            >
+              <option value="晴れ">晴れ ☀️</option>
+              <option value="曇り">曇り ☁️</option>
+              <option value="雨">雨 ☔</option>
+
+            </select>
+          </InputBlock>
+
+          <InputBlock icon={<Users size={18} />} label="誰と観戦した？">
+            <select value={draft.companion} onChange={(e) => updateDraft({ companion: e.target.value })} className="field">
+              <option>友達</option>
+              <option>家族</option>
+              <option>一人</option>
+            </select>
+          </InputBlock>
+        </div>
+      </div>
+
+      <BottomAction>
+        <button onClick={() => setView('step2')} className="primary-btn w-full">
+          次へ <ChevronRight size={22} />
+        </button>
+      </BottomAction>
+
+      <StyleHelper />
+    </CreateShell>
+  );
+}
+
+function CreateStep2({ setView, draft, updateDraft, onSaveDraft }) {
+  const selectedMvp =
+    playerOptions.find((player) => player.name === draft.mvp) ||
+    playerOptions[0];
+
+  const opponentTeam =
+    opponentTeams.find((team) => team.name === draft.opponent) ||
+    opponentTeams.find((team) => team.name === 'FC東京');
+  const removeTag = (tag) => {
+    updateDraft({ tags: draft.tags.filter((t) => t !== tag) });
+  };
+
+  const ratingMessages = {
+    1: '悔しすぎる',
+    2: 'あと少し',
+    3: '楽しめた',
+    4: 'かなり満足！',
+    5: '最高すぎた！',
+  };
+
+  const handlePhotoAdd = (e) => {
+    const files = Array.from(e.target.files);
+    const currentPhotos = draft.photos || [];
+    const remaining = 10 - currentPhotos.length;
+
+    if (remaining <= 0) return;
+
+    const newPhotos = files.slice(0, remaining).map((file) => ({
+      id: `${file.name}-${Date.now()}-${Math.random()}`,
+      name: file.name,
+      url: URL.createObjectURL(file),
+    }));
+
+    updateDraft({
+      photos: [...currentPhotos, ...newPhotos],
+    });
+
+    e.target.value = '';
+  };
+
+  const removePhoto = (id) => {
+    updateDraft({
+      photos: (draft.photos || []).filter((photo) => photo.id !== id),
+    });
+  };
+
+  return (
+    <CreateShell setView={setView} backTo="step1" step={2} onSaveDraft={onSaveDraft}>
+      <div className="space-y-4">
+        {/* 満足度 */}
+        <Card>
+          <div className="flex items-center gap-2 text-[#4b1c89] font-black mb-4">
+            <Star size={18} fill="currentColor" /> 満足度を教えてください
+          </div>
+
+          <div className="flex items-center justify-between">
+            <div className="flex gap-1">
+              {[1, 2, 3, 4, 5].map((star) => (
+                <button
+                  key={star}
+                  type="button"
+                  onClick={() => updateDraft({ rating: star })}
+                  className="interactive-icon"
+                >
+                  <Star
+                    size={36}
+                    fill={star <= draft.rating ? '#f6c400' : '#e5e7eb'}
+                    className={star <= draft.rating ? 'text-yellow-400' : 'text-gray-200'}
+                  />
+                </button>
+              ))}
+            </div>
+
+            <div className="text-left ml-2">
+              <div className="text-[38px] leading-none font-black text-[#171425] drop-shadow-sm tracking-[-0.04em]">
+                {draft.rating}.0
+              </div>
+              <div className="text-[11px] text-[#4b1c89] font-black mt-2 max-w-[120px] leading-snug">
+                {ratingMessages[draft.rating]}
+              </div>
+            </div>
+          </div>
+        </Card>
+
+        {/* 今日のMVP */}
+        {/* 今日のMVP */}
+        <Card>
+          <div className="flex items-center gap-2 text-[#4b1c89] font-black mb-4">
+            <Trophy size={18} fill="currentColor" />
+            今日のMVP
+          </div>
+
+          <div className="flex items-center gap-4">
+            <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-[#4b1c89] to-[#2a075f] text-white flex flex-col items-center justify-center shadow-md shrink-0">
+              <div className="text-[10px] font-black tracking-widest text-white/80">
+                No.
+              </div>
+              <div className="text-[34px] leading-none font-black">
+                {selectedMvp.number}
+              </div>
+              <div className="text-[10px] font-black text-yellow-300 mt-1">
+                {selectedMvp.position}
+              </div>
+            </div>
+
+            <div className="flex-1 min-w-0">
+              <div className="text-xs text-gray-500 font-black mb-1">
+                この試合で一番印象に残った選手
+              </div>
+
+              <select
+                value={draft.mvp}
+                onChange={(e) => updateDraft({ mvp: e.target.value })}
+                className="w-full border border-gray-200 rounded-xl p-3 font-black text-[#171425] outline-none focus:border-[#4b1c89] focus:ring-4 focus:ring-purple-100 bg-white"
+              >
+                {playerOptions.map((player) => (
+                  <option key={player.name} value={player.name}>
+                    #{player.number} {player.name} / {player.position}
+                  </option>
+                ))}
+              </select>
+
+              <div className="mt-2 text-sm font-black text-[#4b1c89]">
+                {selectedMvp.name}
+              </div>
+              <div className="text-xs text-gray-500 font-bold">
+                背番号 {selectedMvp.number} / {selectedMvp.position}
+              </div>
+            </div>
+          </div>
+        </Card>
+
+        {/* 思い出メモ */}
+        <Card>
+          <div className="flex items-center gap-2 text-[#4b1c89] font-black mb-3">
+            <PenSquare size={17} /> 思い出メモ
+          </div>
+
+          <textarea
+            value={draft.memo}
+            onChange={(e) => updateDraft({ memo: e.target.value })}
+            className="w-full h-36 outline-none resize-none text-sm leading-relaxed border border-gray-200 rounded-2xl p-4 focus:border-[#4b1c89] focus:ring-4 focus:ring-purple-100"
+            placeholder="試合の感想、印象に残ったプレー、スタジアムの雰囲気など..."
+          />
+
+          <div className="text-right text-xs text-gray-400 font-bold mt-2">
+            {draft.memo.length}/300
+          </div>
+        </Card>
+
+        {/* タグ */}
+        <Card>
+          <div className="flex items-center gap-2 text-[#4b1c89] font-black mb-4">
+            <TagIcon size={18} /> タグを追加
+          </div>
+
+          <div className="flex flex-wrap gap-3">
+            {draft.tags.map((tag) => (
+              <button
+                key={tag}
+                type="button"
+                onClick={() => removeTag(tag)}
+                className="border border-[#4b1c89] text-[#4b1c89] rounded-full px-4 py-2 text-sm font-black hover:bg-purple-50"
+              >
+                #{tag}
+              </button>
+            ))}
+
+            <button
+              type="button"
+              onClick={() => updateDraft({ tags: [...draft.tags, '新規タグ'] })}
+              className="w-10 h-10 border border-gray-300 rounded-full flex items-center justify-center hover:bg-purple-50"
+            >
+              <Plus size={18} />
+            </button>
+          </div>
+        </Card>
+
+        {/* 写真 */}
+        <Card>
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center gap-2 text-[#4b1c89] font-black">
+              <ImageIcon size={18} />
+              写真を追加
+            </div>
+            <div className="text-xs text-gray-500 font-black">
+              {(draft.photos || []).length}/10枚
+            </div>
+          </div>
+
+          <div className="grid grid-cols-3 gap-3">
+            {(draft.photos || []).map((photo) => (
+              <div key={photo.id} className="relative group">
+                <img
+                  src={photo.url}
+                  alt={photo.name}
+                  className="w-full h-24 object-cover rounded-2xl border border-gray-200 shadow-sm"
+                />
+                <button
+                  type="button"
+                  onClick={() => removePhoto(photo.id)}
+                  className="absolute -top-2 -right-2 w-7 h-7 rounded-full bg-red-500 text-white flex items-center justify-center shadow-md"
+                >
+                  <Trash2 size={14} />
+                </button>
+              </div>
+            ))}
+
+            {(draft.photos || []).length < 10 && (
+              <label className="h-24 rounded-2xl border-2 border-dashed border-purple-200 bg-purple-50/50 text-[#4b1c89] flex flex-col items-center justify-center font-black cursor-pointer hover:bg-purple-100 transition">
+                <Plus size={24} />
+                <span className="text-xs mt-1">写真追加</span>
+                <input
+                  type="file"
+                  accept="image/*"
+                  multiple
+                  onChange={handlePhotoAdd}
+                  className="hidden"
+                />
+              </label>
+            )}
+          </div>
+
+          <p className="text-[11px] text-gray-500 font-bold mt-3">
+            観戦中に撮った写真を最大10枚まで追加できます。
+          </p>
+        </Card>
+      </div>
+
+      <BottomAction>
+        <button onClick={() => setView('step1')} className="secondary-btn">
+          <ChevronLeft size={20} /> 戻る
+        </button>
+        <button onClick={() => setView('step3')} className="primary-btn flex-[1.4]">
+          次へ <ChevronRight size={22} />
+        </button>
+      </BottomAction>
+    </CreateShell>
+  );
+}
+
+function CreateStep3({ setView, draft, updateDraft, onSaveDraft }) {
+  const [editingTimelineId, setEditingTimelineId] = useState(null);
+  const [dragIndex, setDragIndex] = useState(null);
+
+  const expenseItems = [
+    { id: 'ticket', icon: <Ticket size={17} />, label: 'チケット代' },
+    { id: 'goods', icon: <ShoppingBag size={17} />, label: 'グッズ代' },
+    { id: 'food', icon: <Utensils size={17} />, label: 'ご飯・飲み物代' },
+    { id: 'transport', icon: <Train size={17} />, label: '交通費' },
+    { id: 'other', icon: <MoreHorizontal size={17} />, label: 'その他' },
+  ];
+
+  const total = Object.values(draft.expenses).reduce((a, b) => Number(a) + Number(b), 0);
+
+  const updateExpense = (key, value) => {
+    const numberValue = Number(value.replace(/[^0-9]/g, '')) || 0;
+
+    updateDraft({
+      expenses: {
+        ...draft.expenses,
+        [key]: numberValue,
+      },
+    });
+  };
+
+  const updateTimeline = (id, updates) => {
+    updateDraft({
+      timeline: draft.timeline.map((item) =>
+        item.id === id ? { ...item, ...updates } : item
+      ),
+    });
+  };
+
+  const removeTimeline = (id) => {
+    updateDraft({
+      timeline: draft.timeline.filter((item) => item.id !== id),
+    });
+  };
+
+  const addTimeline = () => {
+    updateDraft({
+      timeline: [
+        ...draft.timeline,
+        {
+          id: Date.now(),
+          time: '16:00',
+          desc: '新しいイベント',
+        },
+      ],
+    });
+  };
+
+  const handleDragStart = (index) => {
+    setDragIndex(index);
+  };
+
+  const handleDragOver = (e) => {
+    e.preventDefault();
+  };
+
+  const handleDrop = (dropIndex) => {
+    if (dragIndex === null || dragIndex === dropIndex) return;
+
+    const newTimeline = [...draft.timeline];
+    const draggedItem = newTimeline[dragIndex];
+
+    newTimeline.splice(dragIndex, 1);
+    newTimeline.splice(dropIndex, 0, draggedItem);
+
+    updateDraft({
+      timeline: newTimeline,
+    });
+
+    setDragIndex(null);
+  };
+
+  return (
+    <CreateShell setView={setView} backTo="step2" step={3} onSaveDraft={onSaveDraft}>
+      <div className="space-y-4">
+        {/* 金額 */}
+        <Card>
+          <div className="flex items-center gap-2 text-[#4b1c89] font-black mb-3">
+            <Wallet size={18} />
+            金額を入力
+            <span className="text-xs text-gray-400">（任意）</span>
+          </div>
+
+          <p className="text-xs text-gray-500 font-bold mb-4">
+            金額を押すと編集できます。入力すると合計金額が自動で変わります。
+          </p>
+
+          <div className="space-y-2">
+            {expenseItems.map((item) => (
+              <div
+                key={item.id}
+                className="flex items-center justify-between border-b border-dashed border-gray-200 py-3"
+              >
+                <div className="flex items-center gap-3 font-black text-[#171425]">
+                  <span className="text-[#4b1c89]">{item.icon}</span>
+                  {item.label}
+                </div>
+
+                <div className="flex items-center gap-1">
+                  <span className="text-sm font-black text-gray-400">¥</span>
+                  <input
+                    type="text"
+                    value={draft.expenses[item.id].toLocaleString()}
+                    onChange={(e) => updateExpense(item.id, e.target.value)}
+                    className="w-24 text-right outline-none font-black text-[#4b1c89] bg-purple-50 rounded-lg px-2 py-1 focus:ring-4 focus:ring-purple-100"
+                  />
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div className="mt-5 pt-4 border-t-2 border-gray-100 flex justify-between items-end">
+            <div>
+              <div className="text-sm text-gray-500 font-black">合計金額</div>
+              <div className="text-xs text-gray-400 font-bold mt-1">
+                観戦にかかった総額
+              </div>
+            </div>
+
+            <div className="text-3xl font-black text-[#4b1c89] tracking-tight">
+              ¥{total.toLocaleString()}
+            </div>
+          </div>
+        </Card>
+
+        {/* タイムライン */}
+        <Card>
+          <div className="flex justify-between items-center mb-3">
+            <div className="flex items-center gap-2 text-[#4b1c89] font-black">
+              <Clock size={18} />
+              タイムラインを入力
+              <span className="text-xs text-gray-400">（任意）</span>
+            </div>
+
+            <button
+              type="button"
+              onClick={addTimeline}
+              className="border border-[#4b1c89] text-[#4b1c89] rounded-full px-3 py-2 text-xs font-black flex items-center gap-1 hover:bg-purple-50"
+            >
+              <Plus size={15} />
+              追加
+            </button>
+          </div>
+
+          <p className="text-xs text-gray-500 font-bold mb-5">
+            ペンで編集、ごみ箱で削除できます。項目を長押しして動かすと順番を入れ替えられます。
+          </p>
+
+          <div className="relative ml-3 border-l-2 border-[#4b1c89] space-y-4">
+            {draft.timeline.map((item, index) => {
+              const isEditing = editingTimelineId === item.id;
+
+              return (
+                <div
+                  key={item.id}
+                  draggable
+                  onDragStart={() => handleDragStart(index)}
+                  onDragOver={handleDragOver}
+                  onDrop={() => handleDrop(index)}
+                  onDragEnd={() => setDragIndex(null)}
+                  className={`relative pl-6 transition ${dragIndex === index ? 'opacity-40' : 'opacity-100'
+                    }`}
+                >
+                  <div className="absolute -left-[9px] top-4 w-4 h-4 rounded-full border-2 border-[#4b1c89] bg-white"></div>
+
+                  <div className="bg-white border border-gray-200 rounded-2xl p-3 shadow-sm">
+                    <div className="flex items-center gap-3">
+                      <div className="text-gray-400 cursor-grab active:cursor-grabbing">
+                        <MoreHorizontal size={20} />
+                      </div>
+
+                      {isEditing ? (
+                        <input
+                          type="time"
+                          value={item.time}
+                          onChange={(e) => updateTimeline(item.id, { time: e.target.value })}
+                          className="w-20 border border-gray-200 rounded-lg px-2 py-1 text-sm font-black outline-none focus:border-[#4b1c89]"
+                        />
+                      ) : (
+                        <div className="w-16 font-black text-[#4b1c89]">
+                          {item.time}
+                        </div>
+                      )}
+
+                      {isEditing ? (
+                        <input
+                          type="text"
+                          value={item.desc}
+                          onChange={(e) => updateTimeline(item.id, { desc: e.target.value })}
+                          className="flex-1 min-w-0 border border-gray-200 rounded-lg px-2 py-1 text-sm font-bold outline-none focus:border-[#4b1c89]"
+                        />
+                      ) : (
+                        <div className="flex-1 min-w-0 font-bold text-sm truncate">
+                          {item.desc}
+                        </div>
+                      )}
+
+                      <button
+                        type="button"
+                        onClick={() =>
+                          setEditingTimelineId(isEditing ? null : item.id)
+                        }
+                        className="interactive-icon text-[#4b1c89]"
+                      >
+                        {isEditing ? <CheckCircle2 size={18} /> : <Pencil size={17} />}
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() => removeTimeline(item.id)}
+                        className="interactive-icon text-red-500"
+                      >
+                        <Trash2 size={17} />
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </Card>
+      </div>
+
+      <BottomAction>
+        <button onClick={() => setView('step2')} className="secondary-btn">
+          <ChevronLeft size={20} />
+          戻る
+        </button>
+
+        <button onClick={() => setView('confirm')} className="primary-btn flex-[1.4]">
+          確認画面へ
+          <ChevronRight size={22} />
+        </button>
+      </BottomAction>
+    </CreateShell>
+  );
+}
+
+function ConfirmView({ setView, draft, onSave, onSaveDraft }) {
+  const total = Object.values(draft.expenses).reduce((a, b) => Number(a) + Number(b), 0);
+
+  const selectedMvp =
+    playerOptions.find((player) => player.name === draft.mvp) ||
+    playerOptions[0];
+
+  return (
+    <CreateShell setView={setView} backTo="step3" step={4} onSaveDraft={onSaveDraft}>
+      <div className="space-y-4">
+        {/* 試合結果メインカード */}
+        <div className="relative overflow-hidden rounded-[1.6rem] bg-gradient-to-br from-[#2a075f] via-[#4b1c89] to-[#6d28d9] text-white shadow-xl shadow-purple-900/25">
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_15%,rgba(255,255,255,0.18),transparent_28%),radial-gradient(circle_at_85%_20%,rgba(250,204,21,0.18),transparent_25%)]"></div>
+          <div className="absolute right-[-40px] bottom-[-60px] w-40 h-40 border border-white/10 rounded-full"></div>
+
+          <div className="relative z-10 p-5">
+            <div className="flex items-center justify-between mb-4">
+              <div>
+                <div className="text-[11px] font-black text-white/70">
+                  {draft.date} / {draft.tournament}
+                </div>
+                <div className="text-sm font-black mt-1 flex items-center gap-1">
+                  <MapPin size={14} />
+                  {draft.stadium}
+                </div>
+              </div>
+
+              <div className="bg-yellow-300 text-[#2a075f] text-xs font-black px-3 py-1.5 rounded-full shadow">
+                {draft.homeScore > draft.awayScore ? 'WIN' : draft.homeScore === draft.awayScore ? 'DRAW' : 'LOSE'}
+              </div>
+            </div>
+
+            <div className="bg-white/10 backdrop-blur-md rounded-2xl p-4 border border-white/15">
+              <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-3">
+                <div className="text-center">
+                  <div className="w-12 h-12 mx-auto flex items-center justify-center">
+                    <TeamBadge team={sanfrecceTeam} size="small" />
+                  </div>
+                  <div className="text-xs font-black mt-2 whitespace-nowrap">
+                    サンフレッチェ広島
+                  </div>
+                </div>
+
+                <div className="text-center">
+                  <div className="text-[42px] font-black leading-none tracking-[-0.08em] drop-shadow-md">
+                    {draft.homeScore}
+                    <span className="text-white/60 mx-1">-</span>
+                    {draft.awayScore}
+                  </div>
+                  <div className="text-[10px] font-black text-yellow-300 mt-2 tracking-widest">
+                    FULL TIME
+                  </div>
+                </div>
+
+                <div className="text-center">
+                  <div className="w-12 h-12 mx-auto flex items-center justify-center">
+                    <TeamBadge
+                      team={
+                        opponentTeams.find((team) => team.name === draft.opponent) ||
+                        { name: draft.opponent, main: '#94a3b8', sub: '#cbd5e1' }
+                      }
+                      size="small"
+                    />
+                  </div>
+                  <div className="text-xs font-black mt-2 truncate">
+                    {draft.opponent}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* 基本情報 */}
+        <Card>
+          <div className="grid grid-cols-2 gap-3">
+            <ConfirmMiniCard label="開催地" value={draft.venueType || 'ホーム'} icon={<MapPin size={16} />} />
+            <ConfirmMiniCard label="天気" value={draft.weather} icon={<Sun size={16} />} />
+            <ConfirmMiniCard label="同行者" value={draft.companion} icon={<Users size={16} />} />
+            <ConfirmMiniCard label="座席" value={draft.seat || '未入力'} icon={<Ticket size={16} />} />
+          </div>
+        </Card>
+
+        {/* 満足度・MVP・金額 */}
+        <Card>
+          <div className="grid grid-cols-3 gap-3">
+            <div className="text-center">
+              <div className="text-xs text-gray-500 font-black mb-2">満足度</div>
+              <div className="text-2xl font-black text-[#4b1c89]">{draft.rating}.0</div>
+              <div className="flex justify-center mt-1">
+                {[1, 2, 3, 4, 5].map((star) => (
+                  <Star
+                    key={star}
+                    size={12}
+                    fill={star <= draft.rating ? '#f6c400' : '#e5e7eb'}
+                    className={star <= draft.rating ? 'text-yellow-400' : 'text-gray-200'}
+                  />
+                ))}
+              </div>
+            </div>
+
+            <div className="text-center border-x border-gray-100">
+              <div className="text-xs text-gray-500 font-black mb-2">今日のMVP</div>
+              <div className="w-12 h-12 mx-auto rounded-2xl bg-gradient-to-br from-[#4b1c89] to-[#2a075f] text-white flex flex-col items-center justify-center shadow-md">
+                <div className="text-[9px] font-black text-white/70">No.</div>
+                <div className="text-xl font-black leading-none">{selectedMvp.number}</div>
+              </div>
+              <div className="text-[11px] font-black text-[#4b1c89] mt-2 truncate">
+                {selectedMvp.name}
+              </div>
+            </div>
+
+            <div className="text-center">
+              <div className="text-xs text-gray-500 font-black mb-2">合計費用</div>
+              <div className="text-xl font-black text-[#4b1c89] leading-tight">
+                ¥{total.toLocaleString()}
+              </div>
+              <div className="text-[10px] text-gray-400 font-bold mt-1">
+                観戦総額
+              </div>
+            </div>
+          </div>
+        </Card>
+
+        {/* 思い出メモ */}
+        <Card>
+          <div className="flex items-center gap-2 text-[#4b1c89] font-black mb-3">
+            <PenSquare size={17} />
+            思い出メモ
+          </div>
+          <p className="text-sm leading-relaxed whitespace-pre-wrap text-[#171425]">
+            {draft.memo || '未入力'}
+          </p>
+        </Card>
+
+        {/* タグ */}
+        <Card>
+          <div className="flex items-center gap-2 text-[#4b1c89] font-black mb-3">
+            <TagIcon size={17} />
+            タグ
+          </div>
+
+          <div className="flex flex-wrap gap-2">
+            {draft.tags.length > 0 ? (
+              draft.tags.map((tag) => (
+                <span
+                  key={tag}
+                  className="bg-purple-100 text-[#4b1c89] text-xs font-black px-3 py-1.5 rounded-full"
+                >
+                  #{tag}
+                </span>
+              ))
+            ) : (
+              <span className="text-sm text-gray-400 font-bold">タグなし</span>
+            )}
+          </div>
+        </Card>
+
+        {/* 写真 */}
+        <Card>
+          <div className="flex items-center justify-between mb-3">
+            <div className="flex items-center gap-2 text-[#4b1c89] font-black">
+              <ImageIcon size={17} />
+              写真
+            </div>
+            <div className="text-xs text-gray-500 font-black">
+              {(draft.photos || []).length}/10枚
+            </div>
+          </div>
+
+          {(draft.photos || []).length > 0 ? (
+            <div className="grid grid-cols-3 gap-3">
+              {draft.photos.map((photo) => (
+                <img
+                  key={photo.id}
+                  src={photo.url}
+                  alt={photo.name}
+                  className="w-full h-24 object-cover rounded-2xl border border-gray-200 shadow-sm"
+                />
+              ))}
+            </div>
+          ) : (
+            <div className="h-20 rounded-2xl bg-gray-50 border border-dashed border-gray-200 flex items-center justify-center text-sm text-gray-400 font-bold">
+              写真は追加されていません
+            </div>
+          )}
+        </Card>
+
+        {/* 金額内訳 */}
+        <Card>
+          <div className="flex items-center gap-2 text-[#4b1c89] font-black mb-3">
+            <Wallet size={17} />
+            金額の内訳
+          </div>
+
+          <ConfirmExpenseRow label="チケット代" value={draft.expenses.ticket} />
+          <ConfirmExpenseRow label="グッズ代" value={draft.expenses.goods} />
+          <ConfirmExpenseRow label="ご飯・飲み物代" value={draft.expenses.food} />
+          <ConfirmExpenseRow label="交通費" value={draft.expenses.transport} />
+          <ConfirmExpenseRow label="その他" value={draft.expenses.other} />
+
+          <div className="border-t mt-3 pt-3 flex justify-between items-center">
+            <div className="font-black text-[#4b1c89]">合計</div>
+            <div className="text-2xl font-black text-[#4b1c89]">
+              ¥{total.toLocaleString()}
+            </div>
+          </div>
+        </Card>
+
+        {/* タイムライン */}
+        <Card>
+          <div className="flex items-center gap-2 text-[#4b1c89] font-black mb-4">
+            <Clock size={17} />
+            タイムライン
+          </div>
+
+          {draft.timeline.length > 0 ? (
+            <div className="relative ml-3 border-l-2 border-[#4b1c89] space-y-4">
+              {draft.timeline.map((item) => (
+                <div key={item.id} className="relative pl-6">
+                  <div className="absolute -left-[9px] top-1 w-4 h-4 rounded-full border-2 border-[#4b1c89] bg-white"></div>
+                  <div className="bg-[#f8f7fb] rounded-2xl p-3 border border-gray-100">
+                    <div className="text-xs font-black text-[#4b1c89]">{item.time}</div>
+                    <div className="text-sm font-bold mt-1">{item.desc}</div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="h-20 rounded-2xl bg-gray-50 border border-dashed border-gray-200 flex items-center justify-center text-sm text-gray-400 font-bold">
+              タイムラインは未入力です
+            </div>
+          )}
+        </Card>
+      </div>
+
+      <BottomAction>
+        <button onClick={() => setView('step3')} className="secondary-btn">
+          <ChevronLeft size={20} />
+          戻る
+        </button>
+
+        <button onClick={onSave} className="primary-btn flex-[1.4]">
+          <CheckCircle2 size={20} />
+          この内容で保存
+        </button>
+      </BottomAction>
+    </CreateShell>
+  );
+}
+function ConfirmMiniCard({ icon, label, value }) {
+  return (
+    <div className="bg-[#f8f7fb] rounded-2xl p-3 border border-gray-100">
+      <div className="flex items-center gap-1 text-[#4b1c89] text-xs font-black mb-1">
+        {icon}
+        {label}
+      </div>
+      <div className="text-sm font-black text-[#171425] truncate">
+        {value}
+      </div>
+    </div>
+  );
+}
+
+function ConfirmExpenseRow({ label, value }) {
+  return (
+    <div className="flex justify-between items-center py-2 border-b border-dashed border-gray-100">
+      <div className="text-sm font-bold text-gray-600">{label}</div>
+      <div className="text-sm font-black text-[#171425]">
+        ¥{Number(value).toLocaleString()}
+      </div>
+    </div>
+  );
+}
+function TeamBadge({ team, size = 'normal' }) {
+  const isSmall = size === 'small';
+
+  return (
+    <div
+      className={`${isSmall ? 'w-10 h-10 rounded-xl' : 'w-14 h-14 rounded-2xl'
+        } mx-auto relative flex items-center justify-center shadow-md overflow-hidden shrink-0`}
+      style={{ backgroundColor: team.main }}
+    >
+      {/* 右下に2色目を入れる */}
+      <div
+        className="absolute right-0 bottom-0 w-[55%] h-[55%]"
+        style={{
+          backgroundColor: team.sub,
+          clipPath: 'polygon(100% 0, 100% 100%, 0 100%)',
+        }}
+      />
+
+      {/* 白い盾 */}
+      <Shield
+        size={isSmall ? 22 : 30}
+        fill="white"
+        strokeWidth={0}
+        className="relative z-10 text-white"
+      />
+    </div>
+  );
+}
+function InputBlock({ icon, label, children }) {
+  return (
+    <div>
+      <label className="flex items-center gap-2 text-[#4b1c89] font-black mb-2">
+        {icon} {label}
+      </label>
+      {children}
+    </div>
+  );
+}
+
+function Card({ children }) {
+  return (
+    <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-4">
+      {children}
+    </div>
+  );
+}
+
+function BottomAction({ children }) {
+  return (
+    <div className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-md bg-white p-4 z-50 shadow-[0_-6px_20px_rgba(0,0,0,0.06)] flex gap-4">
+      {children}
+    </div>
+  );
+}
+
+function ExpenseRow({ icon, label, value }) {
+  return (
+    <div className="flex items-center justify-between border-b border-dashed border-gray-200 py-3">
+      <div className="flex items-center gap-3 font-black">
+        <span className="text-[#4b1c89]">{icon}</span>
+        {label}
+      </div>
+      <div className="font-black">¥ {value.toLocaleString()}</div>
+    </div>
+  );
+}
+
+function StyleHelper() {
+  return (
+    <style>{`
+      .interactive-icon {
+  transition: transform 0.18s ease, filter 0.18s ease, opacity 0.18s ease;
+  cursor: pointer;
+}
+
+.interactive-icon:hover {
+  transform: translateY(-5px) scale(1.15);
+  filter: drop-shadow(0 10px 12px rgba(75, 28, 137, 0.35));
+}
+
+.interactive-card {
+  transition: transform 0.22s ease, box-shadow 0.22s ease;
+  cursor: pointer;
+}
+
+.interactive-card:hover {
+  transform: translateY(-6px) scale(1.01);
+  box-shadow: 0 18px 34px rgba(48, 16, 96, 0.18);
+}
+
+button {
+  transition: transform 0.18s ease, box-shadow 0.18s ease, opacity 0.18s ease;
+}
+
+button:hover {
+  transform: translateY(-2px);
+}
+      .field {
+        width: 100%;
+        border: 1px solid #e5e7eb;
+        border-radius: 12px;
+        padding: 12px;
+        outline: none;
+        background: white;
+        font-weight: 600;
+      }
+
+      .compact-field {
+  padding: 9px 8px;
+  font-size: 12px;
+  min-height: 40px;
+}
+      .field:focus {
+        border-color: #4b1c89;
+        box-shadow: 0 0 0 3px rgba(75, 28, 137, 0.12);
+      }
+      .primary-btn {
+        background: #4b1c89;
+        color: white;
+        border-radius: 999px;
+        padding: 14px 18px;
+        font-weight: 900;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 6px;
+        box-shadow: 0 8px 18px rgba(75, 28, 137, 0.25);
+      }
+      .secondary-btn {
+        background: white;
+        color: #4b1c89;
+        border: 1.5px solid #4b1c89;
+        border-radius: 999px;
+        padding: 14px 18px;
+        font-weight: 900;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 6px;
+        flex: 1;
+      }
+    `}</style>
+  );
+}
