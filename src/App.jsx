@@ -676,6 +676,18 @@ export default function App() {
       )
     );
   };
+  const handleDeleteRecord = (id) => {
+    const ok = window.confirm('この観戦記録を削除しますか？');
+
+    if (!ok) return;
+
+    setRecords((prevRecords) =>
+      prevRecords.filter((record) => record.id !== id)
+    );
+
+    setSelectedRecord(null);
+    setView(detailBackView || 'home');
+  };
   const saveCurrentDraft = () => {
     const draftToSave = {
       ...draft,
@@ -763,9 +775,11 @@ export default function App() {
             onStartCreate={handleStartCreate}
             onContinueDraft={continueSavedDraft}
             onDeleteDraft={deleteSavedDraft}
+            onDeleteRecord={handleDeleteRecord}
             onEdit={handleEditRecord}
             onToggleFavorite={toggleFavorite}
             onOpenDetail={openRecordDetail}
+
           />
         )}
         {view === 'stats' && <StatsView records={records} setView={setView} />}
@@ -786,6 +800,7 @@ export default function App() {
             backTo={detailBackView}
             onEdit={handleEditRecord}
             onToggleFavorite={toggleFavorite}
+            onDelete={handleDeleteRecord}
           />
         )}
 
@@ -1094,6 +1109,7 @@ function HomeView({
   onStartCreate,
   onContinueDraft,
   onDeleteDraft,
+  onDeleteRecord,
   onEdit,
   onToggleFavorite,
   onOpenDetail,
@@ -1308,8 +1324,19 @@ function HomeView({
             <div
               key={record.id}
               onClick={() => onOpenDetail(record, 'home')}
-              className="interactive-card bg-white rounded-2xl p-3 shadow-sm border border-gray-100 flex gap-3 cursor-pointer"
+              className="interactive-card relative bg-white rounded-2xl p-3 shadow-sm border border-gray-100 flex gap-3 cursor-pointer"
             >
+
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onDeleteRecord(record.id);
+                }}
+                className="absolute top-2 right-2 w-8 h-8 rounded-full bg-white/95 text-red-500 border border-red-100 shadow-sm flex items-center justify-center active:scale-95 z-10"
+              >
+                <Trash2 size={15} />
+              </button>
               <img
                 src={getStadiumImage(record.stadium)}
                 alt={record.stadium}
@@ -1473,7 +1500,7 @@ function MatchScheduleModal({ onClose }) {
     </div>
   );
 }
-function RecordDetailView({ record, setView, backTo, onEdit, onToggleFavorite }) {
+function RecordDetailView({ record, setView, backTo, onEdit, onToggleFavorite, onDelete }) {
   const data = record.draftData || {};
   const expenses = data.expenses || {};
   const photos = data.photos || [];
@@ -1754,6 +1781,14 @@ function RecordDetailView({ record, setView, backTo, onEdit, onToggleFavorite })
         <button onClick={() => setView(backTo)} className="secondary-btn">
           <ChevronLeft size={20} />
           戻る
+        </button>
+
+        <button
+          onClick={() => onDelete(record.id)}
+          className="bg-red-50 text-red-600 border border-red-100 rounded-2xl py-3 px-4 font-black flex items-center justify-center gap-2 active:scale-95"
+        >
+          <Trash2 size={18} />
+          削除
         </button>
 
         <button onClick={() => onEdit(record)} className="primary-btn flex-[1.4]">
