@@ -5056,6 +5056,21 @@ function CreateStep1({ setView, draft, updateDraft, onSaveDraft }) {
     <CreateShell setView={setView} backTo="home" step={1} onSaveDraft={onSaveDraft}>
       <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-4 space-y-5">
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+
+          {/* 節を選択のブロックのすぐ下、試合日のすぐ上 */}
+          <p className="text-[11px] text-gray-500 font-bold mb-2 pl-1 leading-tight">
+            ※「節」を選択すると、試合日や対戦相手、スタジアムが自動で反映されます。
+          </p>
+
+          <InputBlock icon={<Calendar size={18} />} label="試合日">
+            <input
+              type="text"
+              placeholder="例: 2026.02.23"
+              value={draft.date || ''}
+              onChange={(e) => updateDraft({ date: e.target.value })}
+              className="field"
+            />
+          </InputBlock>
           <InputBlock icon={<Calendar size={18} />} label="試合日">
             <label className="relative flex items-center justify-between w-full max-w-full box-border border border-gray-200 rounded-2xl bg-white px-4 py-4 overflow-hidden">
               <span
@@ -5097,10 +5112,8 @@ function CreateStep1({ setView, draft, updateDraft, onSaveDraft }) {
               </option>
             ))}
           </select>
-          {/* ✨ ここに説明文を追加します */}
-          <p className="text-[11px] text-gray-500 font-bold mt-2 leading-tight">
-            ※節を選択すると、試合日や対戦相手、スタジアムが自動で反映されます。
-          </p>
+
+
         </InputBlock>
 
 
