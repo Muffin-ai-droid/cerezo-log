@@ -1079,6 +1079,7 @@ export default function App() {
 function BrandHeader({ back, setView = () => { } }) {
   const [noticeOpen, setNoticeOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [scheduleOpen, setScheduleOpen] = useState(false);
   const nextMatch = getNextMatch();
 
   const movePage = (page) => {
@@ -1177,10 +1178,23 @@ function BrandHeader({ back, setView = () => { } }) {
           </div>
 
           <div className="space-y-3">
-            <div className="bg-purple-50 rounded-2xl p-3 border border-purple-100">
-              <div className="text-xs font-black text-[#4b1c89]">
-                次の試合
+            {/* ★ 修正：div を button に変え、クリック処理を追加しました */}
+            <button
+              type="button"
+              onClick={() => {
+                setScheduleOpen(true); // カレンダーを開く
+                setNoticeOpen(false);  // お知らせは閉じる
+              }}
+              className="w-full text-left bg-purple-50 hover:bg-purple-100 transition rounded-2xl p-3 border border-purple-100 active:scale-[0.98]"
+            >
+              <div className="flex items-center justify-between">
+                <div className="text-xs font-black text-[#4b1c89]">
+                  次の試合
+                </div>
+                {/* ★ 追加：右側に小さな矢印アイコンを表示して押せる感を出します */}
+                <ChevronRight size={14} className="text-[#4b1c89]" />
               </div>
+
               <div className="flex items-center gap-2 mt-1">
                 <div className="text-sm font-black">
                   {nextMatch
@@ -1205,7 +1219,7 @@ function BrandHeader({ back, setView = () => { } }) {
                   ? `${nextMatch.time} キックオフ / ${nextMatch.stadium.includes('エディオン') ? 'Eピース' : nextMatch.stadium}`
                   : '試合予定を追加してください'}
               </div>
-            </div>
+            </button>
 
             <div className="bg-yellow-50 rounded-2xl p-3 border border-yellow-100">
               <div className="text-xs font-black text-yellow-700">
@@ -1299,6 +1313,13 @@ function BrandHeader({ back, setView = () => { } }) {
           </div>
         </div>
       )}
+
+      {/* ★ 追加：ここから */}
+      {scheduleOpen && (
+        <MatchScheduleModal onClose={() => setScheduleOpen(false)} />
+      )}
+      {/* ★ 追加：ここまで */}
+
     </header>
   );
 }
