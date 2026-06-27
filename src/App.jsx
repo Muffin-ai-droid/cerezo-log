@@ -5047,6 +5047,9 @@ button:hover {
 }
       .field {
         width: 100%;
+        max-width: 100%;
+        box-sizing:border-box;
+        display:block;
         border: 1px solid #e5e7eb;
         border-radius: 12px;
         padding: 12px;
