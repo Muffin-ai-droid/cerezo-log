@@ -32,6 +32,7 @@ const defaultDraft = {
   mvp: '',
   formation: '3-4-2-1',
   lineup: {},
+  scorers: [],
   memo: '',
   tags: [],
   photos: [],
@@ -1933,7 +1934,13 @@ function RecordDetailView({ record, setView, backTo, onEdit, onToggleFavorite, o
   const opponentTeam =
     opponentTeams.find((team) => team.name === record.opponent) ||
     opponentTeams.find((team) => team.name === data.opponent) ||
-    opponentTeams.find((team) => team.name === 'FC東京');
+    {
+      name: record.opponent || data.opponent || '対戦相手未入力',
+      short: record.opponent || data.opponent || '未入力',
+      main: '#6b7280',
+      sub: '#e5e7eb',
+      stadium: record.stadium || data.stadium || '',
+    };
 
   return (
     <div className="min-h-screen bg-[#f8f7fb] pb-28">
@@ -5825,6 +5832,11 @@ function CreateStep2({ setView, draft, updateDraft, onSaveDraft }) {
           updateDraft={updateDraft}
         />
 
+        <ScorersCard
+          draft={draft}
+          updateDraft={updateDraft}
+        />
+
         {/* 思い出メモ */}
         <Card>
           <div className="flex items-center gap-2 text-[#4b1c89] font-black mb-3">
@@ -5951,6 +5963,121 @@ function CreateStep2({ setView, draft, updateDraft, onSaveDraft }) {
   );
 }
 
+function ScorersCard({ draft, updateDraft }) {
+  const scorers = draft.scorers || [];
+
+  const addScorer = () => {
+    updateDraft({
+      scorers: [
+        ...scorers,
+        {
+          id: Date.now(),
+          player: '',
+          minute: '',
+        },
+      ],
+    });
+  };
+
+  const updateScorer = (id, updates) => {
+    updateDraft({
+      scorers: scorers.map((scorer) =>
+        scorer.id === id ? { ...scorer, ...updates } : scorer
+      ),
+    });
+  };
+
+  const removeScorer = (id) => {
+    updateDraft({
+      scorers: scorers.filter((scorer) => scorer.id !== id),
+    });
+  };
+
+  return (
+    <Card>
+      <div className="flex items-center justify-between mb-4">
+        <div className="flex items-center gap-2 text-[#4b1c89] font-black">
+          <Trophy size={18} />
+          得点者
+        </div>
+
+        <button
+          type="button"
+          onClick={addScorer}
+          className="text-xs font-black text-[#4b1c89] bg-purple-50 border border-purple-100 px-3 py-2 rounded-full active:scale-95"
+        >
+          追加
+        </button>
+      </div>
+
+      {scorers.length === 0 ? (
+        <div className="h-20 rounded-2xl bg-gray-50 border border-dashed border-gray-200 flex items-center justify-center text-sm text-gray-400 font-bold">
+          得点者は未入力です
+        </div>
+      ) : (
+        <div className="space-y-3">
+          {scorers.map((scorer, index) => (
+            <div
+              key={scorer.id}
+              className="bg-[#f8f7fb] border border-gray-100 rounded-2xl p-3"
+            >
+              <div className="flex items-center gap-2 mb-3">
+                <div className="w-8 h-8 rounded-xl bg-[#4b1c89] text-white flex items-center justify-center text-xs font-black shrink-0">
+                  {index + 1}
+                </div>
+
+                <div className="flex-1 font-black text-sm text-[#171425]">
+                  ゴール記録
+                </div>
+
+                <button
+                  type="button"
+                  onClick={() => removeScorer(scorer.id)}
+                  className="text-red-500"
+                >
+                  <Trash2 size={17} />
+                </button>
+              </div>
+
+              <div className="grid grid-cols-[1fr_80px] gap-2">
+                <select
+                  value={scorer.player || ''}
+                  onChange={(e) =>
+                    updateScorer(scorer.id, { player: e.target.value })
+                  }
+                  className="field text-sm"
+                >
+                  <option value="">選手を選択</option>
+                  {playerOptions
+                    .filter((player) => player.position !== 'GK')
+                    .map((player) => (
+                      <option key={player.name} value={player.name}>
+                        #{player.number} {player.name}
+                      </option>
+                    ))}
+                </select>
+
+                <input
+                  type="text"
+                  inputMode="numeric"
+                  value={scorer.minute || ''}
+                  onChange={(e) =>
+                    updateScorer(scorer.id, {
+                      minute: e.target.value.replace(/[^0-9]/g, ''),
+                    })
+                  }
+                  placeholder="分"
+                  className="field text-sm text-center"
+                />
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+    </Card>
+  );
+}
+
 function SimplePositionBoard({ draft, updateDraft }) {
   const [activeSlotKey, setActiveSlotKey] = useState(null);
 
@@ -6040,7 +6167,7 @@ function SimplePositionBoard({ draft, updateDraft }) {
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2 text-[#4b1c89] font-black">
           <Shirt size={18} />
-          試合ポジション
+          スタメンポジション
         </div>
 
         <select
@@ -6099,19 +6226,13 @@ function SimplePositionBoard({ draft, updateDraft }) {
                 </div>
               </div>
 
-              {slot.key === 'GK' && (
-                <div className="mb-1 bg-white/95 text-[#171425] rounded-full px-2 py-0.5 text-[8px] font-black shadow-sm max-w-[62px] truncate">
-                  {player ? player.name.replace(' ', '') : slot.label}
-                </div>
-              )}
 
 
 
-              {slot.key !== 'GK' && (
-                <div className="mt-1 bg-white/95 text-[#171425] rounded-full px-2 py-0.5 text-[8px] font-black shadow-sm max-w-[62px] truncate">
-                  {player ? player.name.replace(' ', '') : slot.label}
-                </div>
-              )}
+
+              <div className="mt-1 bg-white/95 text-[#171425] rounded-full px-2 py-0.5 text-[8px] font-black shadow-sm max-w-[62px] truncate">
+                {player ? player.name.replace(' ', '') : slot.label}
+              </div>
             </button>
           );
         })}
@@ -6459,6 +6580,69 @@ function CreateStep3({ setView, draft, updateDraft, onSaveDraft }) {
   );
 }
 
+function ConfirmPositionBoard({ draft }) {
+  const formation = draft.formation || '3-4-2-1';
+  const slots = formationLayouts[formation] || formationLayouts['3-4-2-1'];
+  const lineup = draft.lineup || {};
+
+  return (
+    <Card>
+      <div className="flex items-center justify-between mb-4">
+        <div className="flex items-center gap-2 text-[#4b1c89] font-black">
+          <Shirt size={18} />
+          ポジション確認
+        </div>
+
+        <div className="text-xs font-black text-[#4b1c89] bg-purple-50 border border-purple-100 rounded-full px-3 py-1">
+          {formation}
+        </div>
+      </div>
+
+      <div className="relative h-[360px] rounded-[1.6rem] overflow-hidden bg-gradient-to-b from-[#16a34a] to-[#166534] border-4 border-green-200 shadow-inner">
+        {/* ピッチ線 */}
+        <div className="absolute inset-3 border-2 border-white/70 rounded-xl"></div>
+        <div className="absolute left-3 right-3 top-1/2 border-t-2 border-white/60"></div>
+        <div className="absolute left-1/2 top-1/2 w-20 h-20 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-white/60"></div>
+        <div className="absolute left-1/2 bottom-3 w-28 h-16 -translate-x-1/2 border-2 border-white/60 border-b-0 rounded-t-xl"></div>
+        <div className="absolute left-1/2 top-3 w-28 h-16 -translate-x-1/2 border-2 border-white/60 border-t-0 rounded-b-xl"></div>
+
+        {slots.map((slot) => {
+          const playerName = lineup[slot.key];
+          const player = playerOptions.find((p) => p.name === playerName);
+
+          return (
+            <div
+              key={slot.key}
+              className="absolute -translate-x-1/2 -translate-y-1/2 flex flex-col items-center"
+              style={{
+                left: `${slot.x}%`,
+                top: `${slot.y}%`,
+              }}
+            >
+              <div
+                className={`w-11 h-11 rounded-2xl flex flex-col items-center justify-center shadow-lg border-2 ${player
+                  ? 'bg-[#4b1c89] text-white border-yellow-300'
+                  : 'bg-white/85 text-gray-400 border-white'
+                  }`}
+              >
+                <Shirt size={18} fill="currentColor" strokeWidth={0} />
+
+                <div className="text-[11px] font-black leading-none mt-0.5">
+                  {player ? player.number : '-'}
+                </div>
+              </div>
+
+              <div className="mt-1 bg-white/95 text-[#171425] rounded-full px-2 py-0.5 text-[8px] font-black shadow-sm max-w-[62px] truncate">
+                {player ? player.name.replace(' ', '') : slot.label}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </Card>
+  );
+}
+
 function ConfirmView({ setView, draft, onSave, onSaveDraft }) {
   const seatDetail = [
     draft.seat,
@@ -6540,6 +6724,52 @@ function ConfirmView({ setView, draft, onSave, onSaveDraft }) {
             </div>
           </div>
         </div>
+
+        <Card>
+          <div className="flex items-center gap-2 text-[#4b1c89] font-black mb-4">
+            <Trophy size={18} />
+            得点者確認
+          </div>
+
+          {(draft.scorers || []).length > 0 ? (
+            <div className="space-y-2">
+              {(draft.scorers || []).map((scorer, index) => {
+                const player = playerOptions.find((p) => p.name === scorer.player);
+
+                return (
+                  <div
+                    key={scorer.id}
+                    className="flex items-center gap-3 bg-[#f8f7fb] border border-gray-100 rounded-2xl p-3"
+                  >
+                    <div className="w-10 h-10 rounded-xl bg-[#4b1c89] text-white flex items-center justify-center font-black">
+                      {player ? player.number : index + 1}
+                    </div>
+
+                    <div className="flex-1 min-w-0">
+                      <div className="text-sm font-black text-[#171425] truncate">
+                        {scorer.player || '未入力'}
+                      </div>
+                      <div className="text-[11px] text-gray-400 font-bold mt-0.5">
+                        {scorer.minute ? `${scorer.minute}分` : '時間未入力'}
+                        {player ? ` / ${player.position}` : ''}
+                      </div>
+                    </div>
+
+                    <div className="text-lg font-black text-[#4b1c89]">
+                      GOAL
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          ) : (
+            <div className="h-20 rounded-2xl bg-gray-50 border border-dashed border-gray-200 flex items-center justify-center text-sm text-gray-400 font-bold">
+              得点者は未入力です
+            </div>
+          )}
+        </Card>
+
+        <ConfirmPositionBoard draft={draft} />
 
         {/* 基本情報 */}
         <Card>
