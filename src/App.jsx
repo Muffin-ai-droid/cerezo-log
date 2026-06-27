@@ -10,38 +10,7 @@ import {
 
 const purple = '#3b1378';
 
-const initialRecords = [
-  {
-    id: 1,
-    date: '2027.04.03',
-    opponent: 'ヴィッセル神戸',
-    score: 'サンフレッチェ広島 3 - 1 ヴィッセル神戸',
-    stadium: 'ノエビアスタジアム神戸',
-    companion: '友達と観戦',
-    tag: '逆転勝利',
-    img: 'https://upload.wikimedia.org/wikipedia/commons/5/57/Inside_View_of_Kobe_Wing_Stadium.jpg'
-  },
-  {
-    id: 2,
-    date: '2026.08.15',
-    opponent: '浦和レッズ',
-    score: 'サンフレッチェ広島 1 - 1 浦和レッズ',
-    stadium: '埼玉スタジアム2002',
-    companion: '一人で観戦',
-    tag: '引き分けも価値ある勝ち点1',
-    img: 'https://lh3.googleusercontent.com/gps-cs-s/APNQkAGxp9dIFmLwY1gmp0hEPki3BXG7bvW7qivhNNUBecekE4C93MWHIW54PGhycTgEYDkOesVEqWN0YsygQn0wtwJ-bUAsKr8iSWu3C_dK6PX5BWzfnzudXUqmvPwRCMuDC7_eZaQa=s680-w680-h510-rw'
-  },
-  {
-    id: 3,
-    date: '2026.09.19',
-    opponent: 'アビスパ福岡',
-    score: 'サンフレッチェ広島 2 - 0 アビスパ福岡',
-    stadium: 'ベスト電器スタジアム',
-    companion: '友達と観戦',
-    tag: 'アウェイ勝利',
-    img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b8/Best_denki_stadium02.jpg/1280px-Best_denki_stadium02.jpg'
-  }
-];
+const initialRecords = [];
 
 const defaultDraft = {
   date: '',
@@ -876,6 +845,8 @@ export default function App() {
 
     const ok = window.confirm(`${ids.length}件の観戦記録を削除しますか？`);
     if (!ok) return;
+
+    const deleteIdSet = new Set(ids.map(String));
 
     setRecords((prevRecords) =>
       prevRecords.filter((record) => !ids.includes(record.id))
@@ -2248,10 +2219,12 @@ function RecordsView({
     setFavoriteOnly(false);
   };
   const toggleSelectRecord = (id) => {
+    const targetId = String(id);
+
     setSelectedIds((prevIds) =>
-      prevIds.includes(id)
-        ? prevIds.filter((selectedId) => selectedId !== id)
-        : [...prevIds, id]
+      prevIds.includes(targetId)
+        ? prevIds.filter((selectedId) => selectedId !== targetId)
+        : [...prevIds, targetId]
     );
   };
 
@@ -2266,7 +2239,7 @@ function RecordsView({
   };
 
   const selectAllFilteredRecords = () => {
-    setSelectedIds(filteredRecords.map((record) => record.id));
+    setSelectedIds(filteredRecords.map((record) => String(record.id)));
   };
 
   return (
@@ -2452,6 +2425,8 @@ function RecordsView({
             {filteredRecords.map((record) => {
               const venueType = getVenueType(record);
               const result = getResult(record);
+              const recordId = String(record.id);
+              const isSelected = selectedIds.includes(recordId);
 
               return (
                 <div
@@ -2464,7 +2439,10 @@ function RecordsView({
 
                     onOpenDetail(record, 'records');
                   }}
-                  className="bg-white rounded-2xl p-3 shadow-sm border border-gray-100 flex gap-3 cursor-pointer active:scale-[0.99] transition"
+                  className={`relativebg-white rounded-2xl p-3 shadow-sm border border-gray-100 flex gap-3 cursor-pointer active:scale-[0.99] transition ${selectMode && isSelected
+                    ? 'border-red-300 ring-4 ring-red-100'
+                    : 'border-gray-100'
+                    }`}
                 >
 
                   {selectMode && (
@@ -2475,12 +2453,12 @@ function RecordsView({
                         e.stopPropagation();
                         toggleSelectRecord(record.id);
                       }}
-                      className={`absolute top-3 right-3 w-9 h-9 rounded-full border-2 flex items-center justify-center z-30 shadow-md ${selectedIds.includes(record.id)
+                      className={`absolute top-3 right-3 w-9 h-9 rounded-full border-2 flex items-center justify-center z-30 shadow-md ${isSelected // ✨ ここを isSelected に変更
                         ? 'bg-red-500 border-red-500 text-white'
                         : 'bg-white border-gray-300 text-gray-300'
                         }`}
                     >
-                      {selectedIds.includes(record.id) && (
+                      {isSelected && ( // ✨ ここも isSelected に変更
                         <CheckCircle2 size={22} strokeWidth={3} />
                       )}
                     </button>
@@ -2983,12 +2961,12 @@ function MyPageView({ records, setView, profile }) {
 
   const favoritePlayer = getTopItem(
     records.map((record) => record.draftData?.mvp),
-    '中村 草太'
+    '未設定' // ✨ ここを「未設定」に変更
   );
 
   const favoriteStadium = getTopItem(
     records.map((record) => record.stadium),
-    'エディオンピースウイング広島'
+    '未設定' // ✨ ここを「未設定」に変更
   );
 
   const latestRecord = records[0];
