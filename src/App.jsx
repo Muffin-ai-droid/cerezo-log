@@ -3804,10 +3804,11 @@ function ProfileSettingsView({ profile, setView, onSaveProfile }) {
 
             <InputBlock icon={<Trophy size={18} />} label="推し選手">
               <select
-                value={form.favoritePlayer}
+                value={form.favoritePlayer || ''} // ✨ ここを少し変更
                 onChange={(e) => updateForm({ favoritePlayer: e.target.value })}
                 className="field"
               >
+                <option value="">選択してください</option> {/* ✨ これを追加！ */}
                 {playerOptions.map((player) => (
                   <option key={player.name} value={player.name}>
                     No.{player.number} {player.name} / {player.position}
@@ -3818,10 +3819,11 @@ function ProfileSettingsView({ profile, setView, onSaveProfile }) {
 
             <InputBlock icon={<MapPin size={18} />} label="好きなスタジアム">
               <select
-                value={form.favoriteStadium}
+                value={form.favoriteStadium || ''} // ✨ ここを少し変更
                 onChange={(e) => updateForm({ favoriteStadium: e.target.value })}
                 className="field"
               >
+                <option value="">選択してください</option> {/* ✨ これを追加！ */}
                 {stadiumOptions.map((stadium) => (
                   <option key={stadium} value={stadium}>
                     {stadium}
