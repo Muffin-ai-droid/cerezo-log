@@ -46,6 +46,7 @@ const initialRecords = [
 const defaultDraft = {
   date: '',
   tournament: '',
+  matchSection: '',
   opponent: '',
   homeScore: '',
   awayScore: '',
@@ -571,7 +572,55 @@ const stadiumImages = {
 const getStadiumImage = (stadium) => {
   return stadiumImages[stadium] || stadiumImages.default;
 };
+const moneyToNumber = (value) => {
+  return Number(String(value ?? '').replace(/[^0-9]/g, '')) || 0;
+};
 
+const formatMoney = (value) => {
+  return moneyToNumber(value).toLocaleString();
+};
+const resizeImage = (file, maxSize = 600, quality = 0.75) => {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+
+    reader.onload = () => {
+      const img = new Image();
+
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+
+        let width = img.width;
+        let height = img.height;
+
+        if (width > height) {
+          if (width > maxSize) {
+            height = Math.round((height * maxSize) / width);
+            width = maxSize;
+          }
+        } else {
+          if (height > maxSize) {
+            width = Math.round((width * maxSize) / height);
+            height = maxSize;
+          }
+        }
+
+        canvas.width = width;
+        canvas.height = height;
+
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, width, height);
+
+        resolve(canvas.toDataURL('image/jpeg', quality));
+      };
+
+      img.onerror = reject;
+      img.src = reader.result;
+    };
+
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+};
 const playerOptions = [
   { name: '大迫 敬介', number: '1', position: 'GK' },
   { name: '田中 雄大', number: '21', position: 'GK' },
@@ -852,6 +901,13 @@ export default function App() {
           <PhotoAlbumView
             records={records}
             setView={setView}
+          />
+        )}
+        {view === 'attendanceCalendar' && (
+          <AttendanceCalendarView
+            records={records}
+            setView={setView}
+            onOpenDetail={openRecordDetail}
           />
         )}
 
@@ -1557,8 +1613,8 @@ function RecordDetailView({ record, setView, backTo, onEdit, onToggleFavorite, o
   const timeline = data.timeline || [];
   const tags = data.tags || [record.tag].filter(Boolean);
 
-  const totalExpense = Object.values(expenses).reduce(
-    (sum, value) => sum + Number(value || 0),
+  const totalExpense = Object.values(expenses || {}).reduce(
+    (sum, value) => sum + moneyToNumber(value),
     0
   );
 
@@ -2792,6 +2848,12 @@ function MyPageView({ records, setView, profile }) {
               text="観戦写真をまとめて見る"
               onClick={() => setView('photoAlbum')}
             />
+            <MyPageMenuItem
+              icon={<Calendar size={18} />}
+              title="参戦カレンダー"
+              text="行った試合をカレンダーで見る"
+              onClick={() => setView('attendanceCalendar')}
+            />
 
             <MyPageMenuItem
               icon={<BarChart2 size={18} />}
@@ -3304,22 +3366,24 @@ function ProfileSettingsView({ profile, setView, onSaveProfile }) {
     setForm({ ...form, ...updates });
   };
 
-  const handleProfilePhotoChange = (e) => {
+  const handleProfilePhotoChange = async (e) => {
     const file = e.target.files?.[0];
 
     if (!file) return;
 
-    const reader = new FileReader();
+    try {
+      const resizedPhoto = await resizeImage(file, 600, 0.75);
 
-    reader.onload = () => {
       updateForm({
-        photo: reader.result,
+        photo: resizedPhoto,
         photoX: 50,
         photoY: 50,
       });
-    };
+    } catch (error) {
+      alert('写真の読み込みに失敗しました。別の写真で試してください。');
+    }
 
-    reader.readAsDataURL(file);
+    e.target.value = '';
   };
 
   const removeProfilePhoto = () => {
@@ -3559,6 +3623,196 @@ function ProfileInfoRow({ icon, label, value }) {
     </div>
   );
 }
+
+function AttendanceCalendarView({ records, setView, onOpenDetail }) {
+  const today = new Date();
+  const [currentMonth, setCurrentMonth] = useState(
+    new Date(today.getFullYear(), today.getMonth(), 1)
+  );
+
+  const toDateKey = (dateText) => {
+    if (!dateText) return '';
+
+    return String(dateText)
+      .replaceAll('.', '-')
+      .slice(0, 10);
+  };
+
+  const year = currentMonth.getFullYear();
+  const month = currentMonth.getMonth();
+
+  const firstDay = new Date(year, month, 1);
+  const lastDay = new Date(year, month + 1, 0);
+
+  const startBlank = firstDay.getDay();
+  const daysInMonth = lastDay.getDate();
+
+  const monthKey = `${year}-${String(month + 1).padStart(2, '0')}`;
+
+  const recordsByDate = records.reduce((map, record) => {
+    const key = toDateKey(record.date);
+
+    if (!key) return map;
+
+    if (!map[key]) {
+      map[key] = [];
+    }
+
+    map[key].push(record);
+    return map;
+  }, {});
+
+  const monthRecords = records.filter((record) =>
+    toDateKey(record.date).startsWith(monthKey)
+  );
+
+  const moveMonth = (amount) => {
+    setCurrentMonth(new Date(year, month + amount, 1));
+  };
+
+  const days = [
+    ...Array(startBlank).fill(null),
+    ...Array.from({ length: daysInMonth }, (_, i) => i + 1),
+  ];
+
+  return (
+    <div className="min-h-screen bg-[#f8f7fb] pb-28">
+      <BrandHeader back="mypage" setView={setView} />
+
+      <section className="px-5 py-6">
+        <div className="mb-5">
+          <div className="flex items-center gap-2 text-[#4b1c89] font-black text-sm mb-1">
+            <Calendar size={18} />
+            ATTENDANCE CALENDAR
+          </div>
+
+          <h1 className="text-2xl font-black text-[#171425]">
+            参戦カレンダー
+          </h1>
+
+          <p className="text-xs text-gray-500 font-bold mt-1">
+            行った試合の日に紫のマークが付きます
+          </p>
+        </div>
+
+        <Card>
+          <div className="flex items-center justify-between mb-4">
+            <button
+              type="button"
+              onClick={() => moveMonth(-1)}
+              className="w-10 h-10 rounded-full bg-purple-50 text-[#4b1c89] flex items-center justify-center"
+            >
+              <ChevronLeft size={20} />
+            </button>
+
+            <div className="text-lg font-black text-[#171425]">
+              {year}年 {month + 1}月
+            </div>
+
+            <button
+              type="button"
+              onClick={() => moveMonth(1)}
+              className="w-10 h-10 rounded-full bg-purple-50 text-[#4b1c89] flex items-center justify-center"
+            >
+              <ChevronRight size={20} />
+            </button>
+          </div>
+
+          <div className="grid grid-cols-7 text-center text-[11px] font-black text-gray-400 mb-2">
+            {['日', '月', '火', '水', '木', '金', '土'].map((day) => (
+              <div key={day}>{day}</div>
+            ))}
+          </div>
+
+          <div className="grid grid-cols-7 gap-2">
+            {days.map((day, index) => {
+              if (!day) {
+                return <div key={`blank-${index}`} className="h-11" />;
+              }
+
+              const dateKey = `${monthKey}-${String(day).padStart(2, '0')}`;
+              const dayRecords = recordsByDate[dateKey] || [];
+              const hasRecord = dayRecords.length > 0;
+
+              return (
+                <button
+                  key={dateKey}
+                  type="button"
+                  onClick={() => {
+                    if (hasRecord) {
+                      onOpenDetail(dayRecords[0], 'attendanceCalendar');
+                    }
+                  }}
+                  className={`h-11 rounded-2xl text-sm font-black relative flex items-center justify-center ${hasRecord
+                      ? 'bg-[#4b1c89] text-white shadow-md shadow-purple-900/20'
+                      : 'bg-[#f8f7fb] text-gray-500 border border-gray-100'
+                    }`}
+                >
+                  {day}
+
+                  {hasRecord && (
+                    <span className="absolute bottom-1 w-1.5 h-1.5 rounded-full bg-yellow-300"></span>
+                  )}
+                </button>
+              );
+            })}
+          </div>
+        </Card>
+
+        <Card>
+          <div className="flex items-center justify-between mb-4">
+            <div className="font-black text-[#4b1c89]">
+              この月の参戦記録
+            </div>
+
+            <div className="text-xs text-gray-500 font-black">
+              {monthRecords.length}試合
+            </div>
+          </div>
+
+          {monthRecords.length > 0 ? (
+            <div className="space-y-3">
+              {monthRecords.map((record) => (
+                <button
+                  key={record.id}
+                  type="button"
+                  onClick={() => onOpenDetail(record, 'attendanceCalendar')}
+                  className="w-full bg-[#f8f7fb] rounded-2xl p-3 border border-gray-100 text-left flex items-center gap-3"
+                >
+                  <img
+                    src={getStadiumImage(record.stadium)}
+                    alt={record.stadium}
+                    className="w-16 h-14 rounded-xl object-cover"
+                  />
+
+                  <div className="min-w-0 flex-1">
+                    <div className="text-[11px] text-[#4b1c89] font-black">
+                      {record.date}
+                    </div>
+
+                    <div className="text-sm font-black text-[#171425] truncate mt-1">
+                      vs {record.opponent || '対戦相手未入力'}
+                    </div>
+
+                    <div className="text-xs text-gray-500 font-bold mt-1 truncate">
+                      {record.stadium || 'スタジアム未入力'}
+                    </div>
+                  </div>
+
+                  <ChevronRight size={18} className="text-gray-400" />
+                </button>
+              ))}
+            </div>
+          ) : (
+            <div className="h-24 rounded-2xl bg-gray-50 border border-dashed border-gray-200 flex items-center justify-center text-sm text-gray-400 font-bold">
+              この月の参戦記録はありません
+            </div>
+          )}
+        </Card>
+      </section>
+    </div>
+  );
+}
 function PhotoAlbumView({ records, setView }) {
   const albumPhotos = records.flatMap((record) =>
     (record.draftData?.photos || []).map((photo) => ({
@@ -3570,6 +3824,7 @@ function PhotoAlbumView({ records, setView }) {
       tag: record.tag,
     }))
   );
+
 
   return (
     <div className="min-h-screen bg-[#f8f7fb] pb-28">
@@ -3837,6 +4092,31 @@ function CreateStep1({ setView, draft, updateDraft, onSaveDraft }) {
   const dateInputRef = useRef(null);
   const selectedTeam =
     opponentTeams.find((team) => team.name === draft.opponent) || null;
+  const handleSelectMatch = (sectionValue) => {
+    if (!sectionValue) {
+      updateDraft({
+        matchSection: '',
+      });
+      return;
+    }
+
+    const match = matchSchedule.find(
+      (item) => String(item.section) === String(sectionValue)
+    );
+
+    if (!match) return;
+
+    updateDraft({
+      matchSection: sectionValue,
+      tournament: '明治安田J1リーグ',
+      date: match.date,
+      opponent: match.opponent,
+      stadium: match.stadium,
+      venueType: match.venueType,
+    });
+
+    setTeamOpen(false);
+  };
 
   const homeStadium = 'エディオンピースウイング広島';
 
@@ -3884,15 +4164,16 @@ function CreateStep1({ setView, draft, updateDraft, onSaveDraft }) {
           </InputBlock>
         </div>
 
-        <InputBlock icon={<Trophy size={18} />} label="大会・節">
+        <InputBlock icon={<Flag size={18} />} label="節を選択">
           <select
-            value={draft.tournament}
-            onChange={(e) => updateDraft({ tournament: e.target.value })}
+            value={draft.matchSection || ''}
+            onChange={(e) => handleSelectMatch(e.target.value)}
             className="field"
           >
-            {Array.from({ length: 38 }, (_, i) => (
-              <option key={i + 1} value={`明治安田J1リーグ 第${i + 1}節`}>
-                明治安田J1リーグ 第{i + 1}節
+            <option value="">選択してください</option>
+            {matchSchedule.map((match) => (
+              <option key={match.section} value={match.section}>
+                第{match.section}節　{match.displayDate} vs {match.opponent}
               </option>
             ))}
           </select>
@@ -4434,15 +4715,18 @@ function CreateStep3({ setView, draft, updateDraft, onSaveDraft }) {
     { id: 'other', icon: <MoreHorizontal size={17} />, label: 'その他' },
   ];
 
-  const total = Object.values(draft.expenses).reduce((a, b) => Number(a) + Number(b), 0);
+  const total = Object.values(draft.expenses || {}).reduce(
+    (sum, value) => sum + moneyToNumber(value),
+    0
+  );
 
   const updateExpense = (key, value) => {
-    const numberValue = Number(value.replace(/[^0-9]/g, '')) || 0;
+    const cleanedValue = String(value ?? '').replace(/[^0-9]/g, '');
 
     updateDraft({
       expenses: {
         ...draft.expenses,
-        [key]: numberValue,
+        [key]: cleanedValue,
       },
     });
   };
@@ -4528,8 +4812,11 @@ function CreateStep3({ setView, draft, updateDraft, onSaveDraft }) {
                   <span className="text-sm font-black text-gray-400">¥</span>
                   <input
                     type="text"
-                    value={draft.expenses[item.id].toLocaleString()}
+                    inputMode="numeric"
+                    pattern="[0-9]*"
+                    value={draft.expenses?.[item.id] ?? ''}
                     onChange={(e) => updateExpense(item.id, e.target.value)}
+                    placeholder="0"
                     className="w-24 text-right outline-none font-black text-[#4b1c89] bg-purple-50 rounded-lg px-2 py-1 focus:ring-4 focus:ring-purple-100"
                   />
                 </div>
@@ -4665,7 +4952,10 @@ function CreateStep3({ setView, draft, updateDraft, onSaveDraft }) {
 }
 
 function ConfirmView({ setView, draft, onSave, onSaveDraft }) {
-  const total = Object.values(draft.expenses).reduce((a, b) => Number(a) + Number(b), 0);
+  const total = Object.values(draft.expenses || {}).reduce(
+    (sum, value) => sum + moneyToNumber(value),
+    0
+  );
 
   const selectedMvp =
     playerOptions.find((player) => player.name === draft.mvp) ||
