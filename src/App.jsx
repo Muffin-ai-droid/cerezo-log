@@ -1773,10 +1773,7 @@ function MatchScheduleModal({ onClose }) {
                             vs {match.opponent}
                           </div>
 
-                          {/* (前略：対戦相手の表示部分) */}
-                          <div className="text-sm font-black text-[#171425] mt-1 truncate">
-                            vs {match.opponent}
-                          </div>
+
 
                           <div className="text-xs text-gray-500 font-bold mt-1 flex items-center gap-1 min-w-0">
                             <MapPin size={12} className="shrink-0" />
