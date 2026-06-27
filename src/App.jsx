@@ -30,6 +30,8 @@ const defaultDraft = {
   venueType: 'HOME',
   rating: 0,
   mvp: '',
+  formation: '3-4-2-1',
+  lineup: {},
   memo: '',
   tags: [],
   photos: [],
@@ -701,6 +703,110 @@ const resizeImage = (file, maxSize = 600, quality = 0.75) => {
     reader.onerror = reject;
     reader.readAsDataURL(file);
   });
+};
+const formationLayouts = {
+  '3-4-2-1': [
+    { key: 'CF', label: 'CF', x: 50, y: 10 },
+    { key: 'SHADOW1', label: 'シャドー', x: 35, y: 27 },
+    { key: 'SHADOW2', label: 'シャドー', x: 65, y: 27 },
+
+    { key: 'LWB', label: '左WB', x: 12, y: 48 },
+    { key: 'DMF1', label: 'ボランチ', x: 38, y: 50 },
+    { key: 'DMF2', label: 'ボランチ', x: 62, y: 50 },
+    { key: 'RWB', label: '右WB', x: 88, y: 48 },
+
+    { key: 'CBL', label: '左SB', x: 28, y: 70 },
+    { key: 'CB', label: 'CB', x: 50, y: 70 },
+    { key: 'CBR', label: '右SB', x: 72, y: 70 },
+
+    { key: 'GK', label: 'GK', x: 50, y: 90 },
+  ],
+
+  '3-4-1-2': [
+    { key: 'FW1', label: 'FW', x: 38, y: 10 },
+    { key: 'FW2', label: 'FW', x: 62, y: 10 },
+    { key: 'OMF', label: 'トップ下', x: 50, y: 28 },
+
+    { key: 'LWB', label: '左WB', x: 12, y: 48 },
+    { key: 'DMF1', label: 'ボランチ', x: 38, y: 50 },
+    { key: 'DMF2', label: 'ボランチ', x: 62, y: 50 },
+    { key: 'RWB', label: '右WB', x: 88, y: 48 },
+
+    { key: 'CBL', label: '左SB', x: 28, y: 70 },
+    { key: 'CB', label: 'CB', x: 50, y: 70 },
+    { key: 'CBR', label: '右SB', x: 72, y: 70 },
+
+    { key: 'GK', label: 'GK', x: 50, y: 90 },
+  ],
+
+  '3-4-3': [
+    { key: 'LWG', label: '左WG', x: 30, y: 25 },
+    { key: 'CF', label: 'CF', x: 50, y: 15 },
+    { key: 'RWG', label: '右WG', x: 70, y: 25 },
+
+    { key: 'LWB', label: '左WB', x: 12, y: 48 },
+    { key: 'DMF1', label: 'ボランチ', x: 38, y: 50 },
+    { key: 'DMF2', label: 'ボランチ', x: 62, y: 50 },
+    { key: 'RWB', label: '右WB', x: 88, y: 48 },
+
+    { key: 'CBL', label: '左SB', x: 28, y: 70 },
+    { key: 'CB', label: 'CB', x: 50, y: 70 },
+    { key: 'CBR', label: '右SB', x: 72, y: 70 },
+
+    { key: 'GK', label: 'GK', x: 50, y: 90 },
+  ],
+
+  '4-2-3-1': [
+    { key: 'CF', label: 'CF', x: 50, y: 10 },
+
+    { key: 'LMF', label: '左MF', x: 22, y: 30 },
+    { key: 'OMF', label: 'トップ下', x: 50, y: 30 },
+    { key: 'RMF', label: '右MF', x: 78, y: 30 },
+
+    { key: 'DMF1', label: 'ボランチ', x: 38, y: 52 },
+    { key: 'DMF2', label: 'ボランチ', x: 62, y: 52 },
+
+    { key: 'LB', label: '左SB', x: 15, y: 72 },
+    { key: 'CB1', label: 'CB', x: 38, y: 72 },
+    { key: 'CB2', label: 'CB', x: 62, y: 72 },
+    { key: 'RB', label: '右SB', x: 85, y: 72 },
+
+    { key: 'GK', label: 'GK', x: 50, y: 90 },
+  ],
+
+  '4-4-2': [
+    { key: 'FW1', label: 'FW', x: 38, y: 15 },
+    { key: 'FW2', label: 'FW', x: 62, y: 15 },
+
+    { key: 'LMF', label: '左MF', x: 18, y: 38 },
+    { key: 'CMF1', label: '中央MF', x: 40, y: 42 },
+    { key: 'CMF2', label: '中央MF', x: 60, y: 42 },
+    { key: 'RMF', label: '右MF', x: 82, y: 38 },
+
+    { key: 'LB', label: '左SB', x: 15, y: 72 },
+    { key: 'CB1', label: 'CB', x: 38, y: 72 },
+    { key: 'CB2', label: 'CB', x: 62, y: 72 },
+    { key: 'RB', label: '右SB', x: 85, y: 72 },
+
+    { key: 'GK', label: 'GK', x: 50, y: 90 },
+  ],
+
+  '4-3-3': [
+    { key: 'LWG', label: '左WG', x: 25, y: 20 },
+    { key: 'CF', label: 'CF', x: 50, y: 15 },
+    { key: 'RWG', label: '右WG', x: 75, y: 20 },
+
+    { key: 'CMF1', label: '左MF', x: 32, y: 42 },
+    { key: 'DMF1', label: 'アンカー', x: 50, y: 52 },
+    { key: 'CMF2', label: '右MF', x: 68, y: 42 },
+
+    { key: 'LB', label: '左SB', x: 15, y: 72 },
+    { key: 'CB1', label: 'CB', x: 38, y: 72 },
+    { key: 'CB2', label: 'CB', x: 62, y: 72 },
+    { key: 'RB', label: '右SB', x: 85, y: 72 },
+
+    { key: 'GK', label: 'GK', x: 50, y: 90 },
+  ],
 };
 const playerOptions = [
   { name: '大迫 敬介', number: '1', position: 'GK' },
@@ -5652,7 +5758,7 @@ function CreateStep2({ setView, draft, updateDraft, onSaveDraft }) {
         </Card>
 
 
-        {/* 今日のMVP */}
+
         {/* 今日のMVP */}
         <Card>
           <div className="flex items-center gap-2 text-[#4b1c89] font-black mb-4">
@@ -5714,6 +5820,10 @@ function CreateStep2({ setView, draft, updateDraft, onSaveDraft }) {
             </div>
           </div>
         </Card>
+        <SimplePositionBoard
+          draft={draft}
+          updateDraft={updateDraft}
+        />
 
         {/* 思い出メモ */}
         <Card>
@@ -5838,6 +5948,266 @@ function CreateStep2({ setView, draft, updateDraft, onSaveDraft }) {
         </button>
       </BottomAction>
     </CreateShell>
+  );
+}
+
+function SimplePositionBoard({ draft, updateDraft }) {
+  const [activeSlotKey, setActiveSlotKey] = useState(null);
+
+  const formation = draft.formation || '3-4-2-1';
+  const slots = formationLayouts[formation] || formationLayouts['3-4-2-1'];
+  const lineup = draft.lineup || {};
+  const getPlayerCandidates = (slotKey) => {
+    const allowedPositionsBySlot = {
+      GK: ['GK'],
+
+      CBL: ['DF'],
+      CB: ['DF'],
+      CBR: ['DF'],
+      CB1: ['DF'],
+      CB2: ['DF'],
+      LB: ['DF', 'MF'],
+      RB: ['DF', 'MF'],
+
+      LWB: ['DF', 'MF'],
+      RWB: ['DF', 'MF'],
+
+      DMF1: ['MF'],
+      DMF2: ['MF'],
+      CMF1: ['MF'],
+      CMF2: ['MF'],
+      OMF: ['MF', 'FW'],
+
+      LMF: ['MF', 'FW'],
+      RMF: ['MF', 'FW'],
+      SHADOW1: ['MF', 'FW'],
+      SHADOW2: ['MF', 'FW'],
+
+      LWG: ['FW', 'MF'],
+      RWG: ['FW', 'MF'],
+      CF: ['FW'],
+      FW1: ['FW'],
+      FW2: ['FW'],
+    };
+
+    const allowedPositions = allowedPositionsBySlot[slotKey] || ['GK', 'DF', 'MF', 'FW'];
+
+    return playerOptions.filter((player) => {
+      const isAllowedPosition = allowedPositions.includes(player.position);
+
+      const isSpecialDmfPlayer =
+        (slotKey === 'DMF1' || slotKey === 'DMF2') &&
+        player.name === '新井 直人';
+
+      return isAllowedPosition || isSpecialDmfPlayer;
+    });
+  };
+
+  const activeSlot = slots.find((slot) => slot.key === activeSlotKey);
+  const changeFormation = (nextFormation) => {
+    updateDraft({
+      formation: nextFormation,
+      lineup: {},
+    });
+
+    setActiveSlotKey(null);
+  };
+
+  const updatePlayer = (positionKey, playerName) => {
+    updateDraft({
+      lineup: {
+        ...lineup,
+        [positionKey]: playerName,
+      },
+    });
+
+    setActiveSlotKey(null);
+  };
+
+  const clearPlayer = (positionKey) => {
+    const nextLineup = { ...lineup };
+    delete nextLineup[positionKey];
+
+    updateDraft({
+      lineup: nextLineup,
+    });
+
+    setActiveSlotKey(null);
+  };
+
+  return (
+    <Card>
+      <div className="flex items-center justify-between mb-4">
+        <div className="flex items-center gap-2 text-[#4b1c89] font-black">
+          <Shirt size={18} />
+          試合ポジション
+        </div>
+
+        <select
+          value={formation}
+          onChange={(e) => changeFormation(e.target.value)}
+          className="text-xs font-black text-[#4b1c89] bg-purple-50 border border-purple-100 rounded-full px-3 py-2 outline-none"
+        >
+          {Object.keys(formationLayouts).map((name) => (
+            <option key={name} value={name}>
+              {name}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      <p className="text-[11px] text-gray-500 font-bold mb-3">
+        ユニフォームをタップして選手を選択
+      </p>
+
+      <div className="relative h-[380px] rounded-[1.6rem] overflow-hidden bg-gradient-to-b from-[#16a34a] to-[#166534] border-4 border-green-200 shadow-inner">
+        {/* ピッチ線 */}
+        <div className="absolute inset-3 border-2 border-white/70 rounded-xl"></div>
+        <div className="absolute left-3 right-3 top-1/2 border-t-2 border-white/60"></div>
+        <div className="absolute left-1/2 top-1/2 w-20 h-20 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-white/60"></div>
+        <div className="absolute left-1/2 bottom-3 w-28 h-16 -translate-x-1/2 border-2 border-white/60 border-b-0 rounded-t-xl"></div>
+        <div className="absolute left-1/2 top-3 w-28 h-16 -translate-x-1/2 border-2 border-white/60 border-t-0 rounded-b-xl"></div>
+
+        {slots.map((slot) => {
+          const playerName = lineup[slot.key];
+          const player = playerOptions.find((p) => p.name === playerName);
+          const isActive = activeSlotKey === slot.key;
+
+          return (
+            <button
+              type="button"
+              key={slot.key}
+              onClick={() => setActiveSlotKey(slot.key)}
+              className="absolute -translate-x-1/2 -translate-y-1/2 flex flex-col items-center active:scale-95 transition"
+              style={{
+                left: `${slot.x}%`,
+                top: `${slot.y}%`,
+              }}
+            >
+              <div
+                className={`w-11 h-11 rounded-2xl flex flex-col items-center justify-center shadow-lg border-2 ${isActive
+                  ? 'bg-yellow-300 text-[#4b1c89] border-white ring-4 ring-yellow-200/60'
+                  : player
+                    ? 'bg-[#4b1c89] text-white border-yellow-300'
+                    : 'bg-white/85 text-gray-400 border-white'
+                  }`}
+              >
+                <Shirt size={18} fill="currentColor" strokeWidth={0} />
+
+                <div className="text-[11px] font-black leading-none mt-0.5">
+                  {player ? player.number : '-'}
+                </div>
+              </div>
+
+              {slot.key === 'GK' && (
+                <div className="mb-1 bg-white/95 text-[#171425] rounded-full px-2 py-0.5 text-[8px] font-black shadow-sm max-w-[62px] truncate">
+                  {player ? player.name.replace(' ', '') : slot.label}
+                </div>
+              )}
+
+
+
+              {slot.key !== 'GK' && (
+                <div className="mt-1 bg-white/95 text-[#171425] rounded-full px-2 py-0.5 text-[8px] font-black shadow-sm max-w-[62px] truncate">
+                  {player ? player.name.replace(' ', '') : slot.label}
+                </div>
+              )}
+            </button>
+          );
+        })}
+      </div>
+
+      {activeSlot && (
+        <div className="fixed inset-0 z-[1200] bg-black/45 flex items-end justify-center">
+          <div className="w-full max-w-md bg-white rounded-t-[2rem] p-5 shadow-2xl max-h-[70vh] overflow-hidden">
+            <div className="flex items-center justify-between mb-4">
+              <div>
+                <div className="text-[11px] text-[#4b1c89] font-black tracking-widest">
+                  SELECT PLAYER
+                </div>
+                <div className="text-xl font-black text-[#171425] mt-1">
+                  {activeSlot.label}を選択
+                </div>
+              </div>
+
+              <button
+                type="button"
+                onClick={() => setActiveSlotKey(null)}
+                className="w-9 h-9 rounded-full bg-gray-100 text-gray-500 font-black"
+              >
+                ×
+              </button>
+            </div>
+
+            <div className="space-y-2 overflow-y-auto max-h-[48vh] pr-1">
+              <button
+                type="button"
+                onClick={() => clearPlayer(activeSlot.key)}
+                className="w-full flex items-center gap-3 rounded-2xl p-3 bg-gray-50 border border-gray-100 text-left active:scale-[0.98]"
+              >
+                <div className="w-11 h-11 rounded-2xl bg-white text-gray-400 flex items-center justify-center border border-gray-200">
+                  -
+                </div>
+
+                <div className="flex-1">
+                  <div className="font-black text-gray-500">
+                    未選択に戻す
+                  </div>
+                  <div className="text-[11px] text-gray-400 font-bold mt-0.5">
+                    このポジションの選手を外します
+                  </div>
+                </div>
+              </button>
+
+              {getPlayerCandidates(activeSlot.key).map((player) => {
+                const selectedHere = lineup[activeSlot.key] === player.name;
+                const alreadyUsed = Object.entries(lineup).some(
+                  ([key, name]) => key !== activeSlot.key && name === player.name
+                );
+
+                return (
+                  <button
+                    type="button"
+                    key={player.name}
+                    onClick={() => updatePlayer(activeSlot.key, player.name)}
+                    className={`w-full flex items-center gap-3 rounded-2xl p-3 border text-left active:scale-[0.98] ${selectedHere
+                      ? 'bg-purple-50 border-purple-200'
+                      : 'bg-white border-gray-100'
+                      }`}
+                  >
+                    <div
+                      className={`w-11 h-11 rounded-2xl flex flex-col items-center justify-center ${selectedHere
+                        ? 'bg-[#4b1c89] text-white'
+                        : 'bg-[#f8f7fb] text-[#4b1c89]'
+                        }`}
+                    >
+                      <Shirt size={16} fill="currentColor" strokeWidth={0} />
+                      <div className="text-[11px] font-black leading-none">
+                        {player.number}
+                      </div>
+                    </div>
+
+                    <div className="flex-1 min-w-0">
+                      <div className="font-black text-[#171425] truncate">
+                        {player.name}
+                      </div>
+                      <div className="text-[11px] text-gray-400 font-bold mt-0.5">
+                        #{player.number} / {player.position}
+                        {alreadyUsed ? ' ・他ポジションで選択中' : ''}
+                      </div>
+                    </div>
+
+                    {selectedHere && (
+                      <CheckCircle2 size={20} className="text-[#4b1c89]" />
+                    )}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+      )}
+    </Card>
   );
 }
 
