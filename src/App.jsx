@@ -4722,17 +4722,14 @@ function BadgeCollectionView({ records, setView }) {
   );
 }
 function PhotoAlbumView({ records, setView }) {
-  const albumPhotos = records.flatMap((record) =>
-    (record.draftData?.photos || []).map((photo) => ({
-      ...photo,
-      recordId: record.id,
-      recordDate: record.date,
-      opponent: record.opponent,
-      stadium: record.stadium,
-      tag: record.tag,
-    }))
-  );
+  // ✨ 1. アルバムと拡大写真を開くための状態を用意
+  const [activeAlbum, setActiveAlbum] = useState(null);
+  const [activePhotoUrl, setActivePhotoUrl] = useState(null);
 
+  // ✨ 2. 写真が1枚以上ある記録だけを「アルバム」として抽出
+  const photoRecords = records.filter((record) =>
+    (record.draftData?.photos || []).length > 0
+  );
 
   return (
     <div className="min-h-screen bg-[#f8f7fb] pb-28">
@@ -4750,58 +4747,72 @@ function PhotoAlbumView({ records, setView }) {
           </h1>
 
           <p className="text-xs text-gray-500 font-bold mt-1">
-            観戦記録に追加した写真をまとめて見られます
+            試合ごとにまとまった写真を見られます
           </p>
         </div>
 
         <Card>
           <div className="flex items-center justify-between mb-4">
             <div className="font-black text-[#4b1c89]">
-              写真一覧
+              アルバム一覧
             </div>
 
             <div className="text-xs text-gray-500 font-black">
-              {albumPhotos.length}枚
+              {photoRecords.length}試合
             </div>
           </div>
 
-          {albumPhotos.length > 0 ? (
+          {photoRecords.length > 0 ? (
             <div className="grid grid-cols-2 gap-3">
-              {albumPhotos.map((photo) => (
-                <div
-                  key={photo.id}
-                  className="bg-[#f8f7fb] rounded-2xl overflow-hidden border border-gray-100 shadow-sm"
-                >
-                  <img
-                    src={photo.url}
-                    alt={photo.name || '観戦写真'}
-                    className="w-full h-32 object-cover"
-                  />
+              {/* ✨ 3. 試合ごとに表紙（1枚目の写真）を表示 */}
+              {photoRecords.map((record) => {
+                const photos = record.draftData.photos;
+                const firstPhoto = photos[0];
 
-                  <div className="p-3">
-                    <div className="text-[11px] text-[#4b1c89] font-black">
-                      {photo.recordDate}
+                return (
+                  <div
+                    key={record.id}
+                    onClick={() => setActiveAlbum(record)}
+                    className="bg-[#f8f7fb] rounded-2xl overflow-hidden border border-gray-100 shadow-sm cursor-pointer active:scale-95 transition"
+                  >
+                    <div className="relative">
+                      <img
+                        src={firstPhoto.url}
+                        alt="アルバム表紙"
+                        className="w-full h-32 object-cover"
+                      />
+                      {/* 右下に写真の枚数を表示 */}
+                      <div className="absolute bottom-2 right-2 bg-black/60 backdrop-blur-sm text-white text-[10px] font-black px-2 py-1 rounded-lg flex items-center gap-1">
+                        <ImageIcon size={12} />
+                        {photos.length}
+                      </div>
                     </div>
 
-                    <div className="text-xs font-black text-[#171425] mt-1 truncate">
-                      vs {photo.opponent || '対戦相手未入力'}
-                    </div>
+                    <div className="p-3">
+                      <div className="text-[11px] text-[#4b1c89] font-black">
+                        {record.date}
+                      </div>
 
-                    <div className="text-[10px] text-gray-500 font-bold mt-1 flex items-center gap-1 min-w-0">
-                      <MapPin size={10} className="shrink-0" />
-                      <span className="truncate">
-                        {photo.stadium || 'スタジアム未入力'}
-                      </span>
-                    </div>
+                      <div className="text-xs font-black text-[#171425] mt-1 truncate">
+                        vs {record.opponent || '対戦相手未入力'}
+                      </div>
 
-                    {photo.tag && (
-                      <span className="inline-block mt-2 bg-purple-100 text-[#4b1c89] text-[9px] font-black px-2 py-1 rounded-full">
-                        #{photo.tag}
-                      </span>
-                    )}
+                      <div className="text-[10px] text-gray-500 font-bold mt-1 flex items-center gap-1 min-w-0">
+                        <MapPin size={10} className="shrink-0" />
+                        <span className="truncate">
+                          {record.stadium || 'スタジアム未入力'}
+                        </span>
+                      </div>
+
+                      {record.tag && (
+                        <span className="inline-block mt-2 bg-purple-100 text-[#4b1c89] text-[9px] font-black px-2 py-1 rounded-full">
+                          #{record.tag}
+                        </span>
+                      )}
+                    </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           ) : (
             <div className="h-40 rounded-2xl bg-gray-50 border border-dashed border-gray-200 flex flex-col items-center justify-center text-center px-4">
@@ -4816,6 +4827,67 @@ function PhotoAlbumView({ records, setView }) {
           )}
         </Card>
       </section>
+
+      {/* ✨ 4. アルバムをタップした時に開く画面（モーダル） */}
+      {activeAlbum && (
+        <div className="fixed inset-0 z-[1000] bg-[#f8f7fb] flex flex-col">
+          {/* アルバムのヘッダー */}
+          <div className="h-[70px] px-5 bg-gradient-to-r from-[#2b0b63] to-[#4b1c89] text-white flex items-center justify-between shrink-0 shadow-md">
+            <div className="min-w-0 flex-1">
+              <div className="text-[10px] font-black text-yellow-300">
+                {activeAlbum.date}
+              </div>
+              <div className="text-sm font-black truncate mt-0.5">
+                vs {activeAlbum.opponent} の写真
+              </div>
+            </div>
+            <button
+              onClick={() => setActiveAlbum(null)}
+              className="w-9 h-9 rounded-full bg-white/15 border border-white/15 flex items-center justify-center active:scale-95 shrink-0 ml-3"
+            >
+              <ChevronLeft size={20} strokeWidth={2.5} />
+            </button>
+          </div>
+
+          {/* その試合の写真一覧 */}
+          <div className="flex-1 overflow-y-auto p-5 pb-20">
+            <div className="grid grid-cols-2 gap-3">
+              {activeAlbum.draftData.photos.map((photo) => (
+                <img
+                  key={photo.id}
+                  src={photo.url}
+                  alt={photo.name}
+                  onClick={() => setActivePhotoUrl(photo.url)} // タップでさらに拡大
+                  className="w-full h-40 object-cover rounded-2xl shadow-sm border border-gray-200 cursor-pointer active:scale-95 transition"
+                />
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ✨ 5. 写真をタップした時の拡大モーダル */}
+      {activePhotoUrl && (
+        <div
+          className="fixed inset-0 bg-black/90 z-[1100] flex flex-col items-center justify-center p-4"
+          onClick={() => setActivePhotoUrl(null)}
+        >
+          <div className="relative max-w-full max-h-full flex flex-col items-center">
+            <img
+              src={activePhotoUrl}
+              alt="拡大写真"
+              className="max-w-full max-h-[80vh] rounded-2xl object-contain shadow-2xl border border-white/10"
+            />
+            <button
+              type="button"
+              onClick={() => setActivePhotoUrl(null)}
+              className="mt-6 bg-white/20 text-white font-black px-6 py-3 rounded-full text-sm backdrop-blur-md"
+            >
+              閉じる
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
