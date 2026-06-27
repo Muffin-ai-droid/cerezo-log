@@ -1338,13 +1338,9 @@ function HomeView({
   const [scheduleOpen, setScheduleOpen] = useState(false);
 
   const visibleRecords = showAllRecords ? records : records.slice(0, 3);
-  const winCount = records.filter((record) => {
-    // ...中略...
-    return sanfrecceScore > opponentScore;
-  }).length;
   const nextMatch = getNextMatch();
 
-  // ★追加：各試合の勝ち・引分・負けを判定する関数
+
   const getResult = (record) => {
     const data = record.draftData || {};
     const homeScore =
@@ -1361,6 +1357,9 @@ function HomeView({
     if (homeScore === awayScore) return 'DRAW';
     return 'LOSE';
   };
+
+
+  const winCount = records.filter((record) => getResult(record) === 'WIN').length;
 
   return (
     <div>
