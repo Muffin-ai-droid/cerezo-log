@@ -855,7 +855,8 @@ export default function App() {
     const deleteIdSet = new Set(ids.map(String));
 
     setRecords((prevRecords) =>
-      prevRecords.filter((record) => !ids.includes(record.id))
+      // ★ 修正：文字（String）に揃えて正しく比較・削除できるようにしました！
+      prevRecords.filter((record) => !deleteIdSet.has(String(record.id)))
     );
 
     setSelectedRecord(null);
