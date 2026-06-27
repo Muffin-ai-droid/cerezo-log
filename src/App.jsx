@@ -5093,10 +5093,14 @@ function CreateStep1({ setView, draft, updateDraft, onSaveDraft }) {
             <option value="">選択してください</option>
             {matchSchedule.map((match) => (
               <option key={match.section} value={match.section}>
-                第{match.section}節　{match.displayDate} vs {match.opponent}
+                第{match.section}節 {match.displayDate} vs {match.opponent}
               </option>
             ))}
           </select>
+          {/* ✨ ここに説明文を追加します */}
+          <p className="text-[11px] text-gray-500 font-bold mt-2 leading-tight">
+            ※節を選択すると、試合日や対戦相手、スタジアムが自動で反映されます。
+          </p>
         </InputBlock>
 
 
