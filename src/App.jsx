@@ -3986,15 +3986,36 @@ function ProfileShieldBadge({ badge }) {
   );
 }
 function MyPageStat({ label, value, unit }) {
+  // ★追加：吹き出しを表示するかどうかの「状態」を用意します
+  const [showTooltip, setShowTooltip] = useState(false);
+
   const valueStr = String(value);
-  // ★追加：文字数が7文字以上（例: ¥10,000 など）なら文字を少し小さくする設定
   const isLong = valueStr.length >= 7;
 
-  return (
-    // ★修正：p-3を「py-3 px-1.5」に変えて横の余白を広げ、min-w-0 で枠の破壊を防ぎます
-    <div className="bg-white/10 border border-white/10 rounded-2xl py-3 px-1.5 text-center min-w-0 flex flex-col justify-center">
+  // ★追加：枠がタップされた時の処理（省略されている時だけ吹き出しを出す）
+  const handleClick = () => {
+    if (isLong) {
+      setShowTooltip(true);
+      // 2.5秒後に自動で吹き出しを消す親切設計！
+      setTimeout(() => setShowTooltip(false), 2500);
+    }
+  };
 
-      {/* ★修正：桁数が多い場合は text-sm に縮小。それでもはみ出る異常値は truncate で「...」にします */}
+  return (
+    <div
+      onClick={handleClick}
+      // ★修正：relative を追加し、タップできる感（cursor-pointer と active:scale-95）を出します
+      className="relative bg-white/10 border border-white/10 rounded-2xl py-3 px-1.5 text-center min-w-0 flex flex-col justify-center cursor-pointer active:scale-95 transition"
+    >
+      {/* ★追加：タップされたら、枠の上に全額を書いた黒い吹き出しを表示する */}
+      {showTooltip && (
+        <div className="absolute -top-10 left-1/2 -translate-x-1/2 bg-[#171425] text-white text-xs font-black px-3 py-1.5 rounded-lg whitespace-nowrap z-50 shadow-xl">
+          {value}{unit}
+          {/* 吹き出しの下の小さな三角形（尻尾） */}
+          <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-2 h-2 bg-[#171425] rotate-45"></div>
+        </div>
+      )}
+
       <div className={`${isLong ? 'text-sm' : 'text-lg'} font-black leading-none truncate px-0.5`}>
         {value}
       </div>
