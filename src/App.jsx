@@ -5411,28 +5411,33 @@ function CreateStep2({ setView, draft, updateDraft, onSaveDraft }) {
 
     if (remaining <= 0) return;
 
-    const readFileAsDataUrl = (file) => {
-      return new Promise((resolve) => {
-        const reader = new FileReader();
-
-        reader.onload = () => {
-          resolve({
-            id: `${file.name}-${Date.now()}-${Math.random()}`,
-            name: file.name,
-            url: reader.result,
-          });
+    // 画像を圧縮して読み込む関数に変更
+    const processPhoto = async (file) => {
+      try {
+        // resizeImage(ファイル, 最大ピクセル数, 画質)
+        // ここでは長辺最大800px、画質70%で圧縮します
+        const compressedUrl = await resizeImage(file, 800, 0.7);
+        return {
+          id: `${file.name}-${Date.now()}-${Math.random()}`,
+          name: file.name,
+          url: compressedUrl,
         };
-
-        reader.readAsDataURL(file);
-      });
+      } catch (error) {
+        console.error('写真の圧縮に失敗しました:', error);
+        return null;
+      }
     };
 
-    const newPhotos = await Promise.all(
-      files.slice(0, remaining).map(readFileAsDataUrl)
+    // 選択された画像をすべて圧縮処理にかける
+    const processedPhotos = await Promise.all(
+      files.slice(0, remaining).map(processPhoto)
     );
 
+    // 圧縮に成功したもの（null以外）だけを抽出して追加
+    const validNewPhotos = processedPhotos.filter((photo) => photo !== null);
+
     updateDraft({
-      photos: [...currentPhotos, ...newPhotos],
+      photos: [...currentPhotos, ...validNewPhotos],
     });
 
     e.target.value = '';
