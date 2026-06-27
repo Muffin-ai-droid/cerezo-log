@@ -4346,6 +4346,89 @@ const badgeDefinitions = [
     condition: (stats) => stats.foodRecords >= 1,
     progress: (stats) => `${Math.min(stats.foodRecords, 1)}/1`,
   },
+
+  // --- ここから新バッジ10個を追加 ---
+  {
+    id: 'goddess-of-victory',
+    title: '勝利の女神',
+    description: '勝率70%以上をキープ（※5試合以上記録）',
+    icon: <Star size={24} />,
+    condition: (stats) => stats.total >= 5 && stats.winRate >= 70,
+    progress: (stats) => stats.total < 5 ? `試合不足(${stats.total}/5)` : `${Math.floor(stats.winRate)}%`,
+  },
+  {
+    id: 'half-century',
+    title: 'ハーフセンチュリー',
+    description: '観戦記録を50試合作成',
+    icon: <Shield size={24} />,
+    condition: (stats) => stats.total >= 50,
+    progress: (stats) => `${Math.min(stats.total, 50)}/50`,
+  },
+  {
+    id: 'edion-master',
+    title: 'エディオンの主',
+    description: 'ホーム観戦を10試合記録',
+    icon: <Building2 size={24} />,
+    condition: (stats) => stats.home >= 10,
+    progress: (stats) => `${Math.min(stats.home, 10)}/10`,
+  },
+  {
+    id: 'away-master',
+    title: '全国制覇への道',
+    description: 'アウェイ観戦を10試合記録',
+    icon: <Train size={24} />,
+    condition: (stats) => stats.away >= 10,
+    progress: (stats) => `${Math.min(stats.away, 10)}/10`,
+  },
+  {
+    id: 'food-maniac',
+    title: 'スタグルマニア',
+    description: 'スタジアムでのご飯代が累計1万円を突破',
+    icon: <Utensils size={24} />,
+    condition: (stats) => stats.foodExpenseTotal >= 10000,
+    progress: (stats) => `¥${Math.min(stats.foodExpenseTotal, 10000).toLocaleString()}`,
+  },
+  {
+    id: 'highlight-creator',
+    title: 'ハイライト職人',
+    description: '写真付きの観戦記録を5試合作成',
+    icon: <ImageIcon size={24} />,
+    condition: (stats) => stats.photoRecords >= 5,
+    progress: (stats) => `${Math.min(stats.photoRecords, 5)}/5`,
+  },
+  {
+    id: 'goal-rush',
+    title: 'ゴールラッシュ',
+    description: '1試合で4得点以上のゴールを記録',
+    icon: <Trophy size={24} />,
+    condition: (stats) => stats.fourGoals >= 1,
+    progress: (stats) => `${Math.min(stats.fourGoals, 1)}/1`,
+  },
+  {
+    id: 'chill-watch',
+    title: 'チルな観戦',
+    description: '一人での観戦を5試合記録',
+    icon: <User size={24} />,
+    condition: (stats) => stats.soloGames >= 5,
+    progress: (stats) => `${Math.min(stats.soloGames, 5)}/5`,
+  },
+  {
+    id: 'page-of-youth',
+    title: '青春の1ページ',
+    description: '50文字以上の長文メモを書き残す',
+    icon: <PenSquare size={24} />,
+    condition: (stats) => stats.longMemoGames >= 1,
+    progress: (stats) => `${Math.min(stats.longMemoGames, 1)}/1`,
+  },
+  {
+    id: 'rich-holiday',
+    title: '豪遊',
+    description: '1試合にかかった総費用が2万円を突破',
+    icon: <Wallet size={24} />,
+    condition: (stats) => stats.maxExpense >= 20000,
+    progress: (stats) => `最高 ¥${stats.maxExpense.toLocaleString()}`,
+  },
+  // --- ここまで ---
 ];
 
 const getBadgeStats = (records) => {
@@ -4472,6 +4555,40 @@ const getBadgeStats = (records) => {
     moneyToNumber(record.draftData?.expenses?.food) > 0
   ).length;
 
+  // --- ここから追加する計算式 ---
+  // 勝率（5試合以上記録している場合のみ計算、それ以下は0）
+  const winRate = total >= 5 ? (wins / total) * 100 : 0;
+
+  // スタグル代（ご飯・飲み物代）の合計
+  const foodExpenseTotal = records.reduce((sum, record) => sum + moneyToNumber(record.draftData?.expenses?.food), 0);
+
+  // 4得点以上の試合数
+  const fourGoals = records.filter((record) => {
+    const data = record.draftData || {};
+    const scoreMatch = record.score?.match(/(\d+)\s*-\s*(\d+)/);
+    const homeScore = data.homeScore !== undefined ? Number(data.homeScore) : Number(scoreMatch?.[1] || 0);
+    return homeScore >= 4;
+  }).length;
+
+  // 一人観戦の試合数
+  const soloGames = records.filter((record) =>
+    record.companion === '一人' || record.companion === '一人で観戦'
+  ).length;
+
+  // 50文字以上の長文メモの試合数
+  const longMemoGames = records.filter((record) => {
+    const memo = record.draftData?.memo || '';
+    return memo.length >= 50;
+  }).length;
+
+  // 1試合の最高費用
+  const maxExpense = records.reduce((max, record) => {
+    const ex = record.draftData?.expenses || {};
+    const totalEx = moneyToNumber(ex.ticket) + moneyToNumber(ex.goods) + moneyToNumber(ex.food) + moneyToNumber(ex.transport) + moneyToNumber(ex.other);
+    return totalEx > max ? totalEx : max;
+  }, 0);
+
+
   return {
     total,
     wins,
@@ -4488,6 +4605,12 @@ const getBadgeStats = (records) => {
     memoRecords,
     goodsRecords,
     foodRecords,
+    winRate,
+    foodExpenseTotal,
+    fourGoals,
+    soloGames,
+    longMemoGames,
+    maxExpense,
   };
 };
 
