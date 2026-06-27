@@ -52,6 +52,9 @@ const defaultDraft = {
   awayScore: '',
   stadium: '',
   seat: '',
+  seatBlock: '',
+  seatRow: '',
+  seatNumber: '',
   weather: '',
   companion: '',
   watchType: '',
@@ -568,7 +571,117 @@ const stadiumImages = {
 };
 
 
+const sanfrecceHomeSeatGroups = [
+  {
+    label: 'カテゴリー席',
+    seats: [
+      'カテゴリー1',
+      'カテゴリー2',
+      'カテゴリー3',
+      'カテゴリー4',
+      'カテゴリー5',
+      'カテゴリー6',
+    ],
+  },
+  {
+    label: 'ゴール裏・応援席',
+    seats: [
+      'サンフレッチェサポーターシート',
+      'ホームゴール裏',
+      'ビジターシート',
+    ],
+  },
+  {
+    label: 'スタンド席',
+    seats: [
+      'メインスタンド',
+      'バックスタンド',
+      'ノースサイドシート',
+      'サウスサイドシート',
+    ],
+  },
+  {
+    label: 'バラエティ席',
+    seats: [
+      'カウンターシート',
+      'テーブルシート',
+      'テラスシート',
+      'ボックスシート',
+      'ペアシート',
+      'ファミリーシート',
+    ],
+  },
+  {
+    label: '特別席・その他',
+    seats: [
+      'プレミアム席',
+      'ラウンジ席',
+      '車いす席',
+      'その他',
+    ],
+  },
+];
 
+const awaySeatGroups = [
+  {
+    label: 'ビジター席',
+    seats: [
+      'ビジター席',
+      'ビジター自由席',
+      'ビジター指定席',
+    ],
+  },
+  {
+    label: 'ミックス席',
+    seats: [
+      'メインスタンド・ミックス',
+      'バックスタンド・ミックス',
+      'ゴール裏・ミックス',
+    ],
+  },
+  {
+    label: 'その他',
+    seats: [
+      'その他',
+    ],
+  },
+];
+
+const defaultSeatGroups = [
+  {
+    label: '通常席',
+    seats: [
+      'メインスタンド',
+      'バックスタンド',
+      'ゴール裏',
+    ],
+  },
+  {
+    label: 'ビジター・ミックス',
+    seats: [
+      'ビジター席',
+      'ミックス席',
+    ],
+  },
+  {
+    label: 'その他',
+    seats: [
+      'その他',
+    ],
+  },
+];
+
+const getSeatGroups = (stadium, venueType) => {
+  if (stadium === 'エディオンピースウイング広島') {
+    return sanfrecceHomeSeatGroups;
+  }
+
+  if (venueType === 'AWAY') {
+    return awaySeatGroups;
+  }
+
+  return defaultSeatGroups;
+};
 const getStadiumImage = (stadium) => {
   return stadiumImages[stadium] || stadiumImages.default;
 };
@@ -757,6 +870,19 @@ export default function App() {
     setSelectedRecord(null);
     setView(detailBackView || 'home');
   };
+
+  const handleDeleteRecords = (ids) => {
+    if (!ids.length) return;
+
+    const ok = window.confirm(`${ids.length}件の観戦記録を削除しますか？`);
+    if (!ok) return;
+
+    setRecords((prevRecords) =>
+      prevRecords.filter((record) => !ids.includes(record.id))
+    );
+
+    setSelectedRecord(null);
+  };
   const saveCurrentDraft = () => {
     const draftToSave = {
       ...draft,
@@ -868,6 +994,7 @@ export default function App() {
             onEdit={handleEditRecord}
             onToggleFavorite={toggleFavorite}
             onOpenDetail={openRecordDetail}
+            onDeleteRecords={handleDeleteRecords}
           />
         )}
         {view === 'recordDetail' && selectedRecord && (
@@ -903,11 +1030,24 @@ export default function App() {
             setView={setView}
           />
         )}
+        {view === 'badgeCollection' && (
+          <BadgeCollectionView
+            records={records}
+            setView={setView}
+          />
+        )}
         {view === 'attendanceCalendar' && (
           <AttendanceCalendarView
             records={records}
             setView={setView}
             onOpenDetail={openRecordDetail}
+          />
+        )}
+
+        {view === 'badgeCollection' && (
+          <BadgeCollectionView
+            records={records}
+            setView={setView}
           />
         )}
 
@@ -1148,6 +1288,18 @@ function BrandHeader({ back, setView = () => { } }) {
               icon={<Bookmark size={18} />}
               label="お気に入り記録"
               onClick={() => movePage('favoriteRecords')}
+            />
+
+            <HeaderMenuItem
+              icon={<Calendar size={18} />}
+              label="参戦カレンダー"
+              onClick={() => movePage('attendanceCalendar')}
+            />
+
+            <HeaderMenuItem
+              icon={<Medal size={18} />}
+              label="バッジコレクション"
+              onClick={() => movePage('badgeCollection')}
             />
 
             <HeaderMenuItem
@@ -1612,6 +1764,13 @@ function RecordDetailView({ record, setView, backTo, onEdit, onToggleFavorite, o
   const photos = data.photos || [];
   const timeline = data.timeline || [];
   const tags = data.tags || [record.tag].filter(Boolean);
+  const seatDetail = [
+    data.seat,
+    data.seatBlock,
+    data.seatRow,
+    data.seatNumber ? `${data.seatNumber}番` : '',
+  ].filter(Boolean).join(' / ');
+
 
   const totalExpense = Object.values(expenses || {}).reduce(
     (sum, value) => sum + moneyToNumber(value),
@@ -1729,7 +1888,7 @@ function RecordDetailView({ record, setView, backTo, onEdit, onToggleFavorite, o
             <ConfirmMiniCard
               icon={<Ticket size={16} />}
               label="座席"
-              value={data.seat || '未入力'}
+              value={seatDetail || '未入力'}
             />
           </div>
         </Card>
@@ -1935,7 +2094,10 @@ function FavoriteRecordsView({ setView, records, onEdit, onToggleFavorite, onOpe
               <div
                 key={record.id}
                 onClick={() => onOpenDetail(record, 'favoriteRecords')}
-                className="bg-white rounded-2xl p-3 shadow-sm border border-gray-100 flex gap-3 cursor-pointer active:scale-[0.99] transition"
+                className={`relative bg-white rounded-2xl p-3 shadow-sm border flex gap-3 cursor-pointer active:scale-[0.99] transition ${selectedIds.includes(record.id)
+                  ? 'border-red-300 ring-4 ring-red-100'
+                  : 'border-gray-100'
+                  }`}
               >
                 <img
                   src={record.img}
@@ -2018,11 +2180,20 @@ function FavoriteRecordsView({ setView, records, onEdit, onToggleFavorite, onOpe
     </div>
   );
 }
-function RecordsView({ setView, records, onEdit, onToggleFavorite, onOpenDetail }) {
+function RecordsView({
+  setView,
+  records,
+  onEdit,
+  onToggleFavorite,
+  onOpenDetail,
+  onDeleteRecords,
+}) {
   const [keyword, setKeyword] = useState('');
   const [venueFilter, setVenueFilter] = useState('ALL');
   const [resultFilter, setResultFilter] = useState('ALL');
   const [favoriteOnly, setFavoriteOnly] = useState(false);
+  const [selectMode, setSelectMode] = useState(false);
+  const [selectedIds, setSelectedIds] = useState([]);
 
   const homeStadium = 'エディオンピースウイング広島';
 
@@ -2080,6 +2251,27 @@ function RecordsView({ setView, records, onEdit, onToggleFavorite, onOpenDetail 
     setVenueFilter('ALL');
     setResultFilter('ALL');
     setFavoriteOnly(false);
+  };
+  const toggleSelectRecord = (id) => {
+    setSelectedIds((prevIds) =>
+      prevIds.includes(id)
+        ? prevIds.filter((selectedId) => selectedId !== id)
+        : [...prevIds, id]
+    );
+  };
+
+  const cancelSelectMode = () => {
+    setSelectMode(false);
+    setSelectedIds([]);
+  };
+
+  const deleteSelectedRecords = () => {
+    onDeleteRecords(selectedIds);
+    cancelSelectMode();
+  };
+
+  const selectAllFilteredRecords = () => {
+    setSelectedIds(filteredRecords.map((record) => record.id));
   };
 
   return (
@@ -2203,19 +2395,61 @@ function RecordsView({ setView, records, onEdit, onToggleFavorite, onOpenDetail 
         </div>
 
         <div className="mb-3">
-          <div className="flex items-center justify-between">
-            <div className="text-sm font-black text-[#171425]">
-              {filteredRecords.length}件の記録
+          <div className="flex items-center justify-between gap-3">
+            <div>
+              <div className="text-sm font-black text-[#171425]">
+                {filteredRecords.length}件の記録
+              </div>
+
+              <p className="text-[11px] text-[#4b1c89] font-black mt-1">
+                {selectMode
+                  ? '削除したい記録を選択してください。'
+                  : 'タップで詳細・編集できます。'}
+              </p>
             </div>
 
-            <div className="text-xs text-gray-500 font-bold">
-              全{records.length}件中
-            </div>
+            {!selectMode ? (
+              <button
+                type="button"
+                onClick={() => setSelectMode(true)}
+                className="text-[11px] font-black text-red-500 bg-red-50 border border-red-100 px-3 py-2 rounded-full"
+              >
+                選択削除
+              </button>
+            ) : (
+              <button
+                type="button"
+                onClick={cancelSelectMode}
+                className="text-[11px] font-black text-gray-500 bg-gray-100 px-3 py-2 rounded-full"
+              >
+                キャンセル
+              </button>
+            )}
           </div>
 
-          <p className="text-[11px] text-[#4b1c89] font-black mt-1">
-            タップで詳細・編集できます。
-          </p>
+          {selectMode && (
+            <div className="flex items-center gap-2 mt-3">
+              <button
+                type="button"
+                onClick={selectAllFilteredRecords}
+                className="text-[11px] font-black text-[#4b1c89] bg-purple-50 border border-purple-100 px-3 py-2 rounded-full"
+              >
+                表示中をすべて選択
+              </button>
+
+              <button
+                type="button"
+                onClick={deleteSelectedRecords}
+                disabled={selectedIds.length === 0}
+                className={`text-[11px] font-black px-3 py-2 rounded-full ${selectedIds.length > 0
+                  ? 'bg-red-500 text-white'
+                  : 'bg-gray-100 text-gray-400'
+                  }`}
+              >
+                {selectedIds.length}件削除
+              </button>
+            </div>
+          )}
         </div>
 
         {filteredRecords.length > 0 ? (
@@ -2227,9 +2461,33 @@ function RecordsView({ setView, records, onEdit, onToggleFavorite, onOpenDetail 
               return (
                 <div
                   key={record.id}
-                  onClick={() => onOpenDetail(record, 'records')}
+                  onClick={() => {
+                    if (selectMode) {
+                      toggleSelectRecord(record.id);
+                    } else {
+                      onOpenDetail(record, 'records');
+                    }
+                  }}
                   className="bg-white rounded-2xl p-3 shadow-sm border border-gray-100 flex gap-3 cursor-pointer active:scale-[0.99] transition"
                 >
+
+                  {selectMode && (
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        toggleSelectRecord(record.id);
+                      }}
+                      className={`absolute top-3 right-3 w-9 h-9 rounded-full border-2 flex items-center justify-center z-30 shadow-md ${selectedIds.includes(record.id)
+                          ? 'bg-red-500 border-red-500 text-white'
+                          : 'bg-white border-gray-300 text-gray-300'
+                        }`}
+                    >
+                      {selectedIds.includes(record.id) && (
+                        <CheckCircle2 size={22} strokeWidth={3} />
+                      )}
+                    </button>
+                  )}
                   <img
                     src={record.img}
                     alt="record"
@@ -2648,6 +2906,53 @@ function getSupporterTitle(matchCount) {
 
   return titles[Math.min(level, titles.length - 1)];
 }
+const getProfileShieldBadge = (count) => {
+  if (count >= 100) {
+    return {
+      count: 100,
+      title: 'LEGEND',
+      label: '100',
+      bg: 'linear-gradient(135deg, #fef3c7, #ffffff, #a78bfa, #4b1c89)',
+      text: '#2a075f',
+      border: 'rgba(255,255,255,0.9)',
+    };
+  }
+
+  if (count >= 50) {
+    return {
+      count: 50,
+      title: 'GOLD',
+      label: '50',
+      bg: 'linear-gradient(135deg, #fff7ad, #f6c400, #b45309)',
+      text: '#3b1378',
+      border: 'rgba(255,255,255,0.75)',
+    };
+  }
+
+  if (count >= 30) {
+    return {
+      count: 30,
+      title: 'SILVER',
+      label: '30',
+      bg: 'linear-gradient(135deg, #f8fafc, #cbd5e1, #64748b)',
+      text: '#1f2937',
+      border: 'rgba(255,255,255,0.8)',
+    };
+  }
+
+  if (count >= 10) {
+    return {
+      count: 10,
+      title: 'BRONZE',
+      label: '10',
+      bg: 'linear-gradient(135deg, #fed7aa, #c2410c, #7c2d12)',
+      text: '#fff7ed',
+      border: 'rgba(255,255,255,0.55)',
+    };
+  }
+
+  return null;
+};
 function MyPageView({ records, setView, profile }) {
   const supporterTitle = getSupporterTitle(records.length);
   const nextTitleCount = (Math.floor(records.length / 10) + 1) * 10;
@@ -2694,6 +2999,10 @@ function MyPageView({ records, setView, profile }) {
   const displayPhoto = profile?.photo || null;
   const displayFavoritePlayer = profile?.favoritePlayer || favoritePlayer;
   const displayFavoriteStadium = profile?.favoriteStadium || favoriteStadium;
+  const profileShieldBadge = getProfileShieldBadge(records.length);
+
+  const favoritePlayerData =
+    playerOptions.find((player) => player.name === displayFavoritePlayer) || null;
 
   return (
     <div className="min-h-screen bg-[#f8f7fb] pb-24">
@@ -2723,9 +3032,15 @@ function MyPageView({ records, setView, profile }) {
                 MY PROFILE
               </div>
 
-              <h1 className="text-2xl font-black mt-1">
-                {displayName}さん
-              </h1>
+              <div className="flex items-center justify-between gap-3 mt-1 w-full min-w-0">
+                <h1 className="text-2xl font-black truncate min-w-0">
+                  {displayName}さん
+                </h1>
+
+                {profileShieldBadge && (
+                  <ProfileShieldBadge badge={profileShieldBadge} />
+                )}
+              </div>
 
               <div className="inline-flex items-center gap-1 bg-yellow-300 text-[#3b1378] text-xs font-black px-3 py-1 rounded-full mt-2 shadow">
                 <Trophy size={13} fill="currentColor" />
@@ -2753,10 +3068,9 @@ function MyPageView({ records, setView, profile }) {
           </div>
 
           <div className="space-y-3">
-            <ProfileInfoRow
-              icon={<Trophy size={18} />}
-              label="推し選手"
-              value={displayFavoritePlayer}
+            <FavoritePlayerRow
+              player={favoritePlayerData}
+              fallbackName={displayFavoritePlayer}
             />
 
             <ProfileInfoRow
@@ -2847,6 +3161,13 @@ function MyPageView({ records, setView, profile }) {
               title="写真アルバム"
               text="観戦写真をまとめて見る"
               onClick={() => setView('photoAlbum')}
+            />
+
+            <MyPageMenuItem
+              icon={<Medal size={18} />}
+              title="バッジコレクション"
+              text="観戦で集めたバッジを見る"
+              onClick={() => setView('badgeCollection')}
             />
             <MyPageMenuItem
               icon={<Calendar size={18} />}
@@ -3229,12 +3550,21 @@ function StadiumMapSection({ records }) {
               </div>
             </div>
 
-            <div className="text-right">
-              <div className="text-2xl font-black text-[#4b1c89]">
-                {selectedVisit ? selectedVisit.count : 0}
-              </div>
-              <div className="text-[10px] text-gray-500 font-bold">
-                回観戦
+            <div className="flex items-center gap-3 shrink-0">
+              <img
+                src={getStadiumImage(selectedPoint.name)}
+                alt={selectedPoint.name}
+                className="w-16 h-12 rounded-xl object-cover shadow-sm border border-white"
+              />
+
+              <div className="text-right">
+                <div className="text-2xl font-black text-[#4b1c89]">
+                  {selectedVisit ? selectedVisit.count : 0}
+                </div>
+
+                <div className="text-[10px] text-gray-500 font-bold">
+                  回観戦
+                </div>
               </div>
             </div>
           </div>
@@ -3592,6 +3922,31 @@ function ProfileSettingsView({ profile, setView, onSaveProfile }) {
     </div>
   );
 }
+
+function ProfileShieldBadge({ badge }) {
+  return (
+    <div
+      className="w-[72px] h-[78px] shrink-0 rounded-2xl flex flex-col items-center justify-center shadow-lg border border-white/60"
+      style={{
+        background: badge.bg,
+        color: badge.text,
+      }}
+      title={`${badge.count}試合達成`}
+    >
+      <div className="w-8 h-8 rounded-xl bg-white/25 flex items-center justify-center mb-1.5">
+        <Shield size={100} fill="currentColor" strokeWidth={0} />
+      </div>
+
+      <div className="text-[15px] leading-none font-black">
+        {badge.label}
+      </div>
+
+      <div className="text-[7px] leading-none font-black tracking-widest mt-1 opacity-90">
+        {badge.title}
+      </div>
+    </div>
+  );
+}
 function MyPageStat({ label, value, unit }) {
   return (
     <div className="bg-white/10 border border-white/10 rounded-2xl p-3 text-center">
@@ -3604,7 +3959,47 @@ function MyPageStat({ label, value, unit }) {
     </div>
   );
 }
+function FavoritePlayerRow({ player, fallbackName }) {
+  return (
+    <div className="flex items-center gap-3 bg-[#f8f7fb] rounded-2xl p-3 border border-gray-100">
+      <div className="w-10 h-10 rounded-xl bg-purple-100 text-[#4b1c89] flex items-center justify-center shrink-0">
+        <Trophy size={18} />
+      </div>
 
+      <div className="flex-1 min-w-0">
+        <div className="text-xs text-gray-500 font-black">
+          推し選手
+        </div>
+
+        <div className="text-sm font-black text-[#171425] truncate mt-0.5">
+          {player ? player.name : fallbackName || '未設定'}
+        </div>
+
+        {player && (
+          <div className="text-[11px] text-[#4b1c89] font-black mt-1">
+            背番号 {player.number} / {player.position}
+          </div>
+        )}
+      </div>
+
+      {player && (
+        <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#4b1c89] to-[#2a075f] text-white flex flex-col items-center justify-center shadow-md shrink-0">
+          <div className="text-[8px] font-black tracking-widest text-white/75">
+            No.
+          </div>
+
+          <div className="text-[26px] leading-none font-black">
+            {player.number}
+          </div>
+
+          <div className="text-[8px] font-black text-yellow-300 mt-0.5">
+            {player.position}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
 function ProfileInfoRow({ icon, label, value }) {
   return (
     <div className="flex items-center gap-3 bg-[#f8f7fb] rounded-2xl p-3 border border-gray-100">
@@ -3744,8 +4139,8 @@ function AttendanceCalendarView({ records, setView, onOpenDetail }) {
                     }
                   }}
                   className={`h-11 rounded-2xl text-sm font-black relative flex items-center justify-center ${hasRecord
-                      ? 'bg-[#4b1c89] text-white shadow-md shadow-purple-900/20'
-                      : 'bg-[#f8f7fb] text-gray-500 border border-gray-100'
+                    ? 'bg-[#4b1c89] text-white shadow-md shadow-purple-900/20'
+                    : 'bg-[#f8f7fb] text-gray-500 border border-gray-100'
                     }`}
                 >
                   {day}
@@ -3809,6 +4204,420 @@ function AttendanceCalendarView({ records, setView, onOpenDetail }) {
             </div>
           )}
         </Card>
+      </section>
+    </div>
+  );
+}
+const badgeDefinitions = [
+  {
+    id: 'first-match',
+    title: 'はじめての紫',
+    description: '初めて観戦記録を作成',
+    icon: <Ticket size={24} />,
+    condition: (stats) => stats.total >= 1,
+    progress: (stats) => `${Math.min(stats.total, 1)}/1`,
+  },
+  {
+    id: 'five-matches',
+    title: '紫の常連',
+    description: '観戦記録を5試合作成',
+    icon: <Calendar size={24} />,
+    condition: (stats) => stats.total >= 5,
+    progress: (stats) => `${Math.min(stats.total, 5)}/5`,
+  },
+  {
+    id: 'ten-matches',
+    title: 'サンフレ生活',
+    description: '観戦記録を10試合作成',
+    icon: <Medal size={24} />,
+    condition: (stats) => stats.total >= 10,
+    progress: (stats) => `${Math.min(stats.total, 10)}/10`,
+  },
+  {
+    id: 'home-supporter',
+    title: 'ホームの力',
+    description: 'ホーム観戦を3試合記録',
+    icon: <Building2 size={24} />,
+    condition: (stats) => stats.home >= 3,
+    progress: (stats) => `${Math.min(stats.home, 3)}/3`,
+  },
+  {
+    id: 'away-trip',
+    title: 'アウェイ遠征民',
+    description: 'アウェイ観戦を3試合記録',
+    icon: <Train size={24} />,
+    condition: (stats) => stats.away >= 3,
+    progress: (stats) => `${Math.min(stats.away, 3)}/3`,
+  },
+  {
+    id: 'winner',
+    title: '勝利の目撃者',
+    description: '勝利試合を3試合記録',
+    icon: <Trophy size={24} />,
+    condition: (stats) => stats.wins >= 3,
+    progress: (stats) => `${Math.min(stats.wins, 3)}/3`,
+  },
+  {
+    id: 'photo-memory',
+    title: '思い出カメラマン',
+    description: '写真付き記録を1試合作成',
+    icon: <ImageIcon size={24} />,
+    condition: (stats) => stats.photoRecords >= 1,
+    progress: (stats) => `${Math.min(stats.photoRecords, 1)}/1`,
+  },
+  {
+    id: 'stadium-traveler',
+    title: 'スタジアム巡り',
+    description: '3つのスタジアムで観戦',
+    icon: <MapPin size={24} />,
+    condition: (stats) => stats.stadiums >= 3,
+    progress: (stats) => `${Math.min(stats.stadiums, 3)}/3`,
+  },
+  {
+    id: 'perfect-day',
+    title: '最高の一日',
+    description: '満足度5の試合を記録',
+    icon: <Star size={24} />,
+    condition: (stats) => stats.fiveStar >= 1,
+    progress: (stats) => `${Math.min(stats.fiveStar, 1)}/1`,
+  },
+  {
+    id: 'mvp-watcher',
+    title: 'MVP選定員',
+    description: 'MVPを3試合で記録',
+    icon: <Shield size={24} />,
+    condition: (stats) => stats.mvpRecords >= 3,
+    progress: (stats) => `${Math.min(stats.mvpRecords, 3)}/3`,
+  },
+  {
+    id: 'twenty-matches',
+    title: '熱狂サポーター',
+    description: '観戦記録を20試合作成',
+    icon: <Medal size={24} />,
+    condition: (stats) => stats.total >= 20,
+    progress: (stats) => `${Math.min(stats.total, 20)}/20`,
+  },
+  {
+    id: 'thirty-matches',
+    title: '紫の民',
+    description: '観戦記録を30試合作成',
+    icon: <Shield size={24} />,
+    condition: (stats) => stats.total >= 30,
+    progress: (stats) => `${Math.min(stats.total, 30)}/30`,
+  },
+  {
+    id: 'clean-sheet',
+    title: '完封勝利',
+    description: '相手を0点に抑えた勝利を記録',
+    icon: <Shield size={24} />,
+    condition: (stats) => stats.cleanSheet >= 1,
+    progress: (stats) => `${Math.min(stats.cleanSheet, 1)}/1`,
+  },
+  {
+    id: 'three-goals',
+    title: '大量得点の記憶',
+    description: '3得点以上の試合を記録',
+    icon: <Trophy size={24} />,
+    condition: (stats) => stats.threeGoals >= 1,
+    progress: (stats) => `${Math.min(stats.threeGoals, 1)}/1`,
+  },
+  {
+    id: 'draw-memory',
+    title: '勝ち点1の記憶',
+    description: '引き分け試合を記録',
+    icon: <Flag size={24} />,
+    condition: (stats) => stats.draws >= 1,
+    progress: (stats) => `${Math.min(stats.draws, 1)}/1`,
+  },
+  {
+    id: 'loss-memory',
+    title: '悔しさも記録',
+    description: '敗戦試合を記録',
+    icon: <PenSquare size={24} />,
+    condition: (stats) => stats.losses >= 1,
+    progress: (stats) => `${Math.min(stats.losses, 1)}/1`,
+  },
+  {
+    id: 'five-stadiums',
+    title: '全国スタジアム旅',
+    description: '5つのスタジアムで観戦',
+    icon: <MapPin size={24} />,
+    condition: (stats) => stats.stadiums >= 5,
+    progress: (stats) => `${Math.min(stats.stadiums, 5)}/5`,
+  },
+  {
+    id: 'memo-master',
+    title: '記録の達人',
+    description: 'メモ付き記録を5試合作成',
+    icon: <PenSquare size={24} />,
+    condition: (stats) => stats.memoRecords >= 5,
+    progress: (stats) => `${Math.min(stats.memoRecords, 5)}/5`,
+  },
+  {
+    id: 'goods-buyer',
+    title: 'グッズ購入記録',
+    description: 'グッズ代を記録',
+    icon: <ShoppingBag size={24} />,
+    condition: (stats) => stats.goodsRecords >= 1,
+    progress: (stats) => `${Math.min(stats.goodsRecords, 1)}/1`,
+  },
+  {
+    id: 'stadium-food',
+    title: 'スタグル記録',
+    description: '食費を記録',
+    icon: <Utensils size={24} />,
+    condition: (stats) => stats.foodRecords >= 1,
+    progress: (stats) => `${Math.min(stats.foodRecords, 1)}/1`,
+  },
+];
+
+const getBadgeStats = (records) => {
+  const total = records.length;
+
+  const wins = records.filter((record) => {
+    const data = record.draftData || {};
+    const scoreMatch = record.score?.match(/(\d+)\s*-\s*(\d+)/);
+
+    const homeScore =
+      data.homeScore !== undefined
+        ? Number(data.homeScore)
+        : Number(scoreMatch?.[1] || 0);
+
+    const awayScore =
+      data.awayScore !== undefined
+        ? Number(data.awayScore)
+        : Number(scoreMatch?.[2] || 0);
+
+    return homeScore > awayScore;
+  }).length;
+
+  const home = records.filter((record) => {
+    const data = record.draftData || {};
+    return data.venueType === 'HOME' || record.stadium?.includes('エディオン');
+  }).length;
+
+  const away = records.filter((record) => {
+    const data = record.draftData || {};
+    return data.venueType === 'AWAY';
+  }).length;
+
+  const photoRecords = records.filter((record) => {
+    const photos = record.draftData?.photos || [];
+    return photos.length > 0;
+  }).length;
+
+  const stadiums = new Set(
+    records
+      .map((record) => record.stadium)
+      .filter(Boolean)
+  ).size;
+
+  const fiveStar = records.filter((record) => {
+    return Number(record.draftData?.rating || 0) === 5;
+  }).length;
+
+  const mvpRecords = records.filter((record) => {
+    return Boolean(record.draftData?.mvp);
+  }).length;
+
+  const cleanSheet = records.filter((record) => {
+    const data = record.draftData || {};
+    const scoreMatch = record.score?.match(/(\d+)\s*-\s*(\d+)/);
+
+    const homeScore =
+      data.homeScore !== undefined
+        ? Number(data.homeScore)
+        : Number(scoreMatch?.[1] || 0);
+
+    const awayScore =
+      data.awayScore !== undefined
+        ? Number(data.awayScore)
+        : Number(scoreMatch?.[2] || 0);
+
+    return homeScore > awayScore && awayScore === 0;
+  }).length;
+
+  const threeGoals = records.filter((record) => {
+    const data = record.draftData || {};
+    const scoreMatch = record.score?.match(/(\d+)\s*-\s*(\d+)/);
+
+    const homeScore =
+      data.homeScore !== undefined
+        ? Number(data.homeScore)
+        : Number(scoreMatch?.[1] || 0);
+
+    return homeScore >= 3;
+  }).length;
+
+  const draws = records.filter((record) => {
+    const data = record.draftData || {};
+    const scoreMatch = record.score?.match(/(\d+)\s*-\s*(\d+)/);
+
+    const homeScore =
+      data.homeScore !== undefined
+        ? Number(data.homeScore)
+        : Number(scoreMatch?.[1] || 0);
+
+    const awayScore =
+      data.awayScore !== undefined
+        ? Number(data.awayScore)
+        : Number(scoreMatch?.[2] || 0);
+
+    return homeScore === awayScore;
+  }).length;
+
+  const losses = records.filter((record) => {
+    const data = record.draftData || {};
+    const scoreMatch = record.score?.match(/(\d+)\s*-\s*(\d+)/);
+
+    const homeScore =
+      data.homeScore !== undefined
+        ? Number(data.homeScore)
+        : Number(scoreMatch?.[1] || 0);
+
+    const awayScore =
+      data.awayScore !== undefined
+        ? Number(data.awayScore)
+        : Number(scoreMatch?.[2] || 0);
+
+    return homeScore < awayScore;
+  }).length;
+
+  const memoRecords = records.filter((record) =>
+    Boolean(record.draftData?.memo)
+  ).length;
+
+  const goodsRecords = records.filter((record) =>
+    moneyToNumber(record.draftData?.expenses?.goods) > 0
+  ).length;
+
+  const foodRecords = records.filter((record) =>
+    moneyToNumber(record.draftData?.expenses?.food) > 0
+  ).length;
+
+  return {
+    total,
+    wins,
+    home,
+    away,
+    photoRecords,
+    stadiums,
+    fiveStar,
+    mvpRecords,
+    cleanSheet,
+    threeGoals,
+    draws,
+    losses,
+    memoRecords,
+    goodsRecords,
+    foodRecords,
+  };
+};
+
+function BadgeCollectionView({ records, setView }) {
+  const stats = getBadgeStats(records);
+
+  const unlockedBadges = badgeDefinitions.filter((badge) =>
+    badge.condition(stats)
+  );
+
+  return (
+    <div className="min-h-screen bg-[#f8f7fb] pb-28">
+      <BrandHeader back="mypage" setView={setView} />
+
+      <section className="px-5 py-6">
+        <div className="mb-5">
+          <div className="flex items-center gap-2 text-[#4b1c89] font-black text-sm mb-1">
+            <Medal size={18} />
+            BADGE COLLECTION
+          </div>
+
+          <h1 className="text-2xl font-black text-[#171425]">
+            バッジコレクション
+          </h1>
+
+          <p className="text-xs text-gray-500 font-bold mt-1">
+            観戦記録を増やすとバッジが解放されます
+          </p>
+        </div>
+
+        <Card>
+          <div className="flex items-center justify-between">
+            <div>
+              <div className="text-xs text-gray-500 font-black">
+                獲得バッジ
+              </div>
+
+              <div className="text-3xl font-black text-[#4b1c89] mt-1">
+                {unlockedBadges.length}
+                <span className="text-sm text-gray-400 ml-1">
+                  / {badgeDefinitions.length}
+                </span>
+              </div>
+            </div>
+
+            <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#4b1c89] to-[#2a075f] text-white flex items-center justify-center shadow-lg shadow-purple-900/20">
+              <Medal size={32} />
+            </div>
+          </div>
+
+          <div className="mt-4 h-3 bg-gray-100 rounded-full overflow-hidden">
+            <div
+              className="h-full bg-[#4b1c89] rounded-full"
+              style={{
+                width: `${(unlockedBadges.length / badgeDefinitions.length) * 100}%`,
+              }}
+            />
+          </div>
+        </Card>
+
+        <div className="grid grid-cols-2 gap-3 mt-5">
+          {badgeDefinitions.map((badge) => {
+            const unlocked = badge.condition(stats);
+
+            return (
+              <div
+                key={badge.id}
+                className={`rounded-2xl p-4 border shadow-sm ${unlocked
+                  ? 'bg-white border-purple-100'
+                  : 'bg-gray-50 border-gray-100 opacity-60'
+                  }`}
+              >
+                <div
+                  className={`w-14 h-14 rounded-2xl flex items-center justify-center mb-3 ${unlocked
+                    ? 'bg-gradient-to-br from-[#4b1c89] to-[#2a075f] text-white shadow-md shadow-purple-900/20'
+                    : 'bg-gray-200 text-gray-400'
+                    }`}
+                >
+                  {badge.icon}
+                </div>
+
+                <div className="text-sm font-black text-[#171425] leading-snug">
+                  {badge.title}
+                </div>
+
+                <div className="text-[11px] text-gray-500 font-bold mt-1 leading-5">
+                  {badge.description}
+                </div>
+
+                <div className="mt-3 flex items-center justify-between">
+                  <span
+                    className={`text-[10px] font-black px-2 py-1 rounded-full ${unlocked
+                      ? 'bg-purple-100 text-[#4b1c89]'
+                      : 'bg-gray-200 text-gray-500'
+                      }`}
+                  >
+                    {unlocked ? '獲得済み' : '未獲得'}
+                  </span>
+
+                  <span className="text-[10px] text-gray-400 font-black">
+                    {badge.progress(stats)}
+                  </span>
+                </div>
+              </div>
+            );
+          })}
+        </div>
       </section>
     </div>
   );
@@ -4092,6 +4901,7 @@ function CreateStep1({ setView, draft, updateDraft, onSaveDraft }) {
   const dateInputRef = useRef(null);
   const selectedTeam =
     opponentTeams.find((team) => team.name === draft.opponent) || null;
+  const seatGroups = getSeatGroups(draft.stadium, draft.venueType);
   const handleSelectMatch = (sectionValue) => {
     if (!sectionValue) {
       updateDraft({
@@ -4113,6 +4923,10 @@ function CreateStep1({ setView, draft, updateDraft, onSaveDraft }) {
       opponent: match.opponent,
       stadium: match.stadium,
       venueType: match.venueType,
+      seat: '',
+      seatBlock: '',
+      seatRow: '',
+      seatNumber: '',
     });
 
     setTeamOpen(false);
@@ -4129,7 +4943,13 @@ function CreateStep1({ setView, draft, updateDraft, onSaveDraft }) {
       venueType: type,
       stadium: type === 'HOME'
         ? 'エディオンピースウイング広島'
-        : currentTeam.stadium,
+        : currentTeam
+          ? currentTeam.stadium
+          : '',
+      seat: '',
+      seatBlock: '',
+      seatRow: '',
+      seatNumber: '',
     });
   };
   return (
@@ -4345,13 +5165,57 @@ function CreateStep1({ setView, draft, updateDraft, onSaveDraft }) {
 
 
         <InputBlock icon={<Ticket size={18} />} label="座席">
-          <input
-            value={draft.seat}
+          <select
+            value={draft.seat || ''}
             onChange={(e) => updateDraft({ seat: e.target.value })}
             className="field"
-            placeholder="例：バックスタンド 上層 B5ブロック 23列 128"
-          />
+          >
+            <option value="">選択してください</option>
+
+            {seatGroups.map((group) => (
+              <optgroup key={group.label} label={group.label}>
+                {group.seats.map((seat) => (
+                  <option key={seat} value={seat}>
+                    {seat}
+                  </option>
+                ))}
+              </optgroup>
+            ))}
+          </select>
         </InputBlock>
+
+        <div className="grid grid-cols-3 gap-2">
+          <InputBlock icon={<Building2 size={18} />} label="ブロック">
+            <input
+              type="text"
+              value={draft.seatBlock || ''}
+              onChange={(e) => updateDraft({ seatBlock: e.target.value })}
+              placeholder="例：B12"
+              className="field"
+            />
+          </InputBlock>
+
+          <InputBlock icon={<List size={18} />} label="列">
+            <input
+              type="text"
+              value={draft.seatRow || ''}
+              onChange={(e) => updateDraft({ seatRow: e.target.value })}
+              placeholder="例：8列"
+              className="field"
+            />
+          </InputBlock>
+
+          <InputBlock icon={<Ticket size={18} />} label="番号">
+            <input
+              type="text"
+              inputMode="numeric"
+              value={draft.seatNumber || ''}
+              onChange={(e) => updateDraft({ seatNumber: e.target.value })}
+              placeholder="例：24"
+              className="field"
+            />
+          </InputBlock>
+        </div>
 
         <div className="grid grid-cols-2 gap-4">
           <InputBlock icon={<Sun size={18} />} label="天気">
@@ -4952,6 +5816,12 @@ function CreateStep3({ setView, draft, updateDraft, onSaveDraft }) {
 }
 
 function ConfirmView({ setView, draft, onSave, onSaveDraft }) {
+  const seatDetail = [
+    draft.seat,
+    draft.seatBlock,
+    draft.seatRow,
+    draft.seatNumber ? `${draft.seatNumber}番` : '',
+  ].filter(Boolean).join(' / ');
   const total = Object.values(draft.expenses || {}).reduce(
     (sum, value) => sum + moneyToNumber(value),
     0
@@ -5033,7 +5903,7 @@ function ConfirmView({ setView, draft, onSave, onSaveDraft }) {
             <ConfirmMiniCard label="開催地" value={draft.venueType || 'ホーム'} icon={<MapPin size={16} />} />
             <ConfirmMiniCard label="天気" value={draft.weather} icon={<Sun size={16} />} />
             <ConfirmMiniCard label="同行者" value={draft.companion} icon={<Users size={16} />} />
-            <ConfirmMiniCard label="座席" value={draft.seat || '未入力'} icon={<Ticket size={16} />} />
+            <ConfirmMiniCard label="座席" value={seatDetail || '未入力'} icon={<Ticket size={16} />} />
           </div>
         </Card>
 
