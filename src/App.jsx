@@ -1044,12 +1044,7 @@ export default function App() {
           />
         )}
 
-        {view === 'badgeCollection' && (
-          <BadgeCollectionView
-            records={records}
-            setView={setView}
-          />
-        )}
+
 
         {view === 'step1' && (
           <CreateStep1
@@ -1245,7 +1240,7 @@ function BrandHeader({ back, setView = () => { } }) {
 
       {/* 三本線メニュー */}
       {menuOpen && (
-        <div className="absolute right-4 top-[82px] w-[275px] bg-white text-[#171425] rounded-2xl shadow-2xl border border-gray-100 p-4 z-[999]">
+        <div className="fixed right-4 top-[82px] w-[275px] max-h-[calc(100vh-110px)] overflow-y-auto overscroll-contain bg-white text-[#171425] rounded-2xl shadow-2xl border border-gray-100 p-4 z-[999]">
           <div className="flex items-center justify-between mb-4">
             <div>
               <div className="text-xs font-black text-[#4b1c89]">
@@ -2464,9 +2459,10 @@ function RecordsView({
                   onClick={() => {
                     if (selectMode) {
                       toggleSelectRecord(record.id);
-                    } else {
-                      onOpenDetail(record, 'records');
+                      return;
                     }
+
+                    onOpenDetail(record, 'records');
                   }}
                   className="bg-white rounded-2xl p-3 shadow-sm border border-gray-100 flex gap-3 cursor-pointer active:scale-[0.99] transition"
                 >
@@ -2475,12 +2471,13 @@ function RecordsView({
                     <button
                       type="button"
                       onClick={(e) => {
+                        e.preventDefault();
                         e.stopPropagation();
                         toggleSelectRecord(record.id);
                       }}
                       className={`absolute top-3 right-3 w-9 h-9 rounded-full border-2 flex items-center justify-center z-30 shadow-md ${selectedIds.includes(record.id)
-                          ? 'bg-red-500 border-red-500 text-white'
-                          : 'bg-white border-gray-300 text-gray-300'
+                        ? 'bg-red-500 border-red-500 text-white'
+                        : 'bg-white border-gray-300 text-gray-300'
                         }`}
                     >
                       {selectedIds.includes(record.id) && (
@@ -2489,8 +2486,8 @@ function RecordsView({
                     </button>
                   )}
                   <img
-                    src={record.img}
-                    alt="record"
+                    src={getStadiumImage(record.stadium)}
+                    alt={record.stadium}
                     className="w-24 h-20 rounded-xl object-cover"
                   />
 
