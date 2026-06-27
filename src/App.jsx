@@ -2972,8 +2972,8 @@ function MyPageView({ records, setView, profile }) {
   const latestRecord = records[0];
   const displayName = profile?.name || 'R';
   const displayPhoto = profile?.photo || null;
-  const displayFavoritePlayer = profile?.favoritePlayer || favoritePlayer;
-  const displayFavoriteStadium = profile?.favoriteStadium || favoriteStadium;
+  const displayFavoritePlayer = profile?.favoritePlayer || '未設定'; // ✨ ここを '未設定' に変更
+  const displayFavoriteStadium = profile?.favoriteStadium || '未設定'; // ✨ ここも '未設定' に変更
   const profileShieldBadge = getProfileShieldBadge(records.length);
 
   const favoritePlayerData =
