@@ -44,37 +44,36 @@ const initialRecords = [
 ];
 
 const defaultDraft = {
-  date: '2026-04-16',
-  tournament: '明治安田J1リーグ 第12節',
-  opponent: 'FC東京',
-  homeScore: 3,
-  awayScore: 1,
-  stadium: 'エディオンピースウイング広島',
+  date: '',
+  tournament: '',
+  opponent: '',
+  homeScore: '',
+  awayScore: '',
+  stadium: '',
   seat: '',
-  weather: '晴れ',
-  companion: '友達',
-  watchType: '現地観戦',
+  weather: '',
+  companion: '',
+  watchType: '',
   venueType: 'HOME',
-  rating: 4,
-  mvp: '中村 草太',
-  memo: '0-1で負けていたけど、後半の圧巻の逆転劇！\nゴール裏の一体感が本当に最高だった。\n草太のゴール、みんなの声援、絶対忘れない！',
-  tags: ['逆転勝利', 'ゴール裏最高', '中村草太', '現地観戦'],
+  rating: 0,
+  mvp: '',
+  memo: '',
+  tags: [],
   photos: [],
-  expenses: { ticket: 3500, goods: 4500, food: 1800, transport: 1000, other: 0 },
+  expenses: { ticket: '', goods: '', food: '', transport: '', other: '' },
 
   timeline: [
-    { id: 1, time: '13:00', desc: 'スタジアムに到着' },
-    { id: 2, time: '13:30', desc: 'スタグルを購入' },
-    { id: 3, time: '14:00', desc: 'キックオフ！' },
-    { id: 4, time: '15:20', desc: '中村草太が同点ゴール！！' },
+
   ]
 
 };
 const defaultProfile = {
-  name: 'R',
+  name: '無名',
   photo: null,
-  favoritePlayer: '中村 草太',
-  favoriteStadium: 'エディオンピースウイング広島',
+  photoX: 50,
+  photoY: 50,
+  favoritePlayer: '',
+  favoriteStadium: '',
 };
 
 const sanfrecceTeam = {
@@ -605,6 +604,7 @@ const playerOptions = [
 
 export default function App() {
   const [view, setView] = useState('home');
+  const [saveMessage, setSaveMessage] = useState('');
   const [records, setRecords] = useState(() => {
     try {
       const storedRecords = localStorage.getItem('sanfrel-log-records');
@@ -617,7 +617,18 @@ export default function App() {
   const [editingRecordId, setEditingRecordId] = useState(null);
   const [selectedRecord, setSelectedRecord] = useState(null);
   const [detailBackView, setDetailBackView] = useState('home');
-  const [profile, setProfile] = useState(defaultProfile);
+  const [profile, setProfile] = useState(() => {
+    try {
+      const storedProfile = localStorage.getItem('sanfrel-log-profile');
+      return storedProfile ? JSON.parse(storedProfile) : defaultProfile;
+    } catch {
+      return defaultProfile;
+    }
+  });
+  useEffect(() => {
+    localStorage.setItem('sanfrel-log-profile', JSON.stringify(profile));
+  }, [profile]);
+
   const [savedDraft, setSavedDraft] = useState(() => {
     try {
       const storedDraft = localStorage.getItem('sanfrel-log-draft');
@@ -629,6 +640,15 @@ export default function App() {
   useEffect(() => {
     localStorage.setItem('sanfrel-log-records', JSON.stringify(records));
   }, [records]);
+  useEffect(() => {
+    if (!saveMessage) return;
+
+    const timer = setTimeout(() => {
+      setSaveMessage('');
+    }, 3000);
+
+    return () => clearTimeout(timer);
+  }, [saveMessage]);
 
   const updateDraft = (updates) => {
     setDraft({ ...draft, ...updates });
@@ -758,6 +778,13 @@ export default function App() {
 
     localStorage.removeItem('sanfrel-log-draft');
     setSavedDraft(null);
+
+    setSaveMessage(
+      editingRecordId
+        ? '観戦記録を更新しました！'
+        : '観戦記録を保存しました！'
+    );
+
     setEditingRecordId(null);
     setDraft(defaultDraft);
     setView('home');
@@ -772,6 +799,7 @@ export default function App() {
             records={records}
             setView={setView}
             savedDraft={savedDraft}
+            saveMessage={saveMessage}
             onStartCreate={handleStartCreate}
             onContinueDraft={continueSavedDraft}
             onDeleteDraft={deleteSavedDraft}
@@ -818,6 +846,12 @@ export default function App() {
             onEdit={handleEditRecord}
             onToggleFavorite={toggleFavorite}
             onOpenDetail={openRecordDetail}
+          />
+        )}
+        {view === 'photoAlbum' && (
+          <PhotoAlbumView
+            records={records}
+            setView={setView}
           />
         )}
 
@@ -1106,6 +1140,7 @@ function HomeView({
   records,
   setView,
   savedDraft,
+  saveMessage,
   onStartCreate,
   onContinueDraft,
   onDeleteDraft,
@@ -1175,7 +1210,10 @@ function HomeView({
         <div className="bg-white rounded-2xl shadow-2xl shadow-purple-950/15 p-4 grid grid-cols-3 divide-x divide-gray-200 border border-white/80">
           <MiniStat icon={<Ticket size={14} />} label="観戦数" value={records.length} unit="試合" />
           <MiniStat icon={<Trophy size={14} />} label="勝利" value={winCount} unit="試合" />
-          <div className="px-3">
+          <div
+            onClick={() => setScheduleOpen(true)}
+            className="px-3 cursor-pointer active:scale-[0.98] transition"
+          >
             <button
               type="button"
               onClick={() => setScheduleOpen(true)}
@@ -1184,6 +1222,9 @@ function HomeView({
               <Calendar size={14} className="shrink-0" />
               次の試合
             </button>
+            <p className="text-[9px] text-[#4b1c89] font-black mb-1">
+              タップでカレンダーを表示
+            </p>
             {nextMatch ? (
               <div className="min-w-0">
                 <div className="flex items-center gap-1 min-w-0">
@@ -1227,6 +1268,24 @@ function HomeView({
       </div>
       {scheduleOpen && (
         <MatchScheduleModal onClose={() => setScheduleOpen(false)} />
+      )}
+      {saveMessage && (
+        <div className="fixed left-1/2 top-[60px] z-[900] w-full max-w-md -translate-x-1/2 px-5">
+          <div className="bg-white/95 backdrop-blur-md border border-purple-100 rounded-2xl shadow-xl shadow-purple-900/20 p-4 flex items-center gap-3">
+            <div className="w-10 h-10 rounded-full bg-purple-100 text-[#4b1c89] flex items-center justify-center shrink-0">
+              <CheckCircle2 size={22} />
+            </div>
+
+            <div>
+              <div className="text-sm font-black text-[#171425]">
+                {saveMessage}
+              </div>
+              <div className="text-[11px] text-gray-500 font-bold mt-1">
+                ホームに反映されました
+              </div>
+            </div>
+          </div>
+        </div>
       )}
 
       {/* 記録ボタン */}
@@ -1835,17 +1894,7 @@ function FavoriteRecordsView({ setView, records, onEdit, onToggleFavorite, onOpe
                     </div>
 
                     <div className="flex items-center gap-2">
-                      <button
-                        type="button"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          onEdit(record);
-                        }}
-                        className="text-[10px] font-black text-[#4b1c89] bg-purple-50 border border-purple-100 px-2 py-1 rounded-full flex items-center gap-1"
-                      >
-                        <Pencil size={12} />
-                        編集
-                      </button>
+
 
                       <button
                         type="button"
@@ -1987,9 +2036,12 @@ function RecordsView({ setView, records, onEdit, onToggleFavorite, onOpenDetail 
             <h1 className="text-2xl font-black text-[#171425]">
               観戦記録一覧
             </h1>
+
             <p className="text-xs text-gray-500 font-bold mt-1">
               検索・絞り込みで記録を探せます
             </p>
+
+
           </div>
 
           <button
@@ -2094,14 +2146,20 @@ function RecordsView({ setView, records, onEdit, onToggleFavorite, onOpenDetail 
           </div>
         </div>
 
-        <div className="flex items-center justify-between mb-3">
-          <div className="text-sm font-black text-[#171425]">
-            {filteredRecords.length}件の記録
+        <div className="mb-3">
+          <div className="flex items-center justify-between">
+            <div className="text-sm font-black text-[#171425]">
+              {filteredRecords.length}件の記録
+            </div>
+
+            <div className="text-xs text-gray-500 font-bold">
+              全{records.length}件中
+            </div>
           </div>
 
-          <div className="text-xs text-gray-500 font-bold">
-            全{records.length}件中
-          </div>
+          <p className="text-[11px] text-[#4b1c89] font-black mt-1">
+            タップで詳細・編集できます。
+          </p>
         </div>
 
         {filteredRecords.length > 0 ? (
@@ -2144,17 +2202,7 @@ function RecordsView({ setView, records, onEdit, onToggleFavorite, onOpenDetail 
                               : '負け'}
                         </span>
 
-                        <button
-                          type="button"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            onEdit(record);
-                          }}
-                          className="text-[10px] font-black text-[#4b1c89] bg-purple-50 border border-purple-100 px-2 py-1 rounded-full flex items-center gap-1"
-                        >
-                          <Pencil size={12} />
-                          編集
-                        </button>
+
 
                         <button
                           type="button"
@@ -2533,9 +2581,8 @@ function getSupporterTitle(matchCount) {
   const titles = [
     'SANFRECCE SUPPORTER',
     '紫の記録者',
-    'Eピースの常連',
-    '紫の旅人',
-    'アウェイ遠征者',
+    'スタジアムの住人',
+    '紫の戦士',
     'スタジアムマスター',
     '勝利の目撃者',
     '紫の戦術家',
@@ -2743,6 +2790,7 @@ function MyPageView({ records, setView, profile }) {
               icon={<ImageIcon size={18} />}
               title="写真アルバム"
               text="観戦写真をまとめて見る"
+              onClick={() => setView('photoAlbum')}
             />
 
             <MyPageMenuItem
@@ -3264,7 +3312,11 @@ function ProfileSettingsView({ profile, setView, onSaveProfile }) {
     const reader = new FileReader();
 
     reader.onload = () => {
-      updateForm({ photo: reader.result });
+      updateForm({
+        photo: reader.result,
+        photoX: 50,
+        photoY: 50,
+      });
     };
 
     reader.readAsDataURL(file);
@@ -3304,6 +3356,9 @@ function ProfileSettingsView({ profile, setView, onSaveProfile }) {
                       src={form.photo}
                       alt="profile preview"
                       className="w-full h-full object-cover"
+                      style={{
+                        objectPosition: `${form.photoX ?? 50}% ${form.photoY ?? 50}%`,
+                      }}
                     />
                   ) : (
                     <User size={40} />
@@ -3337,6 +3392,37 @@ function ProfileSettingsView({ profile, setView, onSaveProfile }) {
                   </p>
                 </div>
               </div>
+              {form.photo && (
+                <div className="space-y-3 mt-4">
+                  <div>
+                    <div className="text-xs font-black text-gray-500 mb-1">
+                      横位置
+                    </div>
+                    <input
+                      type="range"
+                      min="0"
+                      max="100"
+                      value={form.photoX ?? 50}
+                      onChange={(e) => updateForm({ photoX: Number(e.target.value) })}
+                      className="w-full"
+                    />
+                  </div>
+
+                  <div>
+                    <div className="text-xs font-black text-gray-500 mb-1">
+                      縦位置
+                    </div>
+                    <input
+                      type="range"
+                      min="0"
+                      max="100"
+                      value={form.photoY ?? 50}
+                      onChange={(e) => updateForm({ photoY: Number(e.target.value) })}
+                      className="w-full"
+                    />
+                  </div>
+                </div>
+              )}
             </InputBlock>
             <InputBlock icon={<User size={18} />} label="名前">
               <input
@@ -3473,7 +3559,103 @@ function ProfileInfoRow({ icon, label, value }) {
     </div>
   );
 }
+function PhotoAlbumView({ records, setView }) {
+  const albumPhotos = records.flatMap((record) =>
+    (record.draftData?.photos || []).map((photo) => ({
+      ...photo,
+      recordId: record.id,
+      recordDate: record.date,
+      opponent: record.opponent,
+      stadium: record.stadium,
+      tag: record.tag,
+    }))
+  );
 
+  return (
+    <div className="min-h-screen bg-[#f8f7fb] pb-28">
+      <BrandHeader back="mypage" setView={setView} />
+
+      <section className="px-5 py-6">
+        <div className="mb-5">
+          <div className="flex items-center gap-2 text-[#4b1c89] font-black text-sm mb-1">
+            <ImageIcon size={18} />
+            PHOTO ALBUM
+          </div>
+
+          <h1 className="text-2xl font-black text-[#171425]">
+            写真アルバム
+          </h1>
+
+          <p className="text-xs text-gray-500 font-bold mt-1">
+            観戦記録に追加した写真をまとめて見られます
+          </p>
+        </div>
+
+        <Card>
+          <div className="flex items-center justify-between mb-4">
+            <div className="font-black text-[#4b1c89]">
+              写真一覧
+            </div>
+
+            <div className="text-xs text-gray-500 font-black">
+              {albumPhotos.length}枚
+            </div>
+          </div>
+
+          {albumPhotos.length > 0 ? (
+            <div className="grid grid-cols-2 gap-3">
+              {albumPhotos.map((photo) => (
+                <div
+                  key={photo.id}
+                  className="bg-[#f8f7fb] rounded-2xl overflow-hidden border border-gray-100 shadow-sm"
+                >
+                  <img
+                    src={photo.url}
+                    alt={photo.name || '観戦写真'}
+                    className="w-full h-32 object-cover"
+                  />
+
+                  <div className="p-3">
+                    <div className="text-[11px] text-[#4b1c89] font-black">
+                      {photo.recordDate}
+                    </div>
+
+                    <div className="text-xs font-black text-[#171425] mt-1 truncate">
+                      vs {photo.opponent || '対戦相手未入力'}
+                    </div>
+
+                    <div className="text-[10px] text-gray-500 font-bold mt-1 flex items-center gap-1 min-w-0">
+                      <MapPin size={10} className="shrink-0" />
+                      <span className="truncate">
+                        {photo.stadium || 'スタジアム未入力'}
+                      </span>
+                    </div>
+
+                    {photo.tag && (
+                      <span className="inline-block mt-2 bg-purple-100 text-[#4b1c89] text-[9px] font-black px-2 py-1 rounded-full">
+                        #{photo.tag}
+                      </span>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="h-40 rounded-2xl bg-gray-50 border border-dashed border-gray-200 flex flex-col items-center justify-center text-center px-4">
+              <ImageIcon size={30} className="text-gray-300 mb-2" />
+              <div className="text-sm text-gray-400 font-black">
+                まだ写真がありません
+              </div>
+              <div className="text-xs text-gray-400 font-bold mt-1">
+                観戦記録を作成するときに写真を追加してみよう
+              </div>
+            </div>
+          )}
+        </Card>
+      </section>
+    </div>
+  );
+}
 function MyPageMenuItem({ icon, title, text, onClick }) {
   return (
     <button
@@ -3653,8 +3835,7 @@ function StepIndicator({ step }) {
 function CreateStep1({ setView, draft, updateDraft, onSaveDraft }) {
   const [teamOpen, setTeamOpen] = useState(false);
   const selectedTeam =
-    opponentTeams.find((team) => team.name === draft.opponent) ||
-    opponentTeams.find((team) => team.name === 'FC東京');
+    opponentTeams.find((team) => team.name === draft.opponent) || null;
 
   const homeStadium = 'エディオンピースウイング広島';
 
@@ -3734,9 +3915,16 @@ function CreateStep1({ setView, draft, updateDraft, onSaveDraft }) {
                 onClick={() => setTeamOpen(!teamOpen)}
                 className="flex-1 text-center interactive-card rounded-xl p-2 hover:bg-purple-50"
               >
-                <TeamBadge team={selectedTeam} />
+                {selectedTeam ? (
+                  <TeamBadge team={selectedTeam} />
+                ) : (
+                  <div className="w-14 h-14 mx-auto rounded-2xl bg-gray-100 text-gray-400 flex items-center justify-center shadow-sm">
+                    <Shield size={30} fill="currentColor" strokeWidth={0} />
+                  </div>
+                )}
+
                 <div className="text-xs font-black mt-2 leading-snug flex items-center justify-center gap-1">
-                  {selectedTeam.name}
+                  {selectedTeam ? selectedTeam.name : '対戦相手を選択'}
                   <ChevronRight size={14} className="rotate-90 text-[#4b1c89]" />
                 </div>
               </button>
@@ -3880,6 +4068,7 @@ function CreateStep1({ setView, draft, updateDraft, onSaveDraft }) {
               onChange={(e) => updateDraft({ weather: e.target.value })}
               className="field"
             >
+              <option value="">選択してください</option>
               <option value="晴れ">晴れ ☀️</option>
               <option value="曇り">曇り ☁️</option>
               <option value="雨">雨 ☔</option>
@@ -3889,6 +4078,7 @@ function CreateStep1({ setView, draft, updateDraft, onSaveDraft }) {
 
           <InputBlock icon={<Users size={18} />} label="誰と観戦した？">
             <select value={draft.companion} onChange={(e) => updateDraft({ companion: e.target.value })} className="field">
+              <option value="">選択してください</option>
               <option>友達</option>
               <option>家族</option>
               <option>一人</option>
@@ -3898,7 +4088,12 @@ function CreateStep1({ setView, draft, updateDraft, onSaveDraft }) {
       </div>
 
       <BottomAction>
-        <button onClick={() => setView('step2')} className="primary-btn w-full">
+        <button onClick={() => setView('home')} className="secondary-btn">
+          <ChevronLeft size={20} />
+          戻る
+        </button>
+
+        <button onClick={() => setView('step2')} className="primary-btn flex-[1.4]">
           次へ <ChevronRight size={22} />
         </button>
       </BottomAction>
@@ -3909,15 +4104,32 @@ function CreateStep1({ setView, draft, updateDraft, onSaveDraft }) {
 }
 
 function CreateStep2({ setView, draft, updateDraft, onSaveDraft }) {
+  const [tagInput, setTagInput] = useState('');
+
   const selectedMvp =
-    playerOptions.find((player) => player.name === draft.mvp) ||
-    playerOptions[0];
+    playerOptions.find((player) => player.name === draft.mvp) || null;
 
   const opponentTeam =
     opponentTeams.find((team) => team.name === draft.opponent) ||
     opponentTeams.find((team) => team.name === 'FC東京');
+
+  const addTag = () => {
+    const newTag = tagInput.trim();
+
+    if (!newTag) return;
+    if ((draft.tags || []).includes(newTag)) return;
+
+    updateDraft({
+      tags: [...(draft.tags || []), newTag],
+    });
+
+    setTagInput('');
+  };
+
   const removeTag = (tag) => {
-    updateDraft({ tags: draft.tags.filter((t) => t !== tag) });
+    updateDraft({
+      tags: (draft.tags || []).filter((t) => t !== tag),
+    });
   };
 
   const ratingMessages = {
@@ -3928,18 +4140,32 @@ function CreateStep2({ setView, draft, updateDraft, onSaveDraft }) {
     5: '最高すぎた！',
   };
 
-  const handlePhotoAdd = (e) => {
-    const files = Array.from(e.target.files);
+  const handlePhotoAdd = async (e) => {
+    const files = Array.from(e.target.files || []);
     const currentPhotos = draft.photos || [];
     const remaining = 10 - currentPhotos.length;
 
     if (remaining <= 0) return;
 
-    const newPhotos = files.slice(0, remaining).map((file) => ({
-      id: `${file.name}-${Date.now()}-${Math.random()}`,
-      name: file.name,
-      url: URL.createObjectURL(file),
-    }));
+    const readFileAsDataUrl = (file) => {
+      return new Promise((resolve) => {
+        const reader = new FileReader();
+
+        reader.onload = () => {
+          resolve({
+            id: `${file.name}-${Date.now()}-${Math.random()}`,
+            name: file.name,
+            url: reader.result,
+          });
+        };
+
+        reader.readAsDataURL(file);
+      });
+    };
+
+    const newPhotos = await Promise.all(
+      files.slice(0, remaining).map(readFileAsDataUrl)
+    );
 
     updateDraft({
       photos: [...currentPhotos, ...newPhotos],
@@ -3983,14 +4209,18 @@ function CreateStep2({ setView, draft, updateDraft, onSaveDraft }) {
 
             <div className="text-left ml-2">
               <div className="text-[38px] leading-none font-black text-[#171425] drop-shadow-sm tracking-[-0.04em]">
-                {draft.rating}.0
+                {draft.rating ? `${draft.rating}.0` : '-'}
               </div>
+
               <div className="text-[11px] text-[#4b1c89] font-black mt-2 max-w-[120px] leading-snug">
-                {ratingMessages[draft.rating]}
+                {draft.rating
+                  ? ratingMessages[draft.rating]
+                  : 'タップして満足度を選択'}
               </div>
             </div>
           </div>
         </Card>
+
 
         {/* 今日のMVP */}
         {/* 今日のMVP */}
@@ -4001,17 +4231,23 @@ function CreateStep2({ setView, draft, updateDraft, onSaveDraft }) {
           </div>
 
           <div className="flex items-center gap-4">
-            <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-[#4b1c89] to-[#2a075f] text-white flex flex-col items-center justify-center shadow-md shrink-0">
-              <div className="text-[10px] font-black tracking-widest text-white/80">
-                No.
+            {selectedMvp ? (
+              <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-[#4b1c89] to-[#2a075f] text-white flex flex-col items-center justify-center shadow-md shrink-0">
+                <div className="text-[10px] font-black tracking-widest text-white/80">
+                  No.
+                </div>
+                <div className="text-[34px] leading-none font-black">
+                  {selectedMvp.number}
+                </div>
+                <div className="text-[10px] font-black text-yellow-300 mt-1">
+                  {selectedMvp.position}
+                </div>
               </div>
-              <div className="text-[34px] leading-none font-black">
-                {selectedMvp.number}
+            ) : (
+              <div className="w-20 h-20 rounded-2xl bg-gray-100 text-gray-400 flex items-center justify-center font-black shrink-0">
+                未選択
               </div>
-              <div className="text-[10px] font-black text-yellow-300 mt-1">
-                {selectedMvp.position}
-              </div>
-            </div>
+            )}
 
             <div className="flex-1 min-w-0">
               <div className="text-xs text-gray-500 font-black mb-1">
@@ -4023,6 +4259,7 @@ function CreateStep2({ setView, draft, updateDraft, onSaveDraft }) {
                 onChange={(e) => updateDraft({ mvp: e.target.value })}
                 className="w-full border border-gray-200 rounded-xl p-3 font-black text-[#171425] outline-none focus:border-[#4b1c89] focus:ring-4 focus:ring-purple-100 bg-white"
               >
+                <option value="">選択してください</option>
                 {playerOptions.map((player) => (
                   <option key={player.name} value={player.name}>
                     #{player.number} {player.name} / {player.position}
@@ -4030,12 +4267,20 @@ function CreateStep2({ setView, draft, updateDraft, onSaveDraft }) {
                 ))}
               </select>
 
-              <div className="mt-2 text-sm font-black text-[#4b1c89]">
-                {selectedMvp.name}
-              </div>
-              <div className="text-xs text-gray-500 font-bold">
-                背番号 {selectedMvp.number} / {selectedMvp.position}
-              </div>
+              {selectedMvp ? (
+                <>
+                  <div className="mt-2 text-sm font-black text-[#4b1c89]">
+                    {selectedMvp.name}
+                  </div>
+                  <div className="text-xs text-gray-500 font-bold">
+                    背番号 {selectedMvp.number} / {selectedMvp.position}
+                  </div>
+                </>
+              ) : (
+                <div className="mt-2 text-xs text-gray-400 font-bold">
+                  まだMVPは選ばれていません
+                </div>
+              )}
             </div>
           </div>
         </Card>
@@ -4061,27 +4306,44 @@ function CreateStep2({ setView, draft, updateDraft, onSaveDraft }) {
         {/* タグ */}
         <Card>
           <div className="flex items-center gap-2 text-[#4b1c89] font-black mb-4">
-            <TagIcon size={18} /> タグを追加
+            <TagIcon size={18} />
+            タグを追加
           </div>
 
-          <div className="flex flex-wrap gap-3">
-            {draft.tags.map((tag) => (
+          <div className="flex flex-wrap gap-2 mb-3">
+            {(draft.tags || []).map((tag) => (
               <button
                 key={tag}
                 type="button"
                 onClick={() => removeTag(tag)}
-                className="border border-[#4b1c89] text-[#4b1c89] rounded-full px-4 py-2 text-sm font-black hover:bg-purple-50"
+                className="border border-[#4b1c89] text-[#4b1c89] rounded-full px-3 py-1.5 text-xs font-black"
               >
-                #{tag}
+                #{tag} ×
               </button>
             ))}
+          </div>
+
+          <div className="flex gap-2">
+            <input
+              type="text"
+              value={tagInput}
+              onChange={(e) => setTagInput(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  e.preventDefault();
+                  addTag();
+                }
+              }}
+              placeholder="例：逆転勝利"
+              className="field flex-1"
+            />
 
             <button
               type="button"
-              onClick={() => updateDraft({ tags: [...draft.tags, '新規タグ'] })}
-              className="w-10 h-10 border border-gray-300 rounded-full flex items-center justify-center hover:bg-purple-50"
+              onClick={addTag}
+              className="bg-[#4b1c89] text-white px-4 rounded-2xl text-xs font-black"
             >
-              <Plus size={18} />
+              追加
             </button>
           </div>
         </Card>
