@@ -3854,18 +3854,18 @@ function CreateStep1({ setView, draft, updateDraft, onSaveDraft }) {
   return (
     <CreateShell setView={setView} backTo="home" step={1} onSaveDraft={onSaveDraft}>
       <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-4 space-y-5">
-        <div className="grid grid-cols-2 gap-2">
-          <InputBlock icon={<Calendar size={14} />} label="試合日">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <InputBlock icon={<Calendar size={18} />} label="試合日">
             <input
               type="date"
               value={draft.date}
               onChange={(e) => updateDraft({ date: e.target.value })}
-              className="field mini-field date-mini-field"
+              className="field"
             />
           </InputBlock>
 
-          <InputBlock icon={<Trophy size={14} />} label="大会">
-            <select className="field mini-field">
+          <InputBlock icon={<Trophy size={18} />} label="大会">
+            <select className="field">
               <option>明治安田J1リーグ</option>
               <option>ルヴァンカップ</option>
               <option>天皇杯</option>
