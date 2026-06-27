@@ -1087,8 +1087,9 @@ function BrandHeader({ back, setView = () => { } }) {
     setNoticeOpen(false);
   };
 
+  // 538行目付近：z-50 を z-[60] に変更して前面に出します
   return (
-    <header className="relative h-[70px] bg-gradient-to-r from-[#2b0b63] via-[#4b1c89] to-[#35106f] text-white z-50 shadow-md shadow-purple-900/15 overflow-visible">
+    <header className="relative h-[70px] bg-gradient-to-r from-[#2b0b63] via-[#4b1c89] to-[#35106f] text-white z-[60] shadow-md shadow-purple-900/15 overflow-visible">
       {/* うっすら装飾 */}
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_25%_20%,rgba(255,255,255,0.18),transparent_28%),radial-gradient(circle_at_85%_30%,rgba(250,204,21,0.16),transparent_24%)]"></div>
       <div className="pointer-events-none absolute left-0 bottom-0 h-[3px] w-full bg-yellow-300/80"></div>
@@ -1219,8 +1220,9 @@ function BrandHeader({ back, setView = () => { } }) {
       )}
 
       {/* 三本線メニュー */}
+      // 598行目付近：max-h を 180px 差し引きに変更し、下部に余白 pb-6 を追加
       {menuOpen && (
-        <div className="fixed right-4 top-[82px] w-[275px] max-h-[calc(100vh-110px)] overflow-y-auto overscroll-contain bg-white text-[#171425] rounded-2xl shadow-2xl border border-gray-100 p-4 z-[999]">
+        <div className="fixed right-4 top-[82px] w-[275px] max-h-[calc(100vh-180px)] overflow-y-auto overscroll-contain bg-white text-[#171425] rounded-2xl shadow-2xl border border-gray-100 p-4 pb-6 z-[999]">
           <div className="flex items-center justify-between mb-4">
             <div>
               <div className="text-xs font-black text-[#4b1c89]">
@@ -2066,14 +2068,14 @@ function FavoriteRecordsView({ setView, records, onEdit, onToggleFavorite, onOpe
         {favoriteRecords.length > 0 ? (
           <div className="space-y-4">
             {favoriteRecords.map((record) => (
+
+              // ✨ classNameの中身をスッキリさせました！
               <div
                 key={record.id}
                 onClick={() => onOpenDetail(record, 'favoriteRecords')}
-                className={`relative bg-white rounded-2xl p-3 shadow-sm border flex gap-3 cursor-pointer active:scale-[0.99] transition ${selectedIds.includes(record.id)
-                  ? 'border-red-300 ring-4 ring-red-100'
-                  : 'border-gray-100'
-                  }`}
+                className="relative bg-white rounded-2xl p-3 shadow-sm border border-gray-100 flex gap-3 cursor-pointer active:scale-[0.99] transition"
               >
+
                 <img
                   src={record.img}
                   alt="record"
@@ -2144,10 +2146,11 @@ function FavoriteRecordsView({ setView, records, onEdit, onToggleFavorite, onOpe
 
             <button
               type="button"
-              onClick={() => setView('home')}
+              // ★ setView('home') を setView('records') に変更しました
+              onClick={() => setView('records')}
               className="mt-5 bg-[#4b1c89] text-white text-sm font-black px-5 py-3 rounded-full shadow-lg shadow-purple-900/20"
             >
-              観戦記録を見る
+              記録一覧を見る
             </button>
           </div>
         )}
