@@ -3986,12 +3986,20 @@ function ProfileShieldBadge({ badge }) {
   );
 }
 function MyPageStat({ label, value, unit }) {
+  const valueStr = String(value);
+  // ★追加：文字数が7文字以上（例: ¥10,000 など）なら文字を少し小さくする設定
+  const isLong = valueStr.length >= 7;
+
   return (
-    <div className="bg-white/10 border border-white/10 rounded-2xl p-3 text-center">
-      <div className="text-lg font-black leading-none">
+    // ★修正：p-3を「py-3 px-1.5」に変えて横の余白を広げ、min-w-0 で枠の破壊を防ぎます
+    <div className="bg-white/10 border border-white/10 rounded-2xl py-3 px-1.5 text-center min-w-0 flex flex-col justify-center">
+
+      {/* ★修正：桁数が多い場合は text-sm に縮小。それでもはみ出る異常値は truncate で「...」にします */}
+      <div className={`${isLong ? 'text-sm' : 'text-lg'} font-black leading-none truncate px-0.5`}>
         {value}
       </div>
-      <div className="text-[10px] text-white/75 font-bold mt-1">
+
+      <div className="text-[10px] text-white/75 font-bold mt-1 truncate px-0.5">
         {label}{unit && ` / ${unit}`}
       </div>
     </div>
