@@ -595,7 +595,6 @@ const awaySeatGroups = [
   {
     label: 'ビジター席',
     seats: [
-      'ビジター席',
       'ビジター自由席',
       'ビジター指定席',
     ],
