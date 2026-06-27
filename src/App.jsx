@@ -779,10 +779,16 @@ export default function App() {
 
     return () => clearTimeout(timer);
   }, [saveMessage]);
+  // ★ 追加：viewが変わるたびにスクロール位置を一番上に戻す処理
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [view]);
 
   const updateDraft = (updates) => {
     setDraft({ ...draft, ...updates });
   };
+
+
 
   const handleStartCreate = () => {
     setEditingRecordId(null);
@@ -2444,24 +2450,7 @@ function RecordsView({
                     }`}
                 >
 
-                  {selectMode && (
-                    <button
-                      type="button"
-                      onClick={(e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        toggleSelectRecord(record.id);
-                      }}
-                      className={`absolute top-3 right-3 w-9 h-9 rounded-full border-2 flex items-center justify-center z-30 shadow-md ${isSelected // ✨ ここを isSelected に変更
-                        ? 'bg-red-500 border-red-500 text-white'
-                        : 'bg-white border-gray-300 text-gray-300'
-                        }`}
-                    >
-                      {isSelected && ( // ✨ ここも isSelected に変更
-                        <CheckCircle2 size={22} strokeWidth={3} />
-                      )}
-                    </button>
-                  )}
+
                   <img
                     src={getStadiumImage(record.stadium)}
                     alt={record.stadium}
