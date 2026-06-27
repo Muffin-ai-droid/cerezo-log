@@ -1768,7 +1768,7 @@ function MatchScheduleModal({ onClose }) {
                             )}
                           </div>
 
-                          <div className="text-sm font-black mt-1 truncate">
+                          <div className="text-sm font-black text-[#171425] mt-1 truncate">
                             vs {match.opponent}
                           </div>
 
