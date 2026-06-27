@@ -1220,7 +1220,7 @@ function BrandHeader({ back, setView = () => { } }) {
       )}
 
       {/* 三本線メニュー */}
-      // 598行目付近：max-h を 180px 差し引きに変更し、下部に余白 pb-6 を追加
+
       {menuOpen && (
         <div className="fixed right-4 top-[82px] w-[275px] max-h-[calc(100vh-180px)] overflow-y-auto overscroll-contain bg-white text-[#171425] rounded-2xl shadow-2xl border border-gray-100 p-4 pb-6 z-[999]">
           <div className="flex items-center justify-between mb-4">
