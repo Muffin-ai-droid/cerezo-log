@@ -5062,15 +5062,7 @@ function CreateStep1({ setView, draft, updateDraft, onSaveDraft }) {
             ※「節」を選択すると、試合日や対戦相手、スタジアムが自動で反映されます。
           </p>
 
-          <InputBlock icon={<Calendar size={18} />} label="試合日">
-            <input
-              type="text"
-              placeholder="例: 2026.02.23"
-              value={draft.date || ''}
-              onChange={(e) => updateDraft({ date: e.target.value })}
-              className="field"
-            />
-          </InputBlock>
+
           <InputBlock icon={<Calendar size={18} />} label="試合日">
             <label className="relative flex items-center justify-between w-full max-w-full box-border border border-gray-200 rounded-2xl bg-white px-4 py-4 overflow-hidden">
               <span
