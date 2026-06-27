@@ -1906,6 +1906,58 @@ function MatchScheduleModal({ onClose }) {
     </div>
   );
 }
+
+function DetailScorersCard({ scorers }) {
+  const goalScorers = scorers || [];
+
+  return (
+    <Card>
+      <div className="flex items-center gap-2 text-[#4b1c89] font-black mb-4">
+        <Trophy size={18} />
+        得点者
+      </div>
+
+      {goalScorers.length > 0 ? (
+        <div className="space-y-2">
+          {goalScorers.map((scorer, index) => {
+            const player = playerOptions.find((p) => p.name === scorer.player);
+
+            return (
+              <div
+                key={scorer.id || index}
+                className="flex items-center gap-3 bg-[#f8f7fb] border border-gray-100 rounded-2xl p-3"
+              >
+                <div className="w-10 h-10 rounded-xl bg-[#4b1c89] text-white flex items-center justify-center font-black shrink-0">
+                  {player ? player.number : index + 1}
+                </div>
+
+                <div className="flex-1 min-w-0">
+                  <div className="text-sm font-black text-[#171425] truncate">
+                    {scorer.player || '未入力'}
+                  </div>
+
+                  <div className="text-[11px] text-gray-400 font-bold mt-0.5">
+                    {scorer.minute ? `${scorer.minute}分` : '時間未入力'}
+                    {player ? ` / ${player.position}` : ''}
+                  </div>
+                </div>
+
+                <div className="text-xs font-black text-[#4b1c89] bg-purple-50 px-2 py-1 rounded-full">
+                  GOAL
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      ) : (
+        <div className="h-20 rounded-2xl bg-gray-50 border border-dashed border-gray-200 flex items-center justify-center text-sm text-gray-400 font-bold">
+          得点者は未入力です
+        </div>
+      )}
+    </Card>
+  );
+}
+
 function RecordDetailView({ record, setView, backTo, onEdit, onToggleFavorite, onDelete }) {
   const data = record.draftData || {};
   const expenses = data.expenses || {};
@@ -2020,6 +2072,10 @@ function RecordDetailView({ record, setView, backTo, onEdit, onToggleFavorite, o
             </div>
           </div>
         </div>
+
+        <DetailScorersCard scorers={data.scorers || []} />
+
+        <ConfirmPositionBoard draft={data} />
 
         {/* 基本情報 */}
         <Card>
