@@ -805,8 +805,9 @@ export default function App() {
       date: record.draftData?.date || record.date.replaceAll('.', '-'),
       opponent: record.opponent || defaultDraft.opponent,
       stadium: record.stadium || defaultDraft.stadium,
+      // ★修正：「で観戦」も取り除くように追加
       companion: record.companion
-        ? record.companion.replace('と観戦', '')
+        ? record.companion.replace('と観戦', '').replace('で観戦', '')
         : defaultDraft.companion,
       tags: record.tag ? [record.tag] : defaultDraft.tags,
     });
@@ -898,7 +899,10 @@ export default function App() {
       opponent: draft.opponent,
       score: `サンフレッチェ広島 ${draft.homeScore} - ${draft.awayScore} ${draft.opponent}`,
       stadium: draft.stadium,
-      companion: `${draft.companion}と観戦`,
+      // ★修正：「一人」の時は「一人で観戦」、空の場合は空文字、それ以外は「〜と観戦」にする
+      companion: draft.companion === '一人'
+        ? '一人で観戦'
+        : (draft.companion ? `${draft.companion}と観戦` : ''),
       tag: draft.tags[0] || '観戦記録',
       img: getStadiumImage(draft.stadium),
       favorite: false,
