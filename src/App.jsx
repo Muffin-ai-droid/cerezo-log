@@ -1196,80 +1196,99 @@ function BrandHeader({ back, setView = () => { } }) {
     setNoticeOpen(false);
   };
 
-  // 538行目付近：z-50 を z-[60] に変更して前面に出します
   return (
-    <header className="relative h-[70px] bg-gradient-to-r from-[#2b0b63] via-[#4b1c89] to-[#35106f] text-white z-[60] shadow-md shadow-purple-900/15 overflow-visible">
-      {/* うっすら装飾 */}
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_25%_20%,rgba(255,255,255,0.18),transparent_28%),radial-gradient(circle_at_85%_30%,rgba(250,204,21,0.16),transparent_24%)]"></div>
-      <div className="pointer-events-none absolute left-0 bottom-0 h-[3px] w-full bg-yellow-300/80"></div>
+    <header className="relative h-[85px] bg-[#210650] text-white z-[60] shadow-lg shadow-purple-900/30 overflow-visible border-b-[3px] border-[#c8a45d]/60">
+      {/* 背景グラデーション */}
+      <div className="absolute inset-0 bg-gradient-to-r from-[#35106f] via-[#24104d] to-[#160533]"></div>
 
-      <div className="relative z-10 h-full px-5 flex items-center justify-between">
-        {/* 左側 */}
-        <div className="flex items-center gap-3 min-w-0">
-          {back ? (
-            <button
-              type="button"
-              onClick={() => setView(back)}
-              className="w-9 h-9 rounded-full bg-white/12 border border-white/15 flex items-center justify-center active:scale-95"
-            >
-              <ChevronLeft size={25} strokeWidth={2.6} />
-            </button>
-          ) : null}
+      {/* うっすら光 */}
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_42%_42%,rgba(255,255,255,0.16),transparent_22%),radial-gradient(circle_at_82%_70%,rgba(214,179,106,0.13),transparent_14%)]"></div>
 
-          <div className="text-left">
-            {/* ↓ 一体感を出すために gap-2 を gap-1 に変更 */}
-            <div className="flex items-baseline gap-1 leading-none">
-              <span className="text-[25px] font-black tracking-[-0.1em] text-white drop-shadow-sm">
+      {/* 左の斜め装飾：薄め */}
+      <div className="absolute -left-12 top-0 h-full w-20 skew-x-[-28deg] bg-white/8"></div>
+      <div className="absolute left-4 top-0 h-full w-1.5 skew-x-[-28deg] bg-[#c8a45d]/28"></div>
+      <div className="absolute left-10 top-0 h-full w-14 skew-x-[-28deg] bg-purple-300/8"></div>
+
+      {/* 右の斜め装飾：薄め */}
+      <div className="absolute -right-10 top-0 h-full w-24 skew-x-[-30deg] bg-purple-300/8"></div>
+      <div className="absolute right-8 top-0 h-full w-1.5 skew-x-[-30deg] bg-[#c8a45d]/28"></div>
+      <div className="absolute right-16 top-0 h-full w-px skew-x-[-30deg] bg-white/12"></div>
+
+      {/* 下の金ライン */}
+      <div className="absolute left-0 right-0 bottom-0 h-[3px] bg-gradient-to-r from-purple-500 via-[#d6b36a] to-purple-600"></div>
+      <div className="absolute left-1/2 bottom-[-5px] h-4 w-24 -translate-x-1/2 rounded-full bg-[#d6b36a]/20 blur-xl"></div>
+
+      <div className="relative z-10 h-full px-5 flex items-center">
+        {back && (
+          <button
+            type="button"
+            onClick={() => setView(back)}
+            className="absolute left-3 top-3 w-8 h-8 rounded-full bg-white/12 border border-white/20 flex items-center justify-center active:scale-95"
+          >
+            <ChevronLeft size={21} strokeWidth={2.8} />
+          </button>
+        )}
+
+        <div className={`w-full flex items-center gap-3 ${back ? 'pl-7' : ''}`}>
+          {/* ロゴ文字 */}
+          <div className="flex-1 min-w-0">
+            <div className="flex items-end gap-3 leading-none whitespace-nowrap">
+              <span className="text-[25px] font-black tracking-[-0.1em] text-white drop-shadow-[0_4px_10px_rgba(0,0,0,0.35)]">
                 SANFRE
               </span>
 
-              {/* ↓ font-extralight を font-black に変更し、少し明るく(white/90)しました */}
-              <span className="text-[20px] font-black tracking-[-0.06em] text-white/90 drop-shadow-sm">
-                LOG
+              <span
+                className="text-[25px] italic font-black tracking-[-0.08em] text-[#d6b36a] drop-shadow-[0_4px_10px_rgba(0,0,0,0.35)]"
+                style={{ fontFamily: "'Brush Script MT', 'Segoe Script', cursive" }}
+              >
+                log
               </span>
             </div>
 
-            <div className="mt-2 flex items-center gap-1">
-              <div className="h-[2px] w-12 rounded-full bg-yellow-300"></div>
-              <span className="text-[8px] font-black tracking-[0.1em] text-yellow-300 whitespace-nowrap">
-                MATCH MEMORY
-              </span>
+            <div className="mt-2 flex items-center gap-2">
+              <div className="h-px w-16 bg-[#d6b36a]/70"></div>
+              <div className="text-[#d6b36a] text-[10px] leading-none">✦</div>
+              <div className="h-px w-16 bg-[#d6b36a]/70"></div>
+            </div>
 
-              <div className="h-[2px] w-10 rounded-full bg-yellow-300"></div>
+            <div className="mt-2 text-[8px] font-bold tracking-[0.24em] text-white/80 whitespace-nowrap">
+              CAPTURE EVERY MATCH MEMORY
             </div>
           </div>
-        </div>
 
-        {/* 右側 */}
-        <div className="flex items-center gap-3">
-          <button
-            type="button"
-            onClick={() => {
-              setNoticeOpen(!noticeOpen);
-              setMenuOpen(false);
-            }}
-            className="relative w-10 h-10 rounded-full bg-white/10 border border-white/10 flex items-center justify-center active:scale-95"
-          >
-            <Bell size={18} strokeWidth={2.0} />
-            <span className="absolute top-1.5 right-1.5 w-1.5 h-1.5 rounded-full bg-yellow-300"></span>
-          </button>
+          {/* 右アイコン */}
+          <div className="flex items-center gap-2 shrink-0">
+            <button
+              type="button"
+              onClick={() => {
+                setNoticeOpen(!noticeOpen);
+                setMenuOpen(false);
+              }}
+              className="relative w-8 h-8 rounded-full bg-white/8 border border-white/15 flex items-center justify-center active:scale-95"
+            >
+              <Bell size={20} strokeWidth={2.1} />
+              <span className="absolute top-1 right-1 w-1.5 h-1.5 rounded-full bg-[#d6b36a]"></span>
+            </button>
 
-          <button
-            type="button"
-            onClick={() => {
-              setMenuOpen(!menuOpen);
-              setNoticeOpen(false);
-            }}
-            className="w-10 h-10 rounded-full bg-white/10 border border-white/10 flex items-center justify-center active:scale-95"
-          >
-            <Menu size={18} strokeWidth={2.0} />
-          </button>
+            <div className="h-8 w-px bg-white/30"></div>
+
+            <button
+              type="button"
+              onClick={() => {
+                setMenuOpen(!menuOpen);
+                setNoticeOpen(false);
+              }}
+              className="w-8 h-8 rounded-full bg-white/8 border border-white/15 flex items-center justify-center active:scale-95"
+            >
+              <Menu size={22} strokeWidth={2.3} />
+            </button>
+          </div>
         </div>
       </div>
 
       {/* お知らせ */}
       {noticeOpen && (
-        <div className="absolute right-4 top-[82px] w-[295px] bg-white text-[#171425] rounded-2xl shadow-2xl border border-gray-100 p-4 z-[999]">
+        <div className="absolute right-4 top-[124px] w-[295px] bg-white text-[#171425] rounded-2xl shadow-2xl border border-gray-100 p-4 z-[999]">
           <div className="flex items-center justify-between mb-3">
             <div className="font-black text-[#4b1c89] flex items-center gap-2">
               <Bell size={18} />
@@ -1286,12 +1305,11 @@ function BrandHeader({ back, setView = () => { } }) {
           </div>
 
           <div className="space-y-3">
-            {/* ★ 修正：div を button に変え、クリック処理を追加しました */}
             <button
               type="button"
               onClick={() => {
-                setScheduleOpen(true); // カレンダーを開く
-                setNoticeOpen(false);  // お知らせは閉じる
+                setScheduleOpen(true);
+                setNoticeOpen(false);
               }}
               className="w-full text-left bg-purple-50 hover:bg-purple-100 transition rounded-2xl p-3 border border-purple-100 active:scale-[0.98]"
             >
@@ -1299,7 +1317,6 @@ function BrandHeader({ back, setView = () => { } }) {
                 <div className="text-xs font-black text-[#4b1c89]">
                   次の試合
                 </div>
-                {/* ★ 追加：右側に小さな矢印アイコンを表示して押せる感を出します */}
                 <ChevronRight size={14} className="text-[#4b1c89]" />
               </div>
 
@@ -1342,9 +1359,8 @@ function BrandHeader({ back, setView = () => { } }) {
       )}
 
       {/* 三本線メニュー */}
-
       {menuOpen && (
-        <div className="fixed right-4 top-[82px] w-[275px] max-h-[calc(100vh-180px)] overflow-y-auto overscroll-contain bg-white text-[#171425] rounded-2xl shadow-2xl border border-gray-100 p-4 pb-6 z-[999]">
+        <div className="fixed right-4 top-[124px] w-[275px] max-h-[calc(100vh-170px)] overflow-y-auto overscroll-contain bg-white text-[#171425] rounded-2xl shadow-2xl border border-gray-100 p-4 pb-6 z-[999]">
           <div className="flex items-center justify-between mb-4">
             <div>
               <div className="text-xs font-black text-[#4b1c89]">
@@ -1422,12 +1438,9 @@ function BrandHeader({ back, setView = () => { } }) {
         </div>
       )}
 
-      {/* ★ 追加：ここから */}
       {scheduleOpen && (
         <MatchScheduleModal onClose={() => setScheduleOpen(false)} />
       )}
-      {/* ★ 追加：ここまで */}
-
     </header>
   );
 }
@@ -1498,7 +1511,7 @@ function HomeView({
         {/* メインビジュアル */}
         <div className="relative h-[250px] overflow-hidden">
           <img
-            src="https://images.unsplash.com/photo-1522778119026-d647f0596c20?auto=format&fit=crop&w=1200&q=80"
+            src="https://www.jleague.jp/img/news/2025/11/32339.jpg?_=1760690164"
             className="absolute inset-0 w-full h-full object-cover opacity-60 scale-105"
             alt="stadium"
           />
