@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   Home, List, BarChart2, User, Plus, Bell, ChevronRight, ChevronLeft,
   Calendar, Trophy, Flag, MapPin, Users, Star, Tag as TagIcon,
@@ -3757,7 +3757,7 @@ function CreateShell({ children, setView, backTo, step, onSaveDraft }) {
     <div className="min-h-screen bg-[#f8f7fb]">
       <BrandHeader back={backTo} setView={setView} />
 
-      <div className="-mt-1 bg-white rounded-t-[2.2rem] min-h-screen px-4 pt-8 pb-28 shadow-[0_-10px_25px_rgba(24,7,55,0.08)]">
+      <div className="-mt-1 bg-white rounded-t-[2.2rem] min-h-screen px-4 pt-8 pb-40 shadow-[0_-10px_25px_rgba(24,7,55,0.08)]">
         <h1 className="text-center text-[24px] font-black tracking-tight text-[#171425] mb-7">
           観戦記録を作成
         </h1>
@@ -3834,6 +3834,7 @@ function StepIndicator({ step }) {
 
 function CreateStep1({ setView, draft, updateDraft, onSaveDraft }) {
   const [teamOpen, setTeamOpen] = useState(false);
+  const dateInputRef = useRef(null);
   const selectedTeam =
     opponentTeams.find((team) => team.name === draft.opponent) || null;
 
@@ -3856,12 +3857,30 @@ function CreateStep1({ setView, draft, updateDraft, onSaveDraft }) {
       <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-4 space-y-5">
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <InputBlock icon={<Calendar size={18} />} label="試合日">
-            <input
-              type="date"
-              value={draft.date}
-              onChange={(e) => updateDraft({ date: e.target.value })}
-              className="field"
-            />
+            <div className="relative w-full min-w-0">
+              <input
+                ref={dateInputRef}
+                type="date"
+                value={draft.date}
+                onChange={(e) => updateDraft({ date: e.target.value })}
+                className="field w-full min-w-0 max-w-full box-border pr-12"
+              />
+
+              <button
+                type="button"
+                onClick={() => {
+                  if (dateInputRef.current?.showPicker) {
+                    dateInputRef.current.showPicker();
+                  } else {
+                    dateInputRef.current?.focus();
+                    dateInputRef.current?.click();
+                  }
+                }}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-[#4b1c89] active:scale-95"
+              >
+                <Calendar size={22} />
+              </button>
+            </div>
           </InputBlock>
 
           <InputBlock icon={<Trophy size={18} />} label="大会">
@@ -4976,8 +4995,10 @@ function Card({ children }) {
 
 function BottomAction({ children }) {
   return (
-    <div className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-md bg-white p-4 z-50 shadow-[0_-6px_20px_rgba(0,0,0,0.06)] flex gap-4">
-      {children}
+    <div className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-md z-50 bg-white/95 backdrop-blur-md border-t border-gray-100 shadow-[0_-8px_24px_rgba(0,0,0,0.08)] px-4 pt-3 pb-[calc(12px+env(safe-area-inset-bottom))]">
+      <div className="flex gap-3">
+        {children}
+      </div>
     </div>
   );
 }
