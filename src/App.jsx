@@ -1339,22 +1339,28 @@ function HomeView({
 
   const visibleRecords = showAllRecords ? records : records.slice(0, 3);
   const winCount = records.filter((record) => {
-    const data = record.draftData || {};
-    const scoreMatch = record.score?.match(/(\d+)\s*-\s*(\d+)/);
-
-    const sanfrecceScore =
-      data.homeScore !== undefined
-        ? Number(data.homeScore)
-        : Number(scoreMatch?.[1] || 0);
-
-    const opponentScore =
-      data.awayScore !== undefined
-        ? Number(data.awayScore)
-        : Number(scoreMatch?.[2] || 0);
-
+    // ...中略...
     return sanfrecceScore > opponentScore;
   }).length;
   const nextMatch = getNextMatch();
+
+  // ★追加：各試合の勝ち・引分・負けを判定する関数
+  const getResult = (record) => {
+    const data = record.draftData || {};
+    const homeScore =
+      data.homeScore !== undefined
+        ? Number(data.homeScore)
+        : Number(record.score?.match(/(\d+)\s*-\s*(\d+)/)?.[1] || 0);
+
+    const awayScore =
+      data.awayScore !== undefined
+        ? Number(data.awayScore)
+        : Number(record.score?.match(/(\d+)\s*-\s*(\d+)/)?.[2] || 0);
+
+    if (homeScore > awayScore) return 'WIN';
+    if (homeScore === awayScore) return 'DRAW';
+    return 'LOSE';
+  };
 
   return (
     <div>
@@ -1564,43 +1570,79 @@ function HomeView({
         </div>
 
         <div className="space-y-4">
-          {visibleRecords.map((record) => (
-            <div
-              key={record.id}
-              onClick={() => onOpenDetail(record, 'home')}
-              className="interactive-card relative bg-white rounded-2xl p-3 shadow-sm border border-gray-100 flex gap-3 cursor-pointer"
-            >
+          {visibleRecords.map((record) => {
 
+            const result = getResult(record);
 
-              <img
-                src={getStadiumImage(record.stadium)}
-                alt={record.stadium}
-                className="w-24 h-20 rounded-xl object-cover"
-              />
+            return (
+              <div
+                key={record.id}
+                onClick={() => onOpenDetail(record, 'home')}
+                className="interactive-card relative bg-white rounded-2xl p-3 shadow-sm border border-gray-100 flex gap-3 cursor-pointer"
+              >
+                <img
+                  src={getStadiumImage(record.stadium)}
+                  alt={record.stadium}
+                  className="w-24 h-20 rounded-xl object-cover"
+                />
 
-              <div className="flex-1 min-w-0">
-                <div className="text-[11px] text-[#3b1378] font-black">
-                  {record.date}
+                <div className="flex-1 min-w-0">
+                  {/* ★修正：日付の横に結果バッジとお気に入りボタンを回り込ませる構造に変更 */}
+                  <div className="flex justify-between items-start gap-2">
+                    <div className="text-[11px] text-[#3b1378] font-black">
+                      {record.date}
+                    </div>
+
+                    <div className="flex items-center gap-2">
+                      <span
+                        className={`text-[10px] font-black px-2 py-1 rounded-full ${result === 'WIN'
+                          ? 'bg-purple-100 text-[#4b1c89]'
+                          : result === 'DRAW'
+                            ? 'bg-gray-100 text-gray-500'
+                            : 'bg-red-50 text-red-500'
+                          }`}
+                      >
+                        {result === 'WIN' ? '勝ち' : result === 'DRAW' ? '引分' : '負け'}
+                      </span>
+
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation(); // 詳細画面への遷移を防ぐ
+                          onToggleFavorite(record.id);
+                        }}
+                        className="interactive-icon"
+                      >
+                        <Bookmark
+                          size={19}
+                          fill={record.favorite ? '#f6c400' : 'none'}
+                          className={record.favorite ? 'text-yellow-400' : 'text-gray-400'}
+                          strokeWidth={2.4}
+                        />
+                      </button>
+                    </div>
+                  </div>
+
+                  <div className="font-black text-sm leading-snug mt-1">
+                    {record.score}
+                  </div>
+
+                  {/* ▼▼ 前回抜けてしまっていた後半部分 ▼▼ */}
+                  <div className="text-[11px] text-gray-500 mt-1 flex items-center gap-1">
+                    <MapPin size={11} /> {record.stadium}
+                  </div>
+
+                  <div className="text-[11px] text-gray-500 flex items-center gap-1">
+                    <Users size={11} /> {record.companion}
+                  </div>
+
+                  <span className="inline-block mt-2 bg-purple-100 text-[#4b1c89] text-[10px] font-black px-3 py-1 rounded-full">
+                    #{record.tag}
+                  </span>
                 </div>
-
-                <div className="font-black text-sm leading-snug mt-1">
-                  {record.score}
-                </div>
-
-                <div className="text-[11px] text-gray-500 mt-1 flex items-center gap-1">
-                  <MapPin size={11} /> {record.stadium}
-                </div>
-
-                <div className="text-[11px] text-gray-500 flex items-center gap-1">
-                  <Users size={11} /> {record.companion}
-                </div>
-
-                <span className="inline-block mt-2 bg-purple-100 text-[#4b1c89] text-[10px] font-black px-3 py-1 rounded-full">
-                  #{record.tag}
-                </span>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </section>
     </div>
