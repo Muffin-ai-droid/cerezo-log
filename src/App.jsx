@@ -3857,30 +3857,22 @@ function CreateStep1({ setView, draft, updateDraft, onSaveDraft }) {
       <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-4 space-y-5">
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <InputBlock icon={<Calendar size={18} />} label="試合日">
-            <div className="relative w-full min-w-0">
+            <label className="relative flex items-center justify-between w-full max-w-full box-border border border-gray-200 rounded-2xl bg-white px-4 py-4 overflow-hidden">
+              <span
+                className={`font-black text-lg ${draft.date ? 'text-[#171425]' : 'text-gray-400'}`}
+              >
+                {draft.date ? draft.date.replaceAll('-', '/') : '日付を選択'}
+              </span>
+
+              <Calendar size={24} className="text-[#4b1c89] shrink-0" />
+
               <input
-                ref={dateInputRef}
                 type="date"
                 value={draft.date}
                 onChange={(e) => updateDraft({ date: e.target.value })}
-                className="field w-full min-w-0 max-w-full box-border pr-12"
+                className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
               />
-
-              <button
-                type="button"
-                onClick={() => {
-                  if (dateInputRef.current?.showPicker) {
-                    dateInputRef.current.showPicker();
-                  } else {
-                    dateInputRef.current?.focus();
-                    dateInputRef.current?.click();
-                  }
-                }}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-[#4b1c89] active:scale-95"
-              >
-                <Calendar size={22} />
-              </button>
-            </div>
+            </label>
           </InputBlock>
 
           <InputBlock icon={<Trophy size={18} />} label="大会">
