@@ -7588,7 +7588,7 @@ function ConfirmPositionBoard({ draft }) {
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2 text-[#4b1c89] font-black">
           <Shirt size={18} />
-          ポジション確認
+          スタメンポジション
         </div>
 
         <div className="text-xs font-black text-[#4b1c89] bg-purple-50 border border-purple-100 rounded-full px-3 py-1">
