@@ -298,7 +298,7 @@ const matchSchedule = [
     day: '土日',
     time: '未定',
     opponent: 'セレッソ大阪',
-    stadium: 'ヨドコウ桜スタジアム',
+    stadium: 'YANMAR HANASAKA STADIUM',
     venueType: 'AWAY',
   },
   {
@@ -527,7 +527,7 @@ const opponentTeams = [
   { name: '名古屋グランパス', short: '名古屋', main: '#dc2626', sub: '#f97316', stadium: '豊田スタジアム' },
   { name: '京都サンガF.C.', short: '京都', main: '#6d28d9', sub: '#dc2626', stadium: 'サンガスタジアム by KYOCERA' },
   { name: 'ガンバ大阪', short: 'G大阪', main: '#1d4ed8', sub: '#111827', stadium: 'パナソニック スタジアム 吹田' },
-  { name: 'セレッソ大阪', short: 'C大阪', main: '#ec4899', sub: '#1d4ed8', stadium: 'ヨドコウ桜スタジアム' },
+  { name: 'セレッソ大阪', short: 'C大阪', main: '#ec4899', sub: '#1d4ed8', stadium: 'YANMAR HANASAKA STADIUM' },
   { name: 'ヴィッセル神戸', short: '神戸', main: '#7f1d1d', sub: '#111827', stadium: 'ノエビアスタジアム神戸' },
   { name: 'ファジアーノ岡山', short: '岡山', main: '#7f1d1d', sub: '#2563eb', stadium: 'JFE晴れの国スタジアム' },
   { name: 'アビスパ福岡', short: '福岡', main: '#1e3a8a', sub: '#9ca3af', stadium: 'ベスト電器スタジアム' },
@@ -579,7 +579,7 @@ const stadiumImages = {
   'パナソニック スタジアム 吹田':
     'https://upload.wikimedia.org/wikipedia/commons/thumb/5/58/%E3%83%91%E3%83%8A%E3%82%BD%E3%83%8B%E3%83%83%E3%82%AF%E3%82%B9%E3%82%BF%E3%82%B8%E3%82%A2%E3%83%A0%E5%90%B9%E7%94%B0_2023%E5%B9%B45%E6%9C%883%E6%97%A5%E3%82%BB%E3%83%AC%E3%83%83%E3%82%BD%E5%A4%A7%E9%98%AA%E6%88%A6.jpg/1920px-%E3%83%91%E3%83%8A%E3%82%BD%E3%83%8B%E3%83%83%E3%82%AF%E3%82%B9%E3%82%BF%E3%82%B8%E3%82%A2%E3%83%A0%E5%90%B9%E7%94%B0_2023%E5%B9%B45%E6%9C%883%E6%97%A5%E3%82%BB%E3%83%AC%E3%83%83%E3%82%BD%E5%A4%A7%E9%98%AA%E6%88%A6.jpg',
 
-  'ヨドコウ桜スタジアム':
+  'YANMAR HANASAKA STADIUM':
     'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e8/NagaiBallField220226.jpg/1280px-NagaiBallField220226.jpg',
 
   'ノエビアスタジアム神戸':
@@ -4080,7 +4080,7 @@ const stadiumMapPoints = [
 
   { name: 'エディオンピースウイング広島', short: 'Eピース', area: '広島', x: 37, y: 67 },
   { name: 'JFE晴れの国スタジアム', short: '岡山', area: '岡山', x: 42, y: 65 },
-  { name: 'ヨドコウ桜スタジアム', short: '大阪', area: '大阪', x: 48, y: 63 },
+  { name: 'YANMAR HANASAKA STADIUM', short: '大阪', area: '大阪', x: 48, y: 63 },
   { name: 'パナソニック スタジアム 吹田', short: '吹田', area: '大阪', x: 49, y: 61 },
   { name: 'サンガスタジアム by KYOCERA', short: '京都', area: '京都', x: 51, y: 59 },
   { name: 'ノエビアスタジアム神戸', short: '神戸', area: '兵庫', x: 46, y: 64 },
@@ -4596,7 +4596,7 @@ function ProfileSettingsView({ profile, setView, onSaveProfile }) {
     'エディオンピースウイング広島',
     ...new Set(opponentTeams.map((team) => team.stadium)),
     '国立競技場',
-    'ヨドコウ桜スタジアム',
+    'YANMAR HANASAKA STADIUM',
     'ヤマハスタジアム',
     'デンカビッグスワンスタジアム',
   ];
@@ -6444,7 +6444,7 @@ function CreateStep1({ setView, draft, updateDraft, onSaveDraft }) {
               <option>PEACE STADIUM Connected by SoftBank</option>
 
               {/* 予備・よく使う会場 */}
-              <option>ヨドコウ桜スタジアム</option>
+              <option>YANMAR HANASAKA STADIUM</option>
               <option>ヤマハスタジアム</option>
               <option>デンカビッグスワンスタジアム</option>
             </select>
