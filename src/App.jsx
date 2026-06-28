@@ -2381,7 +2381,7 @@ function FavoriteRecordsView({ setView, records, onEdit, onToggleFavorite, onOpe
 
   return (
     <div className="min-h-screen bg-[#f8f7fb] pb-24">
-      <BrandHeader back="mypage" setView={setView} />
+      <BrandHeader back="home" setView={setView} />
 
       <section className="px-5 py-6">
         <div className="mb-5">
@@ -4499,6 +4499,7 @@ function AwayRecordSection({ records }) {
 }
 function ProfileSettingsView({ profile, setView, onSaveProfile }) {
   const [form, setForm] = useState(profile);
+  const photoDragRef = useRef(null);
 
   const stadiumOptions = [
     'エディオンピースウイング広島',
@@ -4511,6 +4512,46 @@ function ProfileSettingsView({ profile, setView, onSaveProfile }) {
 
   const updateForm = (updates) => {
     setForm({ ...form, ...updates });
+  };
+
+  const clampPhotoPosition = (value) => {
+    return Math.max(0, Math.min(100, value));
+  };
+
+  const handlePhotoPointerDown = (e) => {
+    if (!form.photo) return;
+
+    e.currentTarget.setPointerCapture?.(e.pointerId);
+
+    photoDragRef.current = {
+      startX: e.clientX,
+      startY: e.clientY,
+      photoX: form.photoX ?? 50,
+      photoY: form.photoY ?? 50,
+    };
+  };
+
+  const handlePhotoPointerMove = (e) => {
+    if (!photoDragRef.current) return;
+
+    const diffX = e.clientX - photoDragRef.current.startX;
+    const diffY = e.clientY - photoDragRef.current.startY;
+
+    updateForm({
+      photoX: clampPhotoPosition(photoDragRef.current.photoX - diffX * 0.45),
+      photoY: clampPhotoPosition(photoDragRef.current.photoY - diffY * 0.45),
+    });
+  };
+
+  const handlePhotoPointerUp = () => {
+    photoDragRef.current = null;
+  };
+
+  const resetPhotoPosition = () => {
+    updateForm({
+      photoX: 50,
+      photoY: 50,
+    });
   };
 
   const handleProfilePhotoChange = async (e) => {
@@ -4534,12 +4575,16 @@ function ProfileSettingsView({ profile, setView, onSaveProfile }) {
   };
 
   const removeProfilePhoto = () => {
-    updateForm({ photo: null });
+    updateForm({
+      photo: null,
+      photoX: 50,
+      photoY: 50,
+    });
   };
 
   return (
     <div className="min-h-screen bg-[#f8f7fb] pb-28">
-      <BrandHeader back="mypage" setView={setView} />
+      <BrandHeader back="home" setView={setView} />
 
       <section className="px-5 py-6">
         <div className="mb-5">
@@ -4561,16 +4606,29 @@ function ProfileSettingsView({ profile, setView, onSaveProfile }) {
           <div className="space-y-5">
             <InputBlock icon={<ImageIcon size={18} />} label="プロフィール写真">
               <div className="flex items-center gap-4">
-                <div className="w-24 h-24 rounded-3xl bg-purple-50 text-[#4b1c89] border-2 border-purple-100 flex items-center justify-center overflow-hidden shrink-0">
+                <div
+                  onPointerDown={handlePhotoPointerDown}
+                  onPointerMove={handlePhotoPointerMove}
+                  onPointerUp={handlePhotoPointerUp}
+                  onPointerCancel={handlePhotoPointerUp}
+                  className="relative w-28 h-28 rounded-3xl bg-purple-50 text-[#4b1c89] border-2 border-purple-100 flex items-center justify-center overflow-hidden shrink-0 touch-none cursor-grab active:cursor-grabbing"
+                >
                   {form.photo ? (
-                    <img
-                      src={form.photo}
-                      alt="profile preview"
-                      className="w-full h-full object-cover"
-                      style={{
-                        objectPosition: `${form.photoX ?? 50}% ${form.photoY ?? 50}%`,
-                      }}
-                    />
+                    <>
+                      <img
+                        src={form.photo}
+                        alt="profile preview"
+                        className="w-full h-full object-cover select-none pointer-events-none"
+                        draggable={false}
+                        style={{
+                          objectPosition: `${form.photoX ?? 50}% ${form.photoY ?? 50}%`,
+                        }}
+                      />
+
+                      <div className="absolute left-2 right-2 bottom-2 bg-black/45 text-white text-[9px] font-black rounded-full py-1 text-center">
+                        ドラッグで調整
+                      </div>
+                    </>
                   ) : (
                     <User size={40} />
                   )}
@@ -4604,34 +4662,22 @@ function ProfileSettingsView({ profile, setView, onSaveProfile }) {
                 </div>
               </div>
               {form.photo && (
-                <div className="space-y-3 mt-4">
-                  <div>
-                    <div className="text-xs font-black text-gray-500 mb-1">
-                      横位置
-                    </div>
-                    <input
-                      type="range"
-                      min="0"
-                      max="100"
-                      value={form.photoX ?? 50}
-                      onChange={(e) => updateForm({ photoX: Number(e.target.value) })}
-                      className="w-full"
-                    />
+                <div className="mt-4 bg-purple-50 border border-purple-100 rounded-2xl p-3">
+                  <div className="text-xs font-black text-[#4b1c89]">
+                    写真の位置調整
                   </div>
 
-                  <div>
-                    <div className="text-xs font-black text-gray-500 mb-1">
-                      縦位置
-                    </div>
-                    <input
-                      type="range"
-                      min="0"
-                      max="100"
-                      value={form.photoY ?? 50}
-                      onChange={(e) => updateForm({ photoY: Number(e.target.value) })}
-                      className="w-full"
-                    />
-                  </div>
+                  <p className="text-[11px] text-gray-500 font-bold mt-1 leading-5">
+                    写真を指でドラッグして、顔が中央に来るように調整できます。
+                  </p>
+
+                  <button
+                    type="button"
+                    onClick={resetPhotoPosition}
+                    className="mt-3 bg-white text-[#4b1c89] border border-purple-100 rounded-xl px-3 py-2 text-xs font-black active:scale-[0.98]"
+                  >
+                    中央に戻す
+                  </button>
                 </div>
               )}
             </InputBlock>
@@ -4920,7 +4966,7 @@ function AttendanceCalendarView({ records, setView, onOpenDetail }) {
 
   return (
     <div className="min-h-screen bg-[#f8f7fb] pb-28">
-      <BrandHeader back="mypage" setView={setView} />
+      <BrandHeader back="home" setView={setView} />
 
       <section className="px-5 py-6">
         <div className="mb-5">
@@ -5494,7 +5540,7 @@ function BadgeCollectionView({ records, setView }) {
 
   return (
     <div className="min-h-screen bg-[#f8f7fb] pb-28">
-      <BrandHeader back="mypage" setView={setView} />
+      <BrandHeader back="home" setView={setView} />
 
       <section className="px-5 py-6">
         <div className="mb-5">
@@ -5605,7 +5651,7 @@ function PhotoAlbumView({ records, setView }) {
 
   return (
     <div className="min-h-screen bg-[#f8f7fb] pb-28">
-      <BrandHeader back="mypage" setView={setView} />
+      <BrandHeader back="home" setView={setView} />
 
       <section className="px-5 py-6">
         <div className="mb-5">
