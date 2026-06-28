@@ -3801,6 +3801,9 @@ function MyPageView({ records, setView, profile }) {
 
       <section className="px-5 py-6">
         {/* プロフィールカード */}
+
+
+
         <div
           onClick={() => setView('profileSettings')}
           role="button"
@@ -3814,6 +3817,12 @@ function MyPageView({ records, setView, profile }) {
         >
           <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_85%_10%,rgba(250,204,21,0.22),transparent_28%)]"></div>
           <div className="pointer-events-none absolute -right-10 -bottom-12 w-36 h-36 rounded-full border border-white/10"></div>
+
+          <div className="mt-3 inline-flex items-center gap-1 bg-white/15 border border-white/20 text-white text-[11px] font-black px-3 py-1.5 rounded-full">
+            タップでプロフィールを編集できます
+            <ChevronRight size={13} strokeWidth={3} />
+          </div>
+
 
           <div className="relative z-10 flex items-center gap-4">
             <div className="w-20 h-20 rounded-3xl bg-white text-[#4b1c89] flex items-center justify-center shadow-xl border-2 border-yellow-300/70 overflow-hidden">
@@ -3857,10 +3866,7 @@ function MyPageView({ records, setView, profile }) {
             </div>
           </div>
 
-          <div className="mt-3 inline-flex items-center gap-1 bg-white/15 border border-white/20 text-white text-[11px] font-black px-3 py-1.5 rounded-full">
-            タップでプロフィールを編集できます
-            <ChevronRight size={13} strokeWidth={3} />
-          </div>
+
 
           <div className="relative z-10 grid grid-cols-3 gap-3 mt-5">
             <MyPageStat label="観戦数" value={records.length} unit="試合" />
