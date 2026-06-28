@@ -3818,9 +3818,11 @@ function MyPageView({ records, setView, profile }) {
           <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_85%_10%,rgba(250,204,21,0.22),transparent_28%)]"></div>
           <div className="pointer-events-none absolute -right-10 -bottom-12 w-36 h-36 rounded-full border border-white/10"></div>
 
-          <div className="mt-3 inline-flex items-center gap-1 bg-white/15 border border-white/20 text-white text-[11px] font-black px-3 py-1.5 rounded-full">
-            タップでプロフィールを編集できます
-            <ChevronRight size={13} strokeWidth={3} />
+          <div className="flex justify-end mb-4">
+            <div className="inline-flex items-center gap-1 text-[9px] font-black text-[#171425] bg-purple-50 border border-purple-100 rounded-full px-2 py-0.5">
+              タップでプロフィールを編集できます
+              <ChevronRight size={10} strokeWidth={3} />
+            </div>
           </div>
 
 
