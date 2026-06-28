@@ -1197,6 +1197,7 @@ export default function App() {
             setView={setView}
             draft={draft}
             updateDraft={updateDraft}
+            records={records}
             onSaveDraft={saveCurrentDraft}
           />
         )}
@@ -1618,7 +1619,7 @@ function HomeView({
                   </div>
 
                   <span
-                    className={`text-[8px] font-black px-1.5 py-0.5 rounded-full shrink-0 ${nextMatch.venueType === 'HOME'
+                    className={`text-[7px] font-black px-1.5 py-0.5 rounded-full shrink-0 ${nextMatch.venueType === 'HOME'
                       ? 'bg-purple-100 text-[#4b1c89]'
                       : 'bg-yellow-100 text-yellow-700'
                       }`}
@@ -3231,6 +3232,24 @@ function MyPageView({ records, setView, profile }) {
   const nextTitleCount = (Math.floor(records.length / 10) + 1) * 10;
   const remainingMatches = nextTitleCount - records.length;
   const favoriteCount = records.filter((record) => record.favorite).length;
+  const [showAllAwayRecords, setShowAllAwayRecords] = useState(false);
+
+  const homeStadium = 'エディオンピースウイング広島';
+
+  const getVenueType = (record) => {
+    const venue = record.draftData?.venueType;
+
+    if (venue === 'AWAY' || venue === 'アウェイ') return 'AWAY';
+    if (venue === 'HOME' || venue === 'ホーム') return 'HOME';
+
+    return record.stadium === homeStadium ? 'HOME' : 'AWAY';
+  };
+
+  const awayRecords = records.filter((record) => getVenueType(record) === 'AWAY');
+
+  const visibleAwayRecords = showAllAwayRecords
+    ? awayRecords
+    : awayRecords.slice(0, 3);
 
   const totalExpense = records.reduce((sum, record) => {
     const expenses = record.draftData?.expenses || {};
@@ -3873,6 +3892,8 @@ function StadiumMapSection({ records }) {
 }
 
 function AwayRecordSection({ records }) {
+  const [showAllAwayRecords, setShowAllAwayRecords] = useState(false);
+
   const homeStadium = 'エディオンピースウイング広島';
 
   const awayRecords = records.filter((record) => {
@@ -3883,6 +3904,10 @@ function AwayRecordSection({ records }) {
 
     return record.stadium !== homeStadium;
   });
+
+  const visibleAwayRecords = showAllAwayRecords
+    ? awayRecords
+    : awayRecords.slice(0, 3);
 
   const awayStadiumCount = new Set(awayRecords.map((record) => record.stadium)).size;
 
@@ -3918,33 +3943,55 @@ function AwayRecordSection({ records }) {
       </div>
 
       {awayRecords.length > 0 ? (
-        <div className="space-y-3">
-          {awayRecords.slice(0, 5).map((record) => (
-            <div
-              key={record.id}
-              className="bg-[#f8f7fb] rounded-2xl p-3 border border-gray-100"
-            >
-              <div className="flex items-center justify-between gap-3">
-                <div className="min-w-0">
-                  <div className="text-[11px] text-[#4b1c89] font-black">
-                    {record.date}
-                  </div>
-                  <div className="text-sm font-black text-[#171425] mt-1 truncate">
-                    vs {record.opponent}
-                  </div>
-                  <div className="text-xs text-gray-500 font-bold mt-1 flex items-center gap-1">
-                    <MapPin size={12} />
-                    {record.stadium}
-                  </div>
-                </div>
+        <>
+          <div className="space-y-3">
+            {visibleAwayRecords.map((record) => (
+              <div
+                key={record.id}
+                className="bg-[#f8f7fb] rounded-2xl p-3 border border-gray-100"
+              >
+                <div className="flex items-center gap-3">
+                  <img
+                    src={record.img || getStadiumImage(record.stadium)}
+                    alt={record.stadium || 'away record'}
+                    className="w-14 h-14 rounded-2xl object-cover shrink-0"
+                  />
 
-                <div className="bg-white text-[#4b1c89] border border-purple-100 rounded-full px-3 py-1 text-[10px] font-black shrink-0">
-                  AWAY
+                  <div className="flex-1 min-w-0">
+                    <div className="text-[11px] text-[#4b1c89] font-black">
+                      {record.date}
+                    </div>
+
+                    <div className="text-sm font-black text-[#171425] mt-1 truncate">
+                      vs {record.opponent || '対戦相手未入力'}
+                    </div>
+
+                    <div className="text-xs text-gray-500 font-bold mt-1 flex items-center gap-1 min-w-0">
+                      <MapPin size={12} className="shrink-0" />
+                      <span className="truncate">
+                        {record.stadium || 'スタジアム未入力'}
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="bg-yellow-100 text-yellow-700 rounded-full px-3 py-1 text-[10px] font-black shrink-0">
+                    AWAY
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+
+          {awayRecords.length > 3 && (
+            <button
+              type="button"
+              onClick={() => setShowAllAwayRecords(!showAllAwayRecords)}
+              className="w-full mt-4 bg-purple-50 text-[#4b1c89] border border-purple-100 rounded-2xl py-3 text-sm font-black active:scale-[0.98]"
+            >
+              {showAllAwayRecords ? '3件だけ表示' : '全て見る'}
+            </button>
+          )}
+        </>
       ) : (
         <div className="h-24 rounded-2xl bg-gray-50 border border-dashed border-gray-200 flex items-center justify-center text-sm text-gray-400 font-bold">
           まだ遠征記録がありません
@@ -5767,7 +5814,7 @@ function CreateStep1({ setView, draft, updateDraft, onSaveDraft }) {
   );
 }
 
-function CreateStep2({ setView, draft, updateDraft, onSaveDraft }) {
+function CreateStep2({ setView, draft, updateDraft, records = [], onSaveDraft }) {
   const [tagInput, setTagInput] = useState('');
 
   const selectedMvp =
@@ -5956,6 +6003,7 @@ function CreateStep2({ setView, draft, updateDraft, onSaveDraft }) {
         <SimplePositionBoard
           draft={draft}
           updateDraft={updateDraft}
+          records={records}
         />
 
         <ScorersCard
@@ -6204,12 +6252,40 @@ function ScorersCard({ draft, updateDraft }) {
   );
 }
 
-function SimplePositionBoard({ draft, updateDraft }) {
+function SimplePositionBoard({ draft, updateDraft, records = [] }) {
   const [activeSlotKey, setActiveSlotKey] = useState(null);
 
   const formation = draft.formation || '3-4-2-1';
   const slots = formationLayouts[formation] || formationLayouts['3-4-2-1'];
   const lineup = draft.lineup || {};
+  const previousPositionRecord = records.find((record) => {
+    const data = record.draftData || {};
+    return data.formation && data.lineup && Object.keys(data.lineup).length > 0;
+  });
+
+  const previousFormation = previousPositionRecord?.draftData?.formation;
+  const previousLineup = previousPositionRecord?.draftData?.lineup || {};
+
+  const hasPreviousPosition =
+    previousFormation &&
+    previousLineup &&
+    Object.keys(previousLineup).length > 0;
+
+  const isUsingPreviousPosition =
+    hasPreviousPosition &&
+    formation === previousFormation &&
+    JSON.stringify(lineup) === JSON.stringify(previousLineup);
+
+  const applyPreviousPosition = () => {
+    if (!hasPreviousPosition) return;
+
+    updateDraft({
+      formation: previousFormation,
+      lineup: { ...previousLineup },
+    });
+
+    setActiveSlotKey(null);
+  };
   const getPlayerCandidates = (slotKey) => {
     const allowedPositionsBySlot = {
       GK: ['GK'],
@@ -6312,6 +6388,38 @@ function SimplePositionBoard({ draft, updateDraft }) {
       <p className="text-[11px] text-gray-500 font-bold mb-3">
         ユニフォームをタップして選手を選択
       </p>
+      <button
+        type="button"
+        onClick={applyPreviousPosition}
+        disabled={!hasPreviousPosition}
+        className={`w-full mb-4 rounded-2xl border p-3 flex items-center gap-3 text-left active:scale-[0.98] ${hasPreviousPosition
+            ? 'bg-purple-50 border-purple-100 text-[#4b1c89]'
+            : 'bg-gray-50 border-gray-100 text-gray-400'
+          }`}
+      >
+        <div
+          className={`w-6 h-6 rounded-lg border-2 flex items-center justify-center shrink-0 ${isUsingPreviousPosition
+              ? 'bg-[#4b1c89] border-[#4b1c89] text-white'
+              : hasPreviousPosition
+                ? 'bg-white border-[#4b1c89] text-transparent'
+                : 'bg-white border-gray-300 text-transparent'
+            }`}
+        >
+          <CheckCircle2 size={16} />
+        </div>
+
+        <div className="flex-1 min-w-0">
+          <div className="text-sm font-black">
+            前回の記録を反映
+          </div>
+
+          <div className="text-[11px] font-bold opacity-70 mt-0.5">
+            {hasPreviousPosition
+              ? `${previousPositionRecord.date} のポジションをコピー`
+              : '前回のポジション記録がありません'}
+          </div>
+        </div>
+      </button>
 
       <div className="relative h-[380px] rounded-[1.6rem] overflow-hidden bg-gradient-to-b from-[#16a34a] to-[#166534] border-4 border-green-200 shadow-inner">
         {/* ピッチ線 */}
