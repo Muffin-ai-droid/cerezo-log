@@ -3786,6 +3786,8 @@ function MyPageView({ records, setView, profile }) {
   const latestRecord = records[0];
   const displayName = profile?.name || 'R';
   const displayPhoto = profile?.photo || null;
+  const displayPhotoX = profile?.photoX ?? 50;
+  const displayPhotoY = profile?.photoY ?? 50;
   const displayFavoritePlayer = profile?.favoritePlayer || '未設定'; // ✨ ここを '未設定' に変更
   const displayFavoriteStadium = profile?.favoriteStadium || '未設定'; // ✨ ここも '未設定' に変更
   const profileShieldBadge = getProfileShieldBadge(records.length);
@@ -3799,7 +3801,17 @@ function MyPageView({ records, setView, profile }) {
 
       <section className="px-5 py-6">
         {/* プロフィールカード */}
-        <div className="relative overflow-hidden rounded-[1.8rem] bg-gradient-to-br from-[#2a075f] via-[#4b1c89] to-[#6d28d9] text-white p-5 shadow-xl shadow-purple-900/25 mb-5">
+        <div
+          onClick={() => setView('profileSettings')}
+          role="button"
+          tabIndex={0}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') {
+              setView('profileSettings');
+            }
+          }}
+          className="relative overflow-hidden rounded-[1.8rem] bg-gradient-to-br from-[#2a075f] via-[#4b1c89] to-[#6d28d9] text-white p-5 shadow-xl shadow-purple-900/25 mb-5 cursor-pointer active:scale-[0.98] transition"
+        >
           <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_85%_10%,rgba(250,204,21,0.22),transparent_28%)]"></div>
           <div className="pointer-events-none absolute -right-10 -bottom-12 w-36 h-36 rounded-full border border-white/10"></div>
 
@@ -3810,6 +3822,9 @@ function MyPageView({ records, setView, profile }) {
                   src={displayPhoto}
                   alt="profile"
                   className="w-full h-full object-cover"
+                  style={{
+                    objectPosition: `${displayPhotoX}% ${displayPhotoY}%`,
+                  }}
                 />
               ) : (
                 <User size={38} strokeWidth={2.5} />
@@ -3840,6 +3855,11 @@ function MyPageView({ records, setView, profile }) {
                 次の称号まであと {remainingMatches} 試合
               </p>
             </div>
+          </div>
+
+          <div className="mt-3 inline-flex items-center gap-1 bg-white/15 border border-white/20 text-white text-[11px] font-black px-3 py-1.5 rounded-full">
+            タップでプロフィールを編集できます
+            <ChevronRight size={13} strokeWidth={3} />
           </div>
 
           <div className="relative z-10 grid grid-cols-3 gap-3 mt-5">
