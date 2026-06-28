@@ -3092,7 +3092,32 @@ function StatsView({ records, setView }) {
           </p>
         </div>
 
+        <button
+          type="button"
+          onClick={() => setShowSeasonStats(!showSeasonStats)}
+          className="w-full mb-4 bg-white border border-purple-100 rounded-2xl p-4 shadow-sm flex items-center justify-between active:scale-[0.98]"
+        >
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-2xl bg-purple-50 text-[#4b1c89] flex items-center justify-center">
+              <BarChart2 size={20} />
+            </div>
 
+            <div className="text-left">
+              <div className="text-sm font-black text-[#171425]">
+                シーズン成績を見る
+              </div>
+              <div className="text-[11px] text-gray-500 font-bold mt-1">
+                勝率・得点・失点・HOME/AWAYをグラフ化
+              </div>
+            </div>
+          </div>
+
+          <ChevronRight
+            size={20}
+            className={`text-[#4b1c89] transition ${showSeasonStats ? 'rotate-90' : ''
+              }`}
+          />
+        </button>
 
 
         {showSeasonStats && (
@@ -3236,32 +3261,7 @@ function StatsView({ records, setView }) {
           </div>
         </div>
 
-        <button
-          type="button"
-          onClick={() => setShowSeasonStats(!showSeasonStats)}
-          className="w-full mb-4 bg-white border border-purple-100 rounded-2xl p-4 shadow-sm flex items-center justify-between active:scale-[0.98]"
-        >
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-2xl bg-purple-50 text-[#4b1c89] flex items-center justify-center">
-              <BarChart2 size={20} />
-            </div>
 
-            <div className="text-left">
-              <div className="text-sm font-black text-[#171425]">
-                シーズン成績を見る
-              </div>
-              <div className="text-[11px] text-gray-500 font-bold mt-1">
-                勝率・得点・失点・HOME/AWAYをグラフ化
-              </div>
-            </div>
-          </div>
-
-          <ChevronRight
-            size={20}
-            className={`text-[#4b1c89] transition ${showSeasonStats ? 'rotate-90' : ''
-              }`}
-          />
-        </button>
 
         {/* HOME / AWAY */}
         <Card>
