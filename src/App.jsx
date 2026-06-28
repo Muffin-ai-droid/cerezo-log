@@ -489,21 +489,28 @@ const getNextMatch = (records = []) => {
 
   const latestRecordedMatch = getLatestRecordedScheduleMatch(records);
 
-  // 記録が1つもない時は、今日以降の最初の試合
-  if (!latestRecordedMatch) {
-    return matchSchedule
-      .filter((match) => {
-        const matchDate = new Date(match.date);
-        matchDate.setHours(0, 0, 0, 0);
-        return matchDate >= today;
-      })
-      .sort((a, b) => new Date(a.date) - new Date(b.date))[0] || null;
+  // 記録済みの試合があり、しかもそれが今日以降の試合なら、
+  // その記録した試合の次の節へ進める
+  if (latestRecordedMatch) {
+    const latestRecordedDate = new Date(latestRecordedMatch.date);
+    latestRecordedDate.setHours(0, 0, 0, 0);
+
+    if (latestRecordedDate >= today) {
+      return matchSchedule
+        .filter((match) => Number(match.section) > Number(latestRecordedMatch.section))
+        .sort((a, b) => Number(a.section) - Number(b.section))[0] || null;
+    }
   }
 
-  // 記録済みの中で一番新しい試合の「次の節」を表示
+  // 記録がない、または最後の記録が過去なら、
+  // 日付基準で今日以降の最初の試合へ進める
   return matchSchedule
-    .filter((match) => Number(match.section) > Number(latestRecordedMatch.section))
-    .sort((a, b) => Number(a.section) - Number(b.section))[0] || null;
+    .filter((match) => {
+      const matchDate = new Date(match.date);
+      matchDate.setHours(0, 0, 0, 0);
+      return matchDate >= today;
+    })
+    .sort((a, b) => new Date(a.date) - new Date(b.date))[0] || null;
 };
 const opponentTeams = [
   { name: '鹿島アントラーズ', short: '鹿島', main: '#b91c1c', sub: '#0f172a', stadium: 'メルカリスタジアム' },
@@ -891,6 +898,9 @@ const playerOptions = [
 export default function App() {
   const [view, setView] = useState('home');
   const [saveMessage, setSaveMessage] = useState('');
+  const [todayKey, setTodayKey] = useState(() =>
+    new Date().toISOString().slice(0, 10)
+  );
   const [records, setRecords] = useState(() => {
     try {
       const storedRecords = localStorage.getItem('sanfrel-log-records');
@@ -939,6 +949,24 @@ export default function App() {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [view]);
+
+  // ★ 追加：viewが変わるたびにスクロール位置を一番上に戻す処理
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [view]);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      const nextTodayKey = new Date().toISOString().slice(0, 10);
+
+      setTodayKey((currentTodayKey) =>
+        currentTodayKey === nextTodayKey ? currentTodayKey : nextTodayKey
+      );
+    }, 60 * 1000);
+
+    return () => clearInterval(timer);
+  }, []);
+
 
   const updateDraft = (updates) => {
     setDraft({ ...draft, ...updates });
@@ -1101,6 +1129,8 @@ export default function App() {
     setDraft(defaultDraft);
     setView('home');
   };
+
+  void todayKey;
 
   return (
     <div className="min-h-screen bg-[#e9e7ef]">
@@ -3974,7 +4004,7 @@ function AwayRecordSection({ records }) {
                     </div>
                   </div>
 
-                  <div className="bg-yellow-100 text-yellow-700 rounded-full px-3 py-1 text-[10px] font-black shrink-0">
+                  <div className="bg-[#f3e3b0] text-[#8a6424] rounded-full px-3 py-1 text-[10px] font-black shrink-0">
                     AWAY
                   </div>
                 </div>
@@ -6279,6 +6309,17 @@ function SimplePositionBoard({ draft, updateDraft, records = [] }) {
   const applyPreviousPosition = () => {
     if (!hasPreviousPosition) return;
 
+    // すでに前回の記録を反映中なら、もう一回押した時に外す
+    if (isUsingPreviousPosition) {
+      updateDraft({
+        lineup: {},
+      });
+
+      setActiveSlotKey(null);
+      return;
+    }
+
+    // まだ反映していない時は、前回のポジションを入れる
     updateDraft({
       formation: previousFormation,
       lineup: { ...previousLineup },
@@ -6393,16 +6434,16 @@ function SimplePositionBoard({ draft, updateDraft, records = [] }) {
         onClick={applyPreviousPosition}
         disabled={!hasPreviousPosition}
         className={`w-full mb-4 rounded-2xl border p-3 flex items-center gap-3 text-left active:scale-[0.98] ${hasPreviousPosition
-            ? 'bg-purple-50 border-purple-100 text-[#4b1c89]'
-            : 'bg-gray-50 border-gray-100 text-gray-400'
+          ? 'bg-purple-50 border-purple-100 text-[#4b1c89]'
+          : 'bg-gray-50 border-gray-100 text-gray-400'
           }`}
       >
         <div
           className={`w-6 h-6 rounded-lg border-2 flex items-center justify-center shrink-0 ${isUsingPreviousPosition
-              ? 'bg-[#4b1c89] border-[#4b1c89] text-white'
-              : hasPreviousPosition
-                ? 'bg-white border-[#4b1c89] text-transparent'
-                : 'bg-white border-gray-300 text-transparent'
+            ? 'bg-[#4b1c89] border-[#4b1c89] text-white'
+            : hasPreviousPosition
+              ? 'bg-white border-[#4b1c89] text-transparent'
+              : 'bg-white border-gray-300 text-transparent'
             }`}
         >
           <CheckCircle2 size={16} />
