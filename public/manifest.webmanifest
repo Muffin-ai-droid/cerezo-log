@@ -1,13 +1,18 @@
 {
-    "name": "SANFRE LOG",
-    "short_name": "SANFRE LOG",
+    "name": "CEREZO LOG",
+    "short_name": "CEREZO LOG",
     "start_url": "/",
     "display": "standalone",
-    "background_color": "#f8f7fb",
-    "theme_color": "#3b1378",
+    "background_color": "#7a003f",
+    "theme_color": "#e4007f",
     "icons": [
         {
-            "src": "/app-icon(4).png",
+            "src": "/apple-touch-icon.png",
+            "sizes": "180x180",
+            "type": "image/png"
+        },
+        {
+            "src": "/cerezo-icon-512.png",
             "sizes": "512x512",
             "type": "image/png"
         }
