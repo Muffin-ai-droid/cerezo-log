@@ -443,14 +443,36 @@ const matchSchedule = [
   },
 ];
 
-const getNextMatch = () => {
+const normalizeDate = (date) => {
+  return String(date || '').replaceAll('.', '-');
+};
+
+const isMatchRecorded = (match, records = []) => {
+  return records.some((record) => {
+    const data = record.draftData || {};
+
+    const recordedSection = data.matchSection;
+    const recordedDate = normalizeDate(data.date || record.date);
+    const recordedOpponent = data.opponent || record.opponent;
+
+    // 節が一致していたら記録済み
+    if (recordedSection && String(recordedSection) === String(match.section)) {
+      return true;
+    }
+
+    // 節がない古い記録用：日付と対戦相手が一致していたら記録済み
+    return recordedDate === match.date && recordedOpponent === match.opponent;
+  });
+};
+
+const getNextMatch = (records = []) => {
   const today = new Date();
   today.setHours(0, 0, 0, 0);
 
   const upcomingMatches = matchSchedule
     .filter((match) => {
       const matchDate = new Date(match.date);
-      return matchDate >= today;
+      return matchDate >= today && !isMatchRecorded(match, records);
     })
     .sort((a, b) => new Date(a.date) - new Date(b.date));
 
@@ -1184,11 +1206,11 @@ export default function App() {
   );
 }
 
-function BrandHeader({ back, setView = () => { } }) {
+function BrandHeader({ back, setView = () => { }, records = [] }) {
   const [noticeOpen, setNoticeOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [scheduleOpen, setScheduleOpen] = useState(false);
-  const nextMatch = getNextMatch();
+  const nextMatch = getNextMatch(records);
 
   const movePage = (page) => {
     setView(page);
@@ -1480,7 +1502,7 @@ function HomeView({
   const [scheduleOpen, setScheduleOpen] = useState(false);
 
   const visibleRecords = showAllRecords ? records : records.slice(0, 3);
-  const nextMatch = getNextMatch();
+  const nextMatch = getNextMatch(records);
 
 
   const getResult = (record) => {
@@ -1506,7 +1528,7 @@ function HomeView({
   return (
     <div>
       <section className="relative bg-[#381078] text-white overflow-visible">
-        <BrandHeader setView={setView} />
+        <BrandHeader setView={setView} records={records} />
 
         {/* メインビジュアル */}
         <div className="relative h-[250px] overflow-hidden">
