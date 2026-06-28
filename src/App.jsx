@@ -2943,6 +2943,8 @@ function StatsView({ records, setView }) {
       .slice(0, 3);
   };
 
+  const [showSeasonStats, setShowSeasonStats] = useState(false);
+
   const results = records.map((record) => {
     const score = parseScore(record);
 
@@ -2968,6 +2970,91 @@ function StatsView({ records, setView }) {
 
   const homeRecords = results.filter((record) => record.venueType === 'HOME');
   const awayRecords = results.filter((record) => record.venueType === 'AWAY');
+
+  const totalGoals = results.reduce(
+    (sum, record) => sum + Number(record.homeScore || 0),
+    0
+  );
+
+  const totalConceded = results.reduce(
+    (sum, record) => sum + Number(record.awayScore || 0),
+    0
+  );
+
+  const goalDifference = totalGoals - totalConceded;
+
+  const cleanSheets = results.filter(
+    (record) => Number(record.awayScore) === 0
+  ).length;
+
+  const cleanSheetRate =
+    totalGames > 0 ? ((cleanSheets / totalGames) * 100).toFixed(1) : '0.0';
+
+  const createVenueSummary = (targetRecords) => {
+    const games = targetRecords.length;
+    const venueWins = targetRecords.filter((record) => record.result === 'win').length;
+    const venueDraws = targetRecords.filter((record) => record.result === 'draw').length;
+    const venueLosses = targetRecords.filter((record) => record.result === 'lose').length;
+
+    const goals = targetRecords.reduce(
+      (sum, record) => sum + Number(record.homeScore || 0),
+      0
+    );
+
+    const conceded = targetRecords.reduce(
+      (sum, record) => sum + Number(record.awayScore || 0),
+      0
+    );
+
+    return {
+      games,
+      wins: venueWins,
+      draws: venueDraws,
+      losses: venueLosses,
+      goals,
+      conceded,
+      winRate: games > 0 ? ((venueWins / games) * 100).toFixed(1) : '0.0',
+    };
+  };
+
+  const homeSummary = createVenueSummary(homeRecords);
+  const awaySummary = createVenueSummary(awayRecords);
+
+  const resultGraphData = [
+    {
+      label: '勝ち',
+      value: wins,
+      rightText: `${wins}勝`,
+      barClass: 'bg-[#4b1c89]',
+    },
+    {
+      label: '引き分け',
+      value: draws,
+      rightText: `${draws}分`,
+      barClass: 'bg-gray-400',
+    },
+    {
+      label: '負け',
+      value: losses,
+      rightText: `${losses}敗`,
+      barClass: 'bg-red-400',
+    },
+  ];
+
+  const scoreGraphData = [
+    {
+      label: '得点',
+      value: totalGoals,
+      rightText: `${totalGoals}点`,
+      barClass: 'bg-[#4b1c89]',
+    },
+    {
+      label: '失点',
+      value: totalConceded,
+      rightText: `${totalConceded}点`,
+      barClass: 'bg-red-400',
+    },
+  ];
 
   const totalExpense = records.reduce((sum, record) => {
     return sum + sumExpenses(record.draftData?.expenses);
@@ -3005,6 +3092,135 @@ function StatsView({ records, setView }) {
           </p>
         </div>
 
+
+        <button
+          type="button"
+          onClick={() => setShowSeasonStats(!showSeasonStats)}
+          className="w-full mb-4 bg-white border border-purple-100 rounded-2xl p-4 shadow-sm flex items-center justify-between active:scale-[0.98]"
+        >
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-2xl bg-purple-50 text-[#4b1c89] flex items-center justify-center">
+              <BarChart2 size={20} />
+            </div>
+
+            <div className="text-left">
+              <div className="text-sm font-black text-[#171425]">
+                シーズン成績を見る
+              </div>
+              <div className="text-[11px] text-gray-500 font-bold mt-1">
+                勝率・得点・失点・HOME/AWAYをグラフ化
+              </div>
+            </div>
+          </div>
+
+          <ChevronRight
+            size={20}
+            className={`text-[#4b1c89] transition ${showSeasonStats ? 'rotate-90' : ''
+              }`}
+          />
+        </button>
+
+        {showSeasonStats && (
+          <>
+            {/* シーズン成績 */}
+            <Card>
+              <div className="flex items-center justify-between mb-4">
+                <div>
+                  <div className="flex items-center gap-2 text-[#4b1c89] font-black">
+                    <BarChart2 size={18} />
+                    シーズン成績
+                  </div>
+                  <p className="text-xs text-gray-500 font-bold mt-1">
+                    観戦記録から自動で集計
+                  </p>
+                </div>
+
+                <div className="bg-purple-50 text-[#4b1c89] border border-purple-100 rounded-full px-3 py-1 text-xs font-black">
+                  AUTO
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                <SeasonStatMiniCard
+                  label="観戦数"
+                  value={totalGames}
+                  unit="試合"
+                  sub="記録した試合"
+                />
+
+                <SeasonStatMiniCard
+                  label="勝率"
+                  value={winRate}
+                  unit="%"
+                  sub={`${wins}勝 ${draws}分 ${losses}敗`}
+                />
+
+                <SeasonStatMiniCard
+                  label="得点"
+                  value={totalGoals}
+                  unit="点"
+                  sub={`1試合平均 ${totalGames > 0 ? (totalGoals / totalGames).toFixed(1) : '0.0'}点`}
+                />
+
+                <SeasonStatMiniCard
+                  label="失点"
+                  value={totalConceded}
+                  unit="点"
+                  sub={`得失点差 ${goalDifference >= 0 ? '+' : ''}${goalDifference}`}
+                />
+
+                <SeasonStatMiniCard
+                  label="クリーンシート"
+                  value={cleanSheets}
+                  unit="試合"
+                  sub={`${cleanSheetRate}%`}
+                />
+
+                <SeasonStatMiniCard
+                  label="HOME / AWAY"
+                  value={`${homeRecords.length}/${awayRecords.length}`}
+                  unit=""
+                  sub="ホーム / アウェイ"
+                />
+              </div>
+            </Card>
+
+            <div className="h-4"></div>
+
+            <SeasonBarGraph
+              title="勝・分・負グラフ"
+              icon={<Trophy size={18} />}
+              data={resultGraphData}
+              emptyText="まだ勝敗データがありません"
+            />
+
+            <div className="h-4"></div>
+
+            <SeasonBarGraph
+              title="得点 / 失点グラフ"
+              icon={<Flag size={18} />}
+              data={scoreGraphData}
+              emptyText="まだ得点データがありません"
+            />
+
+            <div className="h-4"></div>
+
+            <VenueCompareGraph
+              homeSummary={homeSummary}
+              awaySummary={awaySummary}
+            />
+
+            <div className="h-4"></div>
+
+            <CleanSheetGraph
+              cleanSheets={cleanSheets}
+              totalGames={totalGames}
+              cleanSheetRate={cleanSheetRate}
+            />
+
+            <div className="h-4"></div>
+          </>
+        )}
         {/* メイン統計 */}
         <div className="relative overflow-hidden rounded-[1.8rem] bg-gradient-to-br from-[#2a075f] via-[#4b1c89] to-[#6d28d9] text-white p-5 shadow-xl shadow-purple-900/25 mb-4">
           <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_80%_20%,rgba(250,204,21,0.2),transparent_28%)]"></div>
@@ -3097,7 +3313,7 @@ function StatsView({ records, setView }) {
           icon={<MapPin size={18} />}
           title="よく行ったスタジアム"
           items={stadiumRanking}
-          emptyText="まだスタジアム記録がありません"
+          emptyText="スタジアム記録がありません"
         />
 
         <div className="h-4"></div>
@@ -3106,7 +3322,7 @@ function StatsView({ records, setView }) {
           icon={<Users size={18} />}
           title="対戦相手ランキング"
           items={opponentRanking}
-          emptyText="まだ対戦相手の記録がありません"
+          emptyText="対戦相手の記録がありません"
         />
 
         <div className="h-4"></div>
@@ -3115,10 +3331,259 @@ function StatsView({ records, setView }) {
           icon={<Star size={18} />}
           title="MVPランキング"
           items={mvpRanking}
-          emptyText="MVPが登録された記録がまだありません"
+          emptyText="MVPが登録された記録がありません"
         />
       </section>
     </div>
+  );
+}
+
+function SeasonStatMiniCard({ label, value, unit, sub }) {
+  return (
+    <div className="bg-[#f8f7fb] rounded-2xl p-4 border border-gray-100">
+      <div className="text-xs text-gray-500 font-black">
+        {label}
+      </div>
+
+      <div className="text-2xl font-black text-[#4b1c89] mt-1 leading-none">
+        {value}
+        {unit && (
+          <span className="text-sm text-gray-500 ml-1">
+            {unit}
+          </span>
+        )}
+      </div>
+
+      <div className="text-[11px] text-gray-400 font-bold mt-2">
+        {sub}
+      </div>
+    </div>
+  );
+}
+
+function SeasonBarGraph({ title, icon, data, emptyText }) {
+  const maxValue = Math.max(...data.map((item) => item.value), 1);
+  const totalValue = data.reduce((sum, item) => sum + item.value, 0);
+
+  return (
+    <Card>
+      <div className="flex items-center justify-between mb-4">
+        <div className="flex items-center gap-2 text-[#4b1c89] font-black">
+          {icon}
+          {title}
+        </div>
+
+        <div className="text-xs text-gray-500 font-black">
+          合計 {totalValue}
+        </div>
+      </div>
+
+      {totalValue > 0 ? (
+        <div className="space-y-4">
+          {data.map((item) => (
+            <GraphBar
+              key={item.label}
+              label={item.label}
+              value={item.value}
+              maxValue={maxValue}
+              rightText={item.rightText}
+              barClass={item.barClass}
+            />
+          ))}
+        </div>
+      ) : (
+        <div className="h-24 rounded-2xl bg-gray-50 border border-dashed border-gray-200 flex items-center justify-center text-sm text-gray-400 font-bold">
+          {emptyText}
+        </div>
+      )}
+    </Card>
+  );
+}
+
+function GraphBar({ label, value, maxValue, rightText, barClass }) {
+  const width = maxValue > 0 ? (value / maxValue) * 100 : 0;
+  const displayWidth = value > 0 ? Math.max(width, 8) : 0;
+
+  return (
+    <div>
+      <div className="flex items-center justify-between mb-2">
+        <div className="text-sm font-black text-[#171425]">
+          {label}
+        </div>
+
+        <div className="text-sm font-black text-[#4b1c89]">
+          {rightText}
+        </div>
+      </div>
+
+      <div className="h-4 bg-gray-100 rounded-full overflow-hidden">
+        <div
+          className={`h-full rounded-full ${barClass}`}
+          style={{ width: `${displayWidth}%` }}
+        />
+      </div>
+    </div>
+  );
+}
+
+function VenueCompareGraph({ homeSummary, awaySummary }) {
+  const maxGames = Math.max(homeSummary.games, awaySummary.games, 1);
+
+  return (
+    <Card>
+      <div className="flex items-center justify-between mb-4">
+        <div>
+          <div className="flex items-center gap-2 text-[#4b1c89] font-black">
+            <MapPin size={18} />
+            ホーム / アウェイ成績
+          </div>
+
+          <p className="text-xs text-gray-500 font-bold mt-1">
+            会場別の勝敗と観戦数
+          </p>
+        </div>
+      </div>
+
+      <div className="space-y-4">
+        <VenueCompareRow
+          label="HOME"
+          summary={homeSummary}
+          maxGames={maxGames}
+          barClass="bg-[#4b1c89]"
+          badgeClass="bg-purple-100 text-[#4b1c89]"
+        />
+
+        <VenueCompareRow
+          label="AWAY"
+          summary={awaySummary}
+          maxGames={maxGames}
+          barClass="bg-[#d6b36a]"
+          badgeClass="bg-[#efe0b4] text-[#7a5519] border border-[#d6b36a]/40"
+        />
+      </div>
+    </Card>
+  );
+}
+
+function VenueCompareRow({ label, summary, maxGames, barClass, badgeClass }) {
+  const width = maxGames > 0 ? (summary.games / maxGames) * 100 : 0;
+  const displayWidth = summary.games > 0 ? Math.max(width, 8) : 0;
+
+  return (
+    <div className="bg-[#f8f7fb] rounded-2xl p-4 border border-gray-100">
+      <div className="flex items-center justify-between mb-3">
+        <div className={`text-[11px] font-black px-3 py-1 rounded-full ${badgeClass}`}>
+          {label}
+        </div>
+
+        <div className="text-sm font-black text-[#171425]">
+          {summary.games}試合
+        </div>
+      </div>
+
+      <div className="h-4 bg-white rounded-full overflow-hidden border border-gray-100">
+        <div
+          className={`h-full rounded-full ${barClass}`}
+          style={{ width: `${displayWidth}%` }}
+        />
+      </div>
+
+      <div className="grid grid-cols-3 gap-2 mt-3">
+        <div className="bg-white rounded-xl p-2 text-center border border-gray-100">
+          <div className="text-lg font-black text-[#4b1c89]">
+            {summary.wins}
+          </div>
+          <div className="text-[10px] text-gray-400 font-black">
+            勝ち
+          </div>
+        </div>
+
+        <div className="bg-white rounded-xl p-2 text-center border border-gray-100">
+          <div className="text-lg font-black text-gray-500">
+            {summary.draws}
+          </div>
+          <div className="text-[10px] text-gray-400 font-black">
+            引分
+          </div>
+        </div>
+
+        <div className="bg-white rounded-xl p-2 text-center border border-gray-100">
+          <div className="text-lg font-black text-red-400">
+            {summary.losses}
+          </div>
+          <div className="text-[10px] text-gray-400 font-black">
+            負け
+          </div>
+        </div>
+      </div>
+
+      <div className="flex items-center justify-between mt-3 text-[11px] font-bold text-gray-500">
+        <span>勝率 {summary.winRate}%</span>
+        <span>得点 {summary.goals} / 失点 {summary.conceded}</span>
+      </div>
+    </div>
+  );
+}
+
+function CleanSheetGraph({ cleanSheets, totalGames, cleanSheetRate }) {
+  const rate = Number(cleanSheetRate) || 0;
+
+  return (
+    <Card>
+      <div className="flex items-center justify-between mb-4">
+        <div>
+          <div className="flex items-center gap-2 text-[#4b1c89] font-black">
+            <Shield size={18} />
+            クリーンシート率
+          </div>
+
+          <p className="text-xs text-gray-500 font-bold mt-1">
+            無失点で終えた観戦試合
+          </p>
+        </div>
+      </div>
+
+      {totalGames > 0 ? (
+        <div className="flex items-center gap-5">
+          <div
+            className="w-28 h-28 rounded-full p-3 shrink-0"
+            style={{
+              background: `conic-gradient(#4b1c89 ${rate}%, #ede9fe ${rate}% 100%)`,
+            }}
+          >
+            <div className="w-full h-full rounded-full bg-white flex flex-col items-center justify-center shadow-inner">
+              <div className="text-2xl font-black text-[#4b1c89] leading-none">
+                {cleanSheetRate}
+              </div>
+              <div className="text-[10px] font-black text-gray-400 mt-1">
+                %
+              </div>
+            </div>
+          </div>
+
+          <div className="flex-1">
+            <div className="text-3xl font-black text-[#171425]">
+              {cleanSheets}
+              <span className="text-base text-gray-500 ml-1">
+                試合
+              </span>
+            </div>
+
+            <div className="text-sm text-gray-500 font-bold mt-2 leading-6">
+              {totalGames}試合中、{cleanSheets}試合がクリーンシートです。
+            </div>
+
+            <div className="mt-3 bg-purple-50 text-[#4b1c89] rounded-2xl px-3 py-2 text-xs font-black">
+              守備の安定度を見える化
+            </div>
+          </div>
+        </div>
+      ) : (
+        <div className="h-24 rounded-2xl bg-gray-50 border border-dashed border-gray-200 flex items-center justify-center text-sm text-gray-400 font-bold">
+          まだクリーンシート記録がありません
+        </div>
+      )}
+    </Card>
   );
 }
 
