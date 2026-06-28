@@ -3677,52 +3677,57 @@ function getSupporterTitle(matchCount) {
 
   return titles[Math.min(level, titles.length - 1)];
 }
+
+const profileShieldBadges = [
+  {
+    count: 10,
+    title: 'BRONZE',
+    name: '銅の盾',
+    label: '10',
+    condition: '観戦記録を10試合保存する',
+    description: 'サンフレッチェ観戦の第一歩を刻んだ証。',
+    bg: 'linear-gradient(135deg, #fed7aa, #c2410c, #7c2d12)',
+    text: '#fff7ed',
+    border: 'rgba(255,255,255,0.55)',
+  },
+  {
+    count: 25,
+    title: 'SILVER',
+    name: '銀の盾',
+    label: '25',
+    condition: '観戦記録を25試合保存する',
+    description: '何度もスタジアムへ足を運んだサポーターの証。',
+    bg: 'linear-gradient(135deg, #f8fafc, #94a3b8, #334155)',
+    text: '#f8fafc',
+    border: 'rgba(255,255,255,0.65)',
+  },
+  {
+    count: 50,
+    title: 'GOLD',
+    name: '金の盾',
+    label: '50',
+    condition: '観戦記録を50試合保存する',
+    description: '紫の記憶を積み重ねた本格サポーターの証。',
+    bg: 'linear-gradient(135deg, #fef3c7, #d6b36a, #92400e)',
+    text: '#fff7ed',
+    border: 'rgba(255,255,255,0.7)',
+  },
+  {
+    count: 100,
+    title: 'LEGEND',
+    name: '伝説の盾',
+    label: '100',
+    condition: '観戦記録を100試合保存する',
+    description: 'サンフレッチェと歩んだ歴史そのもの。',
+    bg: 'linear-gradient(135deg, #ede9fe, #7c3aed, #2e1065)',
+    text: '#ffffff',
+    border: 'rgba(255,255,255,0.75)',
+  },
+];
 const getProfileShieldBadge = (count) => {
-  if (count >= 100) {
-    return {
-      count: 100,
-      title: 'LEGEND',
-      label: '100',
-      bg: 'linear-gradient(135deg, #fef3c7, #ffffff, #a78bfa, #4b1c89)',
-      text: '#2a075f',
-      border: 'rgba(255,255,255,0.9)',
-    };
-  }
-
-  if (count >= 50) {
-    return {
-      count: 50,
-      title: 'GOLD',
-      label: '50',
-      bg: 'linear-gradient(135deg, #fff7ad, #f6c400, #b45309)',
-      text: '#3b1378',
-      border: 'rgba(255,255,255,0.75)',
-    };
-  }
-
-  if (count >= 30) {
-    return {
-      count: 30,
-      title: 'SILVER',
-      label: '30',
-      bg: 'linear-gradient(135deg, #f8fafc, #cbd5e1, #64748b)',
-      text: '#1f2937',
-      border: 'rgba(255,255,255,0.8)',
-    };
-  }
-
-  if (count >= 10) {
-    return {
-      count: 10,
-      title: 'BRONZE',
-      label: '10',
-      bg: 'linear-gradient(135deg, #fed7aa, #c2410c, #7c2d12)',
-      text: '#fff7ed',
-      border: 'rgba(255,255,255,0.55)',
-    };
-  }
-
-  return null;
+  return [...profileShieldBadges]
+    .reverse()
+    .find((badge) => count >= badge.count) || null;
 };
 function MyPageView({ records, setView, profile }) {
   const [profilePhotoOpen, setProfilePhotoOpen] = useState(false);
@@ -3731,7 +3736,7 @@ function MyPageView({ records, setView, profile }) {
   const remainingMatches = nextTitleCount - records.length;
   const favoriteCount = records.filter((record) => record.favorite).length;
   const [showAllAwayRecords, setShowAllAwayRecords] = useState(false);
-
+  const [shieldListOpen, setShieldListOpen] = useState(false);
   const homeStadium = 'エディオンピースウイング広島';
 
   const getVenueType = (record) => {
@@ -3870,7 +3875,13 @@ function MyPageView({ records, setView, profile }) {
                 </h1>
 
                 {profileShieldBadge && (
-                  <ProfileShieldBadge badge={profileShieldBadge} />
+                  <ProfileShieldBadge
+                    badge={profileShieldBadge}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setShieldListOpen(true);
+                    }}
+                  />
                 )}
               </div>
 
@@ -3920,6 +3931,13 @@ function MyPageView({ records, setView, profile }) {
               </div>
             </div>
           </div>
+        )}
+
+        {shieldListOpen && (
+          <ShieldListModal
+            recordsCount={records.length}
+            onClose={() => setShieldListOpen(false)}
+          />
         )}
 
         {/* 推し・よく行く場所 */}
@@ -4861,15 +4879,114 @@ function ProfileSettingsView({ profile, setView, onSaveProfile }) {
   );
 }
 
-function ProfileShieldBadge({ badge }) {
+function ShieldListModal({ recordsCount, onClose }) {
   return (
     <div
-      className="w-[72px] h-[78px] shrink-0 rounded-2xl flex flex-col items-center justify-center shadow-lg border border-white/60"
+      onClick={onClose}
+      className="fixed inset-0 z-[999] bg-black/60 backdrop-blur-sm flex items-center justify-center px-5"
+    >
+      <div
+        onClick={(e) => e.stopPropagation()}
+        className="w-full max-w-sm bg-white rounded-[2rem] shadow-2xl overflow-hidden"
+      >
+        <div className="bg-gradient-to-br from-[#2a075f] via-[#4b1c89] to-[#6d28d9] text-white p-5">
+          <div className="flex items-center justify-between">
+            <div>
+              <div className="text-xs font-black text-yellow-300 tracking-[0.2em]">
+                SHIELD COLLECTION
+              </div>
+              <div className="text-xl font-black mt-1">
+                盾一覧
+              </div>
+            </div>
+
+            <button
+              type="button"
+              onClick={onClose}
+              className="bg-white/15 border border-white/20 rounded-full px-3 py-1.5 text-xs font-black active:scale-95"
+            >
+              閉じる
+            </button>
+          </div>
+
+          <div className="text-xs text-white/80 font-bold mt-3">
+            現在の観戦記録：{recordsCount}試合
+          </div>
+        </div>
+
+        <div className="p-4 space-y-3 max-h-[65vh] overflow-y-auto">
+          {profileShieldBadges.map((badge) => {
+            const unlocked = recordsCount >= badge.count;
+            const remaining = Math.max(badge.count - recordsCount, 0);
+
+            return (
+              <div
+                key={badge.title}
+                className={`rounded-2xl border p-3 flex gap-3 ${unlocked
+                  ? 'bg-purple-50 border-purple-100'
+                  : 'bg-gray-50 border-gray-100 opacity-75'
+                  }`}
+              >
+                <div
+                  className="w-16 h-16 rounded-2xl flex flex-col items-center justify-center shrink-0 shadow-md border"
+                  style={{
+                    background: unlocked ? badge.bg : 'linear-gradient(135deg, #e5e7eb, #9ca3af)',
+                    color: unlocked ? badge.text : '#ffffff',
+                    borderColor: badge.border,
+                  }}
+                >
+                  <Shield size={28} fill="currentColor" strokeWidth={0} />
+                  <div className="text-xs font-black leading-none mt-1">
+                    {badge.label}
+                  </div>
+                </div>
+
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center justify-between gap-2">
+                    <div className="text-sm font-black text-[#171425]">
+                      {badge.name}
+                    </div>
+
+                    <div
+                      className={`text-[10px] font-black rounded-full px-2 py-1 ${unlocked
+                        ? 'bg-[#4b1c89] text-white'
+                        : 'bg-gray-200 text-gray-500'
+                        }`}
+                    >
+                      {unlocked ? 'GET' : `あと${remaining}試合`}
+                    </div>
+                  </div>
+
+                  <div className="text-[11px] text-[#4b1c89] font-black mt-1">
+                    {badge.condition}
+                  </div>
+
+                  <p className="text-[11px] text-gray-500 font-bold mt-1 leading-5">
+                    {badge.description}
+                  </p>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function ProfileShieldBadge({ badge, onClick }) {
+  const Wrapper = onClick ? 'button' : 'div';
+
+  return (
+    <Wrapper
+      type={onClick ? 'button' : undefined}
+      onClick={onClick}
+      className="w-[72px] h-[78px] shrink-0 rounded-2xl flex flex-col items-center justify-center shadow-lg border border-white/60 active:scale-95 transition"
       style={{
         background: badge.bg,
         color: badge.text,
       }}
-      title={`${badge.count}試合達成`}
+      title={`${badge.name} / ${badge.count}試合達成`}
     >
       <div className="w-8 h-8 rounded-xl bg-white/25 flex items-center justify-center mb-1.5">
         <Shield size={100} fill="currentColor" strokeWidth={0} />
@@ -4882,7 +4999,7 @@ function ProfileShieldBadge({ badge }) {
       <div className="text-[7px] leading-none font-black tracking-widest mt-1 opacity-90">
         {badge.title}
       </div>
-    </div>
+    </Wrapper>
   );
 }
 function MyPageStat({ label, value, unit }) {
@@ -6874,6 +6991,20 @@ function SimplePositionBoard({ draft, updateDraft, records = [] }) {
   const formation = draft.formation || '3-4-2-1';
   const slots = formationLayouts[formation] || formationLayouts['3-4-2-1'];
   const lineup = draft.lineup || {};
+  const isAwayUniform =
+    draft.venueType === 'AWAY' || draft.venueType === 'アウェイ';
+
+  const selectedUniformClass = isAwayUniform
+    ? 'bg-white text-[#4b1c89] border-purple-200 ring-2 ring-white/70'
+    : 'bg-[#4b1c89] text-white border-yellow-300';
+
+  const activeUniformClass = isAwayUniform
+    ? 'bg-white text-[#4b1c89] border-yellow-300 ring-4 ring-yellow-200/70'
+    : 'bg-yellow-300 text-[#4b1c89] border-white ring-4 ring-yellow-200/60';
+
+  const modalSelectedUniformClass = isAwayUniform
+    ? 'bg-white text-[#4b1c89] border border-purple-200'
+    : 'bg-[#4b1c89] text-white';
   const previousPositionRecord = records.find((record) => {
     const data = record.draftData || {};
     return data.formation && data.lineup && Object.keys(data.lineup).length > 0;
@@ -7074,9 +7205,9 @@ function SimplePositionBoard({ draft, updateDraft, records = [] }) {
             >
               <div
                 className={`w-11 h-11 rounded-2xl flex flex-col items-center justify-center shadow-lg border-2 ${isActive
-                  ? 'bg-yellow-300 text-[#4b1c89] border-white ring-4 ring-yellow-200/60'
+                  ? activeUniformClass
                   : player
-                    ? 'bg-[#4b1c89] text-white border-yellow-300'
+                    ? selectedUniformClass
                     : 'bg-white/85 text-gray-400 border-white'
                   }`}
               >
@@ -7159,7 +7290,7 @@ function SimplePositionBoard({ draft, updateDraft, records = [] }) {
                   >
                     <div
                       className={`w-11 h-11 rounded-2xl flex flex-col items-center justify-center ${selectedHere
-                        ? 'bg-[#4b1c89] text-white'
+                        ? modalSelectedUniformClass
                         : 'bg-[#f8f7fb] text-[#4b1c89]'
                         }`}
                     >
@@ -7445,6 +7576,12 @@ function ConfirmPositionBoard({ draft }) {
   const formation = draft.formation || '3-4-2-1';
   const slots = formationLayouts[formation] || formationLayouts['3-4-2-1'];
   const lineup = draft.lineup || {};
+  const isAwayUniform =
+    draft.venueType === 'AWAY' || draft.venueType === 'アウェイ';
+
+  const selectedUniformClass = isAwayUniform
+    ? 'bg-white text-[#4b1c89] border-purple-200 ring-2 ring-white/70'
+    : 'bg-[#4b1c89] text-white border-yellow-300';
 
   return (
     <Card>
@@ -7482,7 +7619,7 @@ function ConfirmPositionBoard({ draft }) {
             >
               <div
                 className={`w-11 h-11 rounded-2xl flex flex-col items-center justify-center shadow-lg border-2 ${player
-                  ? 'bg-[#4b1c89] text-white border-yellow-300'
+                  ? selectedUniformClass
                   : 'bg-white/85 text-gray-400 border-white'
                   }`}
               >
@@ -7519,6 +7656,8 @@ function ConfirmView({ setView, draft, onSave, onSaveDraft }) {
   const selectedMvp =
     playerOptions.find((player) => player.name === draft.mvp) ||
     playerOptions[0];
+
+  const hasSanfrecceGoal = Number(draft.homeScore || 0) > 0;
 
   return (
     <CreateShell setView={setView} backTo="step3" step={4} onSaveDraft={onSaveDraft}>
@@ -7585,51 +7724,51 @@ function ConfirmView({ setView, draft, onSave, onSaveDraft }) {
             </div>
           </div>
         </div>
-
-        <Card>
-          <div className="flex items-center gap-2 text-[#4b1c89] font-black mb-4">
-            <Trophy size={18} />
-            得点者確認
-          </div>
-
-          {(draft.scorers || []).length > 0 ? (
-            <div className="space-y-2">
-              {(draft.scorers || []).map((scorer, index) => {
-                const player = playerOptions.find((p) => p.name === scorer.player);
-
-                return (
-                  <div
-                    key={scorer.id}
-                    className="flex items-center gap-3 bg-[#f8f7fb] border border-gray-100 rounded-2xl p-3"
-                  >
-                    <div className="w-10 h-10 rounded-xl bg-[#4b1c89] text-white flex items-center justify-center font-black">
-                      {player ? player.number : index + 1}
-                    </div>
-
-                    <div className="flex-1 min-w-0">
-                      <div className="text-sm font-black text-[#171425] truncate">
-                        {scorer.player || '未入力'}
-                      </div>
-                      <div className="text-[11px] text-gray-400 font-bold mt-0.5">
-                        {scorer.minute ? `${scorer.minute}分` : '時間未入力'}
-                        {player ? ` / ${player.position}` : ''}
-                      </div>
-                    </div>
-
-                    <div className="text-lg font-black text-[#4b1c89]">
-                      GOAL
-                    </div>
-                  </div>
-                );
-              })}
+        {hasSanfrecceGoal && (
+          <Card>
+            <div className="flex items-center gap-2 text-[#4b1c89] font-black mb-4">
+              <Trophy size={18} />
+              得点者確認
             </div>
-          ) : (
-            <div className="h-20 rounded-2xl bg-gray-50 border border-dashed border-gray-200 flex items-center justify-center text-sm text-gray-400 font-bold">
-              得点者は未入力です
-            </div>
-          )}
-        </Card>
 
+            {(draft.scorers || []).length > 0 ? (
+              <div className="space-y-2">
+                {(draft.scorers || []).map((scorer, index) => {
+                  const player = playerOptions.find((p) => p.name === scorer.player);
+
+                  return (
+                    <div
+                      key={scorer.id}
+                      className="flex items-center gap-3 bg-[#f8f7fb] border border-gray-100 rounded-2xl p-3"
+                    >
+                      <div className="w-10 h-10 rounded-xl bg-[#4b1c89] text-white flex items-center justify-center font-black">
+                        {player ? player.number : index + 1}
+                      </div>
+
+                      <div className="flex-1 min-w-0">
+                        <div className="text-sm font-black text-[#171425] truncate">
+                          {scorer.player || '未入力'}
+                        </div>
+                        <div className="text-[11px] text-gray-400 font-bold mt-0.5">
+                          {scorer.minute ? `${scorer.minute}分` : '時間未入力'}
+                          {player ? ` / ${player.position}` : ''}
+                        </div>
+                      </div>
+
+                      <div className="text-lg font-black text-[#4b1c89]">
+                        GOAL
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            ) : (
+              <div className="h-20 rounded-2xl bg-gray-50 border border-dashed border-gray-200 flex items-center justify-center text-sm text-gray-400 font-bold">
+                得点者は未入力です
+              </div>
+            )}
+          </Card>
+        )}
         <ConfirmPositionBoard draft={draft} />
 
         {/* 基本情報 */}
