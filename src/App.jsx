@@ -443,40 +443,67 @@ const matchSchedule = [
   },
 ];
 
+
+
 const normalizeDate = (date) => {
-  return String(date || '').replaceAll('.', '-');
+  return String(date || '').replaceAll('.', '-').replaceAll('/', '-');
 };
 
-const isMatchRecorded = (match, records = []) => {
-  return records.some((record) => {
-    const data = record.draftData || {};
+const getScheduleMatchFromRecord = (record) => {
+  const data = record.draftData || {};
 
-    const recordedSection = data.matchSection;
-    const recordedDate = normalizeDate(data.date || record.date);
-    const recordedOpponent = data.opponent || record.opponent;
+  const recordedSection = data.matchSection || record.matchSection;
+  const recordedDate = normalizeDate(data.date || record.date);
+  const recordedOpponent = data.opponent || record.opponent;
 
-    // 節が一致していたら記録済み
-    if (recordedSection && String(recordedSection) === String(match.section)) {
-      return true;
-    }
+  // ① 節が入っている記録なら、節で探す
+  if (recordedSection) {
+    const matchBySection = matchSchedule.find(
+      (match) => String(match.section) === String(recordedSection)
+    );
 
-    // 節がない古い記録用：日付と対戦相手が一致していたら記録済み
-    return recordedDate === match.date && recordedOpponent === match.opponent;
+    if (matchBySection) return matchBySection;
+  }
+
+  // ② 節がない記録用：日付と対戦相手で探す
+  return matchSchedule.find((match) => {
+    return (
+      normalizeDate(match.date) === recordedDate &&
+      match.opponent === recordedOpponent
+    );
   });
+};
+
+const getLatestRecordedScheduleMatch = (records = []) => {
+  const recordedScheduleMatches = records
+    .map((record) => getScheduleMatchFromRecord(record))
+    .filter(Boolean)
+    .sort((a, b) => new Date(b.date) - new Date(a.date));
+
+  return recordedScheduleMatches[0] || null;
 };
 
 const getNextMatch = (records = []) => {
   const today = new Date();
   today.setHours(0, 0, 0, 0);
 
-  const upcomingMatches = matchSchedule
-    .filter((match) => {
-      const matchDate = new Date(match.date);
-      return matchDate >= today && !isMatchRecorded(match, records);
-    })
-    .sort((a, b) => new Date(a.date) - new Date(b.date));
+  const latestRecordedMatch = getLatestRecordedScheduleMatch(records);
 
-  return upcomingMatches[0] || null;
+  // 記録が1つもない時は、今日以降の最初の試合
+  if (!latestRecordedMatch) {
+    return matchSchedule
+      .filter((match) => {
+        const matchDate = new Date(match.date);
+        matchDate.setHours(0, 0, 0, 0);
+        return matchDate >= today;
+      })
+      .sort((a, b) => new Date(a.date) - new Date(b.date))[0] || null;
+  }
+
+  // 記録済みの中で一番新しい試合の「次の節」を表示
+  return matchSchedule
+    .filter((match) => Number(match.section) > Number(latestRecordedMatch.section))
+    .sort((a, b) => Number(a.section) - Number(b.section))[0] || null;
 };
 const opponentTeams = [
   { name: '鹿島アントラーズ', short: '鹿島', main: '#b91c1c', sub: '#0f172a', stadium: 'メルカリスタジアム' },
@@ -1212,6 +1239,7 @@ function BrandHeader({ back, setView = () => { }, records = [] }) {
   const [scheduleOpen, setScheduleOpen] = useState(false);
   const nextMatch = getNextMatch(records);
 
+
   const movePage = (page) => {
     setView(page);
     setMenuOpen(false);
@@ -1461,7 +1489,10 @@ function BrandHeader({ back, setView = () => { }, records = [] }) {
       )}
 
       {scheduleOpen && (
-        <MatchScheduleModal onClose={() => setScheduleOpen(false)} />
+        <MatchScheduleModal
+          onClose={() => setScheduleOpen(false)}
+          records={records}
+        />
       )}
     </header>
   );
@@ -1621,7 +1652,10 @@ function HomeView({
         </div>
       </div>
       {scheduleOpen && (
-        <MatchScheduleModal onClose={() => setScheduleOpen(false)} />
+        <MatchScheduleModal
+          onClose={() => setScheduleOpen(false)}
+          records={records}
+        />
       )}
       {saveMessage && (
         <div className="fixed left-1/2 top-[60px] z-[900] w-full max-w-md -translate-x-1/2 px-5">
@@ -1811,7 +1845,8 @@ function HomeView({
     </div>
   );
 }
-function MatchScheduleModal({ onClose }) {
+function MatchScheduleModal({ onClose, records = [] }) {
+  const nextMatch = getNextMatch(records);
   const today = new Date();
   today.setHours(0, 0, 0, 0);
 
@@ -1873,7 +1908,7 @@ function MatchScheduleModal({ onClose }) {
                   const matchDate = new Date(match.date);
                   matchDate.setHours(0, 0, 0, 0);
 
-                  const isNextMatch = matchDate >= today && match.section === getNextMatch()?.section;
+                  const isNextMatch = nextMatch && match.section === nextMatch.section;
 
                   return (
                     <div
