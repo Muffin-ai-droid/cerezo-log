@@ -14,6 +14,7 @@ const initialRecords = [];
 
 const defaultDraft = {
   date: '',
+  season: '2026-27',
   tournament: '',
   matchSection: '',
   opponent: '',
@@ -443,7 +444,217 @@ const matchSchedule = [
   },
 ];
 
+const hundredYearSchedule = [
+  {
+    section: 1,
+    date: '2026-02-06',
+    displayDate: '2.6',
+    day: '金',
+    time: '19:00',
+    opponent: 'V・ファーレン長崎',
+    stadium: 'PEACE STADIUM Connected by SoftBank',
+    venueType: 'AWAY',
+  },
+  {
+    section: 2,
+    date: '2026-02-14',
+    displayDate: '2.14',
+    day: '土',
+    time: '14:00',
+    opponent: 'ファジアーノ岡山',
+    stadium: 'エディオンピースウイング広島',
+    venueType: 'HOME',
+  },
+  {
+    section: 3,
+    date: '2026-02-22',
+    displayDate: '2.22',
+    day: '日',
+    time: '15:00',
+    opponent: 'セレッソ大阪',
+    stadium: 'ヨドコウ桜スタジアム',
+    venueType: 'AWAY',
+  },
+  {
+    section: 4,
+    date: '2026-02-27',
+    displayDate: '2.27',
+    day: '金',
+    time: '19:00',
+    opponent: '京都サンガF.C.',
+    stadium: 'エディオンピースウイング広島',
+    venueType: 'HOME',
+  },
+  {
+    section: 5,
+    date: '2026-03-27',
+    displayDate: '3.27',
+    day: '金',
+    time: '19:00',
+    opponent: 'ヴィッセル神戸',
+    stadium: 'ノエビアスタジアム神戸',
+    venueType: 'AWAY',
+  },
+  {
+    section: 6,
+    date: '2026-03-14',
+    displayDate: '3.14',
+    day: '土',
+    time: '15:00',
+    opponent: 'ガンバ大阪',
+    stadium: 'エディオンピースウイング広島',
+    venueType: 'HOME',
+  },
+  {
+    section: 7,
+    date: '2026-03-18',
+    displayDate: '3.18',
+    day: '水',
+    time: '19:00',
+    opponent: '名古屋グランパス',
+    stadium: '豊田スタジアム',
+    venueType: 'AWAY',
+  },
+  {
+    section: 8,
+    date: '2026-03-22',
+    displayDate: '3.22',
+    day: '日',
+    time: '13:00',
+    opponent: '清水エスパルス',
+    stadium: 'IAIスタジアム日本平',
+    venueType: 'AWAY',
+  },
+  {
+    section: 9,
+    date: '2026-04-05',
+    displayDate: '4.5',
+    day: '日',
+    time: '14:00',
+    opponent: 'アビスパ福岡',
+    stadium: 'エディオンピースウイング広島',
+    venueType: 'HOME',
+  },
+  {
+    section: 10,
+    date: '2026-04-11',
+    displayDate: '4.11',
+    day: '土',
+    time: '14:00',
+    opponent: '清水エスパルス',
+    stadium: 'エディオンピースウイング広島',
+    venueType: 'HOME',
+  },
+  {
+    section: 11,
+    date: '2026-04-18',
+    displayDate: '4.18',
+    day: '土',
+    time: '14:00',
+    opponent: 'V・ファーレン長崎',
+    stadium: 'エディオンピースウイング広島',
+    venueType: 'HOME',
+  },
+  {
+    section: 12,
+    date: '2026-04-25',
+    displayDate: '4.25',
+    day: '土',
+    time: '16:00',
+    opponent: 'セレッソ大阪',
+    stadium: 'エディオンピースウイング広島',
+    venueType: 'HOME',
+  },
+  {
+    section: 13,
+    date: '2026-04-29',
+    displayDate: '4.29',
+    day: '水祝',
+    time: '14:00',
+    opponent: 'アビスパ福岡',
+    stadium: 'ベスト電器スタジアム',
+    venueType: 'AWAY',
+  },
+  {
+    section: 14,
+    date: '2026-05-02',
+    displayDate: '5.2',
+    day: '土',
+    time: '12:55',
+    opponent: 'ファジアーノ岡山',
+    stadium: 'JFE晴れの国スタジアム',
+    venueType: 'AWAY',
+  },
+  {
+    section: 15,
+    date: '2026-05-06',
+    displayDate: '5.6',
+    day: '水休',
+    time: '15:00',
+    opponent: 'ヴィッセル神戸',
+    stadium: 'エディオンピースウイング広島',
+    venueType: 'HOME',
+  },
+  {
+    section: 16,
+    date: '2026-05-10',
+    displayDate: '5.10',
+    day: '日',
+    time: '15:00',
+    opponent: 'ガンバ大阪',
+    stadium: 'パナソニック スタジアム 吹田',
+    venueType: 'AWAY',
+  },
+  {
+    section: 17,
+    date: '2026-05-17',
+    displayDate: '5.17',
+    day: '日',
+    time: '15:00',
+    opponent: '京都サンガF.C.',
+    stadium: 'サンガスタジアム by KYOCERA',
+    venueType: 'AWAY',
+  },
+  {
+    section: 18,
+    date: '2026-05-23',
+    displayDate: '5.23',
+    day: '土',
+    time: '14:00',
+    opponent: '名古屋グランパス',
+    stadium: 'エディオンピースウイング広島',
+    venueType: 'HOME',
+  },
+];
 
+const seasonOptions = [
+  {
+    key: '2026-27',
+    label: '2026/27シーズン',
+    tournament: '明治安田J1リーグ',
+  },
+  {
+    key: '100year',
+    label: '百年構想リーグ',
+    tournament: '明治安田J1百年構想リーグ',
+  },
+];
+
+const seasonSchedules = {
+  '2026-27': matchSchedule,
+  '100year': hundredYearSchedule,
+};
+
+const getSeasonInfo = (seasonKey) => {
+  return seasonOptions.find((season) => season.key === seasonKey) || seasonOptions[0];
+};
+
+const getSeasonSchedule = (seasonKey) => {
+  return seasonSchedules[seasonKey] || matchSchedule;
+};
+const getRecordSeason = (record) => {
+  return record?.draftData?.season || record?.season || '2026-27';
+};
 
 const normalizeDate = (date) => {
   return String(date || '').replaceAll('.', '-').replaceAll('/', '-');
@@ -452,21 +663,22 @@ const normalizeDate = (date) => {
 const getScheduleMatchFromRecord = (record) => {
   const data = record.draftData || {};
 
+  const recordedSeason = data.season || record.season || '2026-27';
+  const targetSchedule = getSeasonSchedule(recordedSeason);
+
   const recordedSection = data.matchSection || record.matchSection;
   const recordedDate = normalizeDate(data.date || record.date);
   const recordedOpponent = data.opponent || record.opponent;
 
-  // ① 節が入っている記録なら、節で探す
   if (recordedSection) {
-    const matchBySection = matchSchedule.find(
+    const matchBySection = targetSchedule.find(
       (match) => String(match.section) === String(recordedSection)
     );
 
     if (matchBySection) return matchBySection;
   }
 
-  // ② 節がない記録用：日付と対戦相手で探す
-  return matchSchedule.find((match) => {
+  return targetSchedule.find((match) => {
     return (
       normalizeDate(match.date) === recordedDate &&
       match.opponent === recordedOpponent
@@ -866,11 +1078,14 @@ const formationLayouts = {
   ],
 };
 const playerOptions = [
+  // GK
   { name: '大迫 敬介', number: '1', position: 'GK' },
   { name: '田中 雄大', number: '21', position: 'GK' },
   { name: '小川 煌', number: '43', position: 'GK' },
   { name: '大内 一生', number: '99', position: 'GK' },
+  { name: 'ヒル 袈依廉', number: '38', position: 'GK', seasons: ['100year'] },
 
+  // DF
   { name: '山崎 大地', number: '3', position: 'DF' },
   { name: '荒木 隼人', number: '4', position: 'DF' },
   { name: '新井 直人', number: '13', position: 'DF' },
@@ -880,20 +1095,36 @@ const playerOptions = [
   { name: '塩谷 司', number: '33', position: 'DF' },
   { name: 'キム ジュソン', number: '37', position: 'DF' },
 
+  // MF
   { name: '川辺 駿', number: '6', position: 'MF' },
   { name: '松本 泰志', number: '14', position: 'MF' },
   { name: '菅 大輝', number: '18', position: 'MF' },
   { name: '東 俊希', number: '24', position: 'MF' },
+  { name: '茶島 雄介', number: '25', position: 'MF', seasons: ['100year'] },
+  { name: 'トルガイ アルスラン', number: '30', position: 'MF', seasons: ['100year'] },
   { name: '越道 草太', number: '32', position: 'MF' },
   { name: '中島 洋太朗', number: '35', position: 'MF' },
+  { name: '小原 基樹', number: '40', position: 'MF', seasons: ['100year'] },
   { name: '小林 志紋', number: '45', position: 'MF' },
 
+  // FW
+  { name: 'ジャーメイン 良', number: '9', position: 'FW', seasons: ['100year'] },
   { name: '鈴木 章斗', number: '10', position: 'FW' },
   { name: '加藤 陸次樹', number: '11', position: 'FW' },
+  { name: '木下 康介', number: '17', position: 'FW', seasons: ['100year'] },
   { name: '鮎川 峻', number: '23', position: 'FW' },
   { name: '中村 草太', number: '39', position: 'FW' },
   { name: '前田 直輝', number: '41', position: 'FW' },
+  { name: '浅野 拓磨', number: '未定', position: 'FW', seasons: ['2026-27'] },
 ];
+
+const getSeasonPlayerOptions = (seasonKey = '2026-27') => {
+  return playerOptions.filter((player) => {
+    if (!player.seasons) return true;
+    return player.seasons.includes(seasonKey);
+  });
+};
+
 
 export default function App() {
   const [view, setView] = useState('home');
@@ -1080,6 +1311,7 @@ export default function App() {
   const handleSave = () => {
     const savedRecord = {
       id: editingRecordId || Date.now(),
+      season: draft.season || '2026-27',
       date: draft.date.replaceAll('-', '.'),
       opponent: draft.opponent,
       score: `サンフレッチェ広島 ${draft.homeScore} - ${draft.awayScore} ${draft.opponent}`,
@@ -1264,11 +1496,22 @@ export default function App() {
   );
 }
 
-function BrandHeader({ back, setView = () => { }, records = [] }) {
+function BrandHeader({ back, setView = () => { }, records }) {
   const [noticeOpen, setNoticeOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [scheduleOpen, setScheduleOpen] = useState(false);
-  const nextMatch = getNextMatch(records);
+  const headerRecords =
+    records ??
+    (() => {
+      try {
+        const storedRecords = localStorage.getItem('sanfrel-log-records');
+        return storedRecords ? JSON.parse(storedRecords) : [];
+      } catch {
+        return [];
+      }
+    })();
+
+  const nextMatch = getNextMatch(headerRecords);
 
 
   const movePage = (page) => {
@@ -2503,6 +2746,7 @@ function RecordsView({
   const [keyword, setKeyword] = useState('');
   const [venueFilter, setVenueFilter] = useState('ALL');
   const [resultFilter, setResultFilter] = useState('ALL');
+  const [seasonFilter, setSeasonFilter] = useState('ALL');
   const [favoriteOnly, setFavoriteOnly] = useState(false);
   const [selectMode, setSelectMode] = useState(false);
   const [selectedIds, setSelectedIds] = useState([]);
@@ -2555,13 +2799,17 @@ function RecordsView({
       resultFilter === 'ALL' || getResult(record) === resultFilter;
     const matchFavorite = !favoriteOnly || record.favorite;
 
-    return matchKeyword && matchVenue && matchResult && matchFavorite;
+    const matchSeason =
+      seasonFilter === 'ALL' || getRecordSeason(record) === seasonFilter;
+
+    return matchKeyword && matchVenue && matchResult && matchSeason && matchFavorite;
   });
 
   const resetFilters = () => {
     setKeyword('');
     setVenueFilter('ALL');
     setResultFilter('ALL');
+    setSeasonFilter('ALL');
     setFavoriteOnly(false);
   };
   const toggleSelectRecord = (id) => {
@@ -2591,6 +2839,8 @@ function RecordsView({
   return (
     <div className="min-h-screen bg-[#f8f7fb] pb-24">
       <BrandHeader setView={setView} />
+
+
 
       <div className="px-5 pt-6">
         <div className="flex items-center justify-between mb-5">
@@ -2652,6 +2902,29 @@ function RecordsView({
                   {item.label}
                 </button>
               ))}
+            </div>
+          </div>
+
+          <div className="mt-5">
+            <div className="text-[11px] text-gray-500 font-black mb-1.5">
+              シーズン
+            </div>
+
+            <div className="relative">
+              <select
+                value={seasonFilter}
+                onChange={(e) => setSeasonFilter(e.target.value)}
+                className="w-full h-9 appearance-none rounded-xl bg-[#f8f7fb] border border-gray-200 px-3 pr-9 text-xs font-black text-[#171425] outline-none focus:border-[#4b1c89]"
+              >
+                <option value="ALL">全シーズン</option>
+                <option value="2026-27">2026/27シーズン</option>
+                <option value="100year">百年構想リーグ</option>
+              </select>
+
+              <ChevronRight
+                size={15}
+                className="absolute right-3 top-1/2 -translate-y-1/2 rotate-90 text-[#4b1c89] pointer-events-none"
+              />
             </div>
           </div>
 
@@ -2945,7 +3218,20 @@ function StatsView({ records, setView }) {
 
   const [showSeasonStats, setShowSeasonStats] = useState(false);
 
-  const results = records.map((record) => {
+  const [selectedSeasonFilter, setSelectedSeasonFilter] = useState('all');
+  const [seasonSelectOpen, setSeasonSelectOpen] = useState(false);
+
+  const filteredRecords =
+    selectedSeasonFilter === 'all'
+      ? records
+      : records.filter((record) => getRecordSeason(record) === selectedSeasonFilter);
+
+  const selectedSeasonLabel =
+    selectedSeasonFilter === 'all'
+      ? '全シーズン'
+      : getSeasonInfo(selectedSeasonFilter).label;
+
+  const results = filteredRecords.map((record) => {
     const score = parseScore(record);
 
     return {
@@ -2962,7 +3248,7 @@ function StatsView({ records, setView }) {
     };
   });
 
-  const totalGames = records.length;
+  const totalGames = filteredRecords.length;
   const wins = results.filter((record) => record.result === 'win').length;
   const draws = results.filter((record) => record.result === 'draw').length;
   const losses = results.filter((record) => record.result === 'lose').length;
@@ -3056,28 +3342,85 @@ function StatsView({ records, setView }) {
     },
   ];
 
-  const totalExpense = records.reduce((sum, record) => {
+  const totalExpense = filteredRecords.reduce((sum, record) => {
     return sum + sumExpenses(record.draftData?.expenses);
   }, 0);
 
   const averageExpense = totalGames > 0 ? Math.round(totalExpense / totalGames) : 0;
 
-  const stadiumRanking = toRanking(countBy(records.map((record) => record.stadium)));
-  const opponentRanking = toRanking(countBy(records.map((record) => record.opponent)));
-  const mvpRanking = toRanking(countBy(records.map((record) => record.draftData?.mvp)));
+  const stadiumRanking = toRanking(countBy(filteredRecords.map((record) => record.stadium)));
+  const opponentRanking = toRanking(countBy(filteredRecords.map((record) => record.opponent)));
+  const mvpRanking = toRanking(countBy(filteredRecords.map((record) => record.draftData?.mvp)));
 
   const expenseBreakdown = {
-    ticket: records.reduce((sum, record) => sum + Number(record.draftData?.expenses?.ticket || 0), 0),
-    goods: records.reduce((sum, record) => sum + Number(record.draftData?.expenses?.goods || 0), 0),
-    food: records.reduce((sum, record) => sum + Number(record.draftData?.expenses?.food || 0), 0),
-    transport: records.reduce((sum, record) => sum + Number(record.draftData?.expenses?.transport || 0), 0),
-    other: records.reduce((sum, record) => sum + Number(record.draftData?.expenses?.other || 0), 0),
+    ticket: filteredRecords.reduce((sum, record) => sum + Number(record.draftData?.expenses?.ticket || 0), 0),
+    goods: filteredRecords.reduce((sum, record) => sum + Number(record.draftData?.expenses?.goods || 0), 0),
+    food: filteredRecords.reduce((sum, record) => sum + Number(record.draftData?.expenses?.food || 0), 0),
+    transport: filteredRecords.reduce((sum, record) => sum + Number(record.draftData?.expenses?.transport || 0), 0),
+    other: filteredRecords.reduce((sum, record) => sum + Number(record.draftData?.expenses?.other || 0), 0),
   };
 
   return (
     <div className="min-h-screen bg-[#f8f7fb] pb-24">
       <BrandHeader setView={setView} />
+      <div className="px-5 pt-5">
+        <div className="bg-white rounded-2xl border border-purple-100 shadow-sm p-3">
+          <div className="flex items-center justify-between gap-3 mb-2">
+            <div>
+              <div className="text-[10px] font-black text-[#4b1c89]">
+                SEASON
+              </div>
+              <div className="text-xs font-black text-[#171425]">
+                表示するシーズン
+              </div>
+            </div>
 
+            <div className="text-[10px] font-black text-white bg-[#4b1c89] rounded-full px-2.5 py-1">
+              {filteredRecords.length}試合
+            </div>
+          </div>
+
+          <div className="relative">
+            <button
+              type="button"
+              onClick={() => setSeasonSelectOpen(!seasonSelectOpen)}
+              className="w-full h-9 rounded-xl bg-[#f8f7fb] border border-gray-200 px-3 text-xs font-black text-[#171425] flex items-center justify-between active:scale-[0.98]"
+            >
+              <span>{selectedSeasonLabel}</span>
+
+              <ChevronRight
+                size={15}
+                className={`text-[#4b1c89] transition ${seasonSelectOpen ? 'rotate-90' : ''
+                  }`}
+              />
+            </button>
+
+            {seasonSelectOpen && (
+              <div className="absolute left-0 right-0 top-11 z-[999] bg-white border border-purple-100 rounded-2xl shadow-xl overflow-hidden">
+                {[
+                  { key: 'all', label: '全シーズン' },
+                  ...seasonOptions,
+                ].map((season) => (
+                  <button
+                    key={season.key}
+                    type="button"
+                    onClick={() => {
+                      setSelectedSeasonFilter(season.key);
+                      setSeasonSelectOpen(false);
+                    }}
+                    className={`w-full text-left px-4 py-3 text-xs font-black border-b border-gray-100 last:border-b-0 ${selectedSeasonFilter === season.key
+                      ? 'bg-purple-50 text-[#4b1c89]'
+                      : 'bg-white text-[#171425]'
+                      }`}
+                  >
+                    {season.label}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
       <section className="px-5 py-6">
         <div className="mb-5">
           <div className="flex items-center gap-2 text-[#4b1c89] font-black text-sm mb-1">
@@ -4077,32 +4420,205 @@ function MyPageView({ records, setView, profile }) {
 }
 
 const stadiumMapPoints = [
-
-  { name: 'エディオンピースウイング広島', short: 'Eピース', area: '広島', x: 37, y: 67 },
-  { name: 'JFE晴れの国スタジアム', short: '岡山', area: '岡山', x: 42, y: 65 },
-  { name: 'YANMAR HANASAKA STADIUM', short: '大阪', area: '大阪', x: 48, y: 63 },
-  { name: 'パナソニック スタジアム 吹田', short: '吹田', area: '大阪', x: 49, y: 61 },
-  { name: 'サンガスタジアム by KYOCERA', short: '京都', area: '京都', x: 51, y: 59 },
-  { name: 'ノエビアスタジアム神戸', short: '神戸', area: '兵庫', x: 46, y: 64 },
-  { name: 'ベスト電器スタジアム', short: '福岡', area: '福岡', x: 19, y: 63 },
-  { name: 'PEACE STADIUM Connected by SoftBank', short: '長崎', area: '長崎', x: 15, y: 72 },
-  { name: '豊田スタジアム', short: '豊田', area: '愛知', x: 58, y: 55 },
-  { name: 'IAIスタジアム日本平', short: '清水', area: '静岡', x: 66, y: 51 },
-  { name: '味の素スタジアム', short: '味スタ', area: '東京', x: 76, y: 42 },
-  { name: '国立競技場', short: '国立', area: '東京', x: 77, y: 41 },
-  { name: '町田GIONスタジアム', short: '町田', area: '東京', x: 74, y: 44 },
-  { name: 'Uvanceとどろきスタジアム by Fujitsu', short: '等々力', area: '神奈川', x: 76, y: 45 },
-  { name: '日産スタジアム', short: '日産', area: '神奈川', x: 75, y: 47 },
-  { name: '埼玉スタジアム2002', short: '埼スタ', area: '埼玉', x: 78, y: 38 },
-  { name: 'フクダ電子アリーナ', short: 'フクアリ', area: '千葉', x: 81, y: 45 },
-  { name: '三協フロンテア柏スタジアム', short: '柏', area: '千葉', x: 81, y: 40 },
-  { name: 'メルカリスタジアム', short: 'カシマ', area: '茨城', x: 85, y: 36 },
-  { name: 'ケーズデンキスタジアム水戸', short: '水戸', area: '茨城', x: 83, y: 33 },
+  {
+    name: 'エディオンピースウイング広島',
+    short: 'Eピース',
+    area: '広島',
+    x: 30,
+    y: 57,
+    lx: 25,
+    ly: 53,
+  },
+  {
+    name: 'JFE晴れの国スタジアム',
+    short: '岡山',
+    area: '岡山',
+    x: 36,
+    y: 57,
+    lx: 36,
+    ly: 52,
+  },
+  {
+    name: 'ノエビアスタジアム神戸',
+    short: 'ノエスタ',
+    area: '兵庫',
+    x: 42,
+    y: 58,
+    lx: 39,
+    ly: 63,
+  },
+  {
+    name: 'パナソニック スタジアム 吹田',
+    short: 'パナスタ',
+    area: '大阪',
+    x: 45,
+    y: 56,
+    lx: 49,
+    ly: 52,
+  },
+  {
+    name: 'ヨドコウ桜スタジアム',
+    short: 'ヨドコウ',
+    area: '大阪',
+    x: 45,
+    y: 59,
+    lx: 51,
+    ly: 60,
+  },
+  {
+    name: 'YANMAR HANASAKA STADIUM',
+    short: 'ヤンマー',
+    area: '大阪',
+    x: 44,
+    y: 61,
+    lx: 51,
+    ly: 65,
+  },
+  {
+    name: 'サンガスタジアム by KYOCERA',
+    short: 'サンガS',
+    area: '京都',
+    x: 46,
+    y: 54,
+    lx: 51,
+    ly: 50,
+  },
+  {
+    name: '豊田スタジアム',
+    short: '豊田',
+    area: '愛知',
+    x: 56,
+    y: 53,
+    lx: 61,
+    ly: 49,
+  },
+  {
+    name: 'IAIスタジアム日本平',
+    short: 'アイスタ',
+    area: '静岡',
+    x: 64,
+    y: 54,
+    lx: 69,
+    ly: 57,
+  },
+  {
+    name: '味の素スタジアム',
+    short: '味スタ',
+    area: '東京',
+    x: 70,
+    y: 49,
+    lx: 65,
+    ly: 45,
+  },
+  {
+    name: '国立競技場',
+    short: '国立',
+    area: '東京',
+    x: 72,
+    y: 48,
+    lx: 77,
+    ly: 44,
+  },
+  {
+    name: '町田GIONスタジアム',
+    short: '町田',
+    area: '東京',
+    x: 70,
+    y: 52,
+    lx: 64,
+    ly: 55,
+  },
+  {
+    name: 'Uvanceとどろきスタジアム by Fujitsu',
+    short: '等々力',
+    area: '神奈川',
+    x: 72,
+    y: 51,
+    lx: 78,
+    ly: 51,
+  },
+  {
+    name: '日産スタジアム',
+    short: '日産',
+    area: '神奈川',
+    x: 72,
+    y: 54,
+    lx: 78,
+    ly: 57,
+  },
+  {
+    name: '埼玉スタジアム2002',
+    short: '埼スタ',
+    area: '埼玉',
+    x: 71,
+    y: 44,
+    lx: 77,
+    ly: 41,
+  },
+  {
+    name: 'フクダ電子アリーナ',
+    short: 'フクアリ',
+    area: '千葉',
+    x: 76,
+    y: 52,
+    lx: 82,
+    ly: 55,
+  },
+  {
+    name: '三協フロンテア柏スタジアム',
+    short: '柏',
+    area: '千葉',
+    x: 75,
+    y: 48,
+    lx: 81,
+    ly: 48,
+  },
+  {
+    name: 'メルカリスタジアム',
+    short: 'カシマ',
+    area: '茨城',
+    x: 78,
+    y: 45,
+    lx: 84,
+    ly: 44,
+  },
+  {
+    name: 'ケーズデンキスタジアム水戸',
+    short: '水戸',
+    area: '茨城',
+    x: 76,
+    y: 42,
+    lx: 82,
+    ly: 39,
+  },
+  {
+    name: 'ベスト電器スタジアム',
+    short: 'ベススタ',
+    area: '福岡',
+    x: 19,
+    y: 63,
+    lx: 24,
+    ly: 60,
+  },
+  {
+    name: 'PEACE STADIUM Connected by SoftBank',
+    short: 'ピースタ',
+    area: '長崎',
+    x: 14,
+    y: 67,
+    lx: 19,
+    ly: 72,
+  },
 ];
 
 
 function StadiumMapSection({ records }) {
   const [selectedStadiumName, setSelectedStadiumName] = useState(null);
+  const mapPinOffset = {
+    x: -4,
+    y: 0,
+  };
+  const [showUnvisitedPins, setShowUnvisitedPins] = useState(false);
 
   const visitedStadiums = records.reduce((acc, record) => {
     const point = stadiumMapPoints.find((stadium) => stadium.name === record.stadium);
@@ -4146,21 +4662,44 @@ function StadiumMapSection({ records }) {
 
       <p className="text-xs text-gray-500 font-bold mb-4">
         観戦したスタジアムが紫で表示されます。ピンを押すと記録を確認できます。
+
+        <div className="flex justify-end mb-3">
+          <button
+            type="button"
+            onClick={() => setShowUnvisitedPins(!showUnvisitedPins)}
+            className={`text-[10px] font-black rounded-full px-3 py-1.5 border active:scale-95 ${showUnvisitedPins
+              ? 'bg-[#4b1c89] text-white border-[#4b1c89]'
+              : 'bg-white text-gray-500 border-gray-200'
+              }`}
+          >
+            {showUnvisitedPins ? '未訪問も表示中' : '未訪問も表示'}
+          </button>
+        </div>
       </p>
 
-      <div className="relative h-[340px] rounded-[1.8rem] overflow-hidden bg-gradient-to-br from-[#faf7ff] via-white to-[#fffaf0] border border-purple-100">
+      <div className="relative w-full aspect-square rounded-[1.8rem] overflow-hidden bg-white border border-purple-100 shadow-inner">
+        {/* リアル日本地図 */}
+        <img
+          src="/japan-map(1).png"
+          alt="日本地図"
+          className="absolute inset-0 w-full h-full object-contain select-none pointer-events-none"
+        />
+
+        {/* 少し白をかぶせて、ピンを見やすくする */}
+        <div className="absolute inset-0 bg-white/20 pointer-events-none"></div>
+
         {/* タイトル */}
-        <div className="absolute left-4 top-4 z-20">
-          <div className="text-[10px] font-black text-[#4b1c89] tracking-[0.28em]">
+        <div className="absolute left-4 top-4 z-30">
+          <div className="text-[10px] font-black text-[#4b1c89] tracking-[0.28em] bg-white/90 rounded-full px-2 py-1 shadow-sm">
             SANFRE AWAY MAP
           </div>
-          <div className="text-sm font-black text-[#171425] mt-1">
+          <div className="text-xs font-black text-[#171425] mt-1 bg-white/90 rounded-full px-2 py-1 shadow-sm inline-block">
             スタジアム遠征記録
           </div>
         </div>
 
         {/* 凡例 */}
-        <div className="absolute right-4 top-4 z-20 bg-white/85 backdrop-blur-sm rounded-2xl px-3 py-2 border border-gray-100 shadow-sm">
+        <div className="absolute right-3 top-3 z-30 bg-white/90 backdrop-blur-sm rounded-2xl px-3 py-2 border border-gray-100 shadow-sm">
           <div className="flex items-center gap-2 text-[10px] font-black text-gray-500">
             <span className="w-3 h-3 rounded-full bg-[#4b1c89] inline-block border border-yellow-300"></span>
             訪問済み
@@ -4171,239 +4710,49 @@ function StadiumMapSection({ records }) {
           </div>
         </div>
 
-        {/* 地図 */}
-        {/* 地図 */}
-        <svg
-          viewBox="0 0 100 100"
-          className="absolute inset-0 w-full h-full"
-          preserveAspectRatio="xMidYMid meet"
-        >
-          <defs>
-            <filter id="mapShadow" x="-20%" y="-20%" width="140%" height="140%">
-              <feDropShadow
-                dx="0"
-                dy="1.5"
-                stdDeviation="1.4"
-                floodColor="#cdbcf0"
-                floodOpacity="0.35"
-              />
-            </filter>
-          </defs>
-
-          {/* 北海道 */}
-          <path
-            d="
-      M76 19
-      L78 15
-      L82 13
-      L86 12
-      L91 14
-      L94 17
-      L95 21
-      L92 24
-      L87 26
-      L82 25
-      L78 23
-      L75 21
-      Z
-    "
-            fill="#efe8fb"
-            stroke="#d7c8f3"
-            strokeWidth="0.85"
-            strokeLinejoin="round"
-            filter="url(#mapShadow)"
-          />
-
-          {/* 本州 */}
-          <path
-            d="
-      M22 68
-      L24 65
-      L23 63
-      L26 61
-      L29 62
-      L32 59
-      L36 58
-      L38 56
-      L43 56
-      L47 54
-      L50 53
-      L53 50
-      L57 49
-      L60 46
-      L63 45
-      L66 42
-      L70 41
-      L72 38
-      L75 37
-      L77 34
-      L80 32
-      L82 28
-      L85 25
-      L88 24
-      L90 26
-      L90 30
-      L88 33
-      L86 34
-      L84 38
-      L81 39
-      L79 43
-      L76 45
-      L74 49
-      L70 50
-      L67 54
-      L64 55
-      L61 59
-      L57 60
-      L54 63
-      L50 64
-      L46 67
-      L41 67
-      L37 69
-      L32 69
-      L29 71
-      L25 70
-      Z
-    "
-            fill="#efe8fb"
-            stroke="#d7c8f3"
-            strokeWidth="0.85"
-            strokeLinejoin="round"
-            filter="url(#mapShadow)"
-          />
-
-          {/* 四国 */}
-          <path
-            d="
-      M38 74
-      L41 72
-      L45 71
-      L49 72
-      L52 74
-      L50 76
-      L45 76
-      L42 75
-      Z
-    "
-            fill="#efe8fb"
-            stroke="#d7c8f3"
-            strokeWidth="0.75"
-            strokeLinejoin="round"
-            filter="url(#mapShadow)"
-          />
-
-          {/* 九州 */}
-          <path
-            d="
-      M12 72
-      L13 68
-      L15 65
-      L14 62
-      L17 60
-      L21 61
-      L24 60
-      L27 63
-      L29 66
-      L28 70
-      L26 73
-      L27 76
-      L23 78
-      L21 82
-      L17 82
-      L14 79
-      L12 75
-      Z
-    "
-            fill="#efe8fb"
-            stroke="#d7c8f3"
-            strokeWidth="0.85"
-            strokeLinejoin="round"
-            filter="url(#mapShadow)"
-          />
-
-          {/* 佐渡島っぽい島 */}
-          <path
-            d="
-      M67 36
-      L69 34
-      L72 35
-      L71 38
-      L68 39
-      Z
-    "
-            fill="#efe8fb"
-            stroke="#d7c8f3"
-            strokeWidth="0.55"
-            strokeLinejoin="round"
-          />
-
-          {/* 淡路島っぽい島 */}
-          <path
-            d="
-      M47 68
-      L49 68.5
-      L48 70.5
-      L46.5 70
-      Z
-    "
-            fill="#efe8fb"
-            stroke="#d7c8f3"
-            strokeWidth="0.45"
-            strokeLinejoin="round"
-          />
-
-          {/* 沖縄 */}
-          <circle cx="8" cy="88" r="0.8" fill="#efe8fb" stroke="#d7c8f3" strokeWidth="0.4" />
-          <circle cx="10.5" cy="90.5" r="0.6" fill="#efe8fb" stroke="#d7c8f3" strokeWidth="0.4" />
-          <circle cx="13" cy="92" r="0.45" fill="#efe8fb" stroke="#d7c8f3" strokeWidth="0.35" />
-
-          {/* 薄い内側ライン：地図っぽさ追加 */}
-          <path
-            d="M30 63 L36 61 L43 59 L50 56 L57 52 L64 48 L71 43 L78 36"
-            fill="none"
-            stroke="#ded2f5"
-            strokeWidth="0.45"
-            strokeDasharray="2 2"
-            opacity="0.8"
-          />
-
-          <path
-            d="M30 68 L36 67 L42 66 L49 64 L55 61"
-            fill="none"
-            stroke="#ded2f5"
-            strokeWidth="0.4"
-            strokeDasharray="2 2"
-            opacity="0.7"
-          />
-        </svg>
-
-        {/* マーカー */}
+        {/* スタジアムピン */}
         {stadiumMapPoints.map((point) => {
           const visited = visitedStadiums[point.name];
           const isSelected = selectedStadiumName === point.name;
+
+          // 未訪問を表示OFFのときは出さない
+          if (!visited && !showUnvisitedPins && !isSelected) {
+            return null;
+          }
 
           return (
             <React.Fragment key={point.name}>
               <button
                 type="button"
                 onClick={() => setSelectedStadiumName(point.name)}
-                className="absolute -translate-x-1/2 -translate-y-1/2 z-30"
-                style={{ left: `${point.x}%`, top: `${point.y}%` }}
+                className="absolute -translate-x-1/2 -translate-y-1/2 z-20 active:scale-95"
+                style={{
+                  left: `${point.x + mapPinOffset.x}%`,
+                  top: `${point.y + mapPinOffset.y}%`,
+                }}
               >
                 <div
-                  className={`rounded-full border-2 shadow-md flex items-center justify-center font-black transition-all ${visited
-                    ? 'w-8 h-8 bg-[#4b1c89] text-white border-yellow-300'
-                    : 'w-5 h-5 bg-white text-gray-300 border-gray-300'
-                    } ${isSelected ? 'scale-110 ring-4 ring-purple-200' : ''}`}
+                  className={`relative rounded-full flex items-center justify-center font-black border ${visited
+                    ? 'w-7 h-7 text-[10px] bg-[#4b1c89] text-white border-yellow-300 shadow-lg'
+                    : 'w-3 h-3 text-[0px] bg-white/80 border-gray-300 shadow-sm opacity-80'
+                    } ${isSelected ? 'ring-4 ring-purple-200 scale-125' : ''
+                    }`}
                 >
                   {visited ? visited.count : ''}
+
+                  {visited && (
+                    <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-2 h-2 rotate-45 bg-[#4b1c89] border-r border-b border-yellow-300"></span>
+                  )}
                 </div>
               </button>
 
-              {(visited || isSelected) && (
+              {isSelected && (
                 <div
-                  className="absolute -translate-x-1/2 -translate-y-1/2 z-20"
-                  style={{ left: `${point.lx}%`, top: `${point.ly}%` }}
+                  className="absolute -translate-x-1/2 -translate-y-1/2 z-30 pointer-events-none"
+                  style={{
+                    left: `${point.lx + mapPinOffset.x}%`,
+                    top: `${point.ly + mapPinOffset.y}%`,
+                  }}
                 >
                   <div className="bg-white/95 border border-purple-100 rounded-full px-2.5 py-1 shadow-sm text-[9px] font-black text-[#4b1c89] whitespace-nowrap">
                     {point.short}
@@ -6178,26 +6527,61 @@ function StepIndicator({ step }) {
 function CreateStep1({ setView, draft, updateDraft, onSaveDraft }) {
   const [teamOpen, setTeamOpen] = useState(false);
   const dateInputRef = useRef(null);
+
   const selectedTeam =
     opponentTeams.find((team) => team.name === draft.opponent) || null;
+
   const seatGroups = getSeatGroups(draft.stadium, draft.venueType);
+
+  const selectedSeason = draft.season || '2026-27';
+  const selectedSeasonInfo = getSeasonInfo(selectedSeason);
+  const currentSeasonSchedule = getSeasonSchedule(selectedSeason);
+
+  const handleSeasonChange = (seasonKey) => {
+    const seasonInfo = getSeasonInfo(seasonKey);
+
+    updateDraft({
+      season: seasonKey,
+      tournament: seasonInfo.tournament,
+      matchSection: '',
+      date: '',
+      opponent: '',
+      stadium: '',
+      venueType: 'HOME',
+      seat: '',
+      seatBlock: '',
+      seatRow: '',
+      seatNumber: '',
+    });
+
+    setTeamOpen(false);
+  };
+
   const handleSelectMatch = (sectionValue) => {
     if (!sectionValue) {
       updateDraft({
         matchSection: '',
+        date: '',
+        opponent: '',
+        stadium: '',
+        seat: '',
+        seatBlock: '',
+        seatRow: '',
+        seatNumber: '',
       });
       return;
     }
 
-    const match = matchSchedule.find(
+    const match = currentSeasonSchedule.find(
       (item) => String(item.section) === String(sectionValue)
     );
 
     if (!match) return;
 
     updateDraft({
+      season: selectedSeason,
       matchSection: sectionValue,
-      tournament: '明治安田J1リーグ',
+      tournament: selectedSeasonInfo.tournament,
       date: match.date,
       opponent: match.opponent,
       stadium: match.stadium,
@@ -6210,8 +6594,6 @@ function CreateStep1({ setView, draft, updateDraft, onSaveDraft }) {
 
     setTeamOpen(false);
   };
-
-  const homeStadium = 'エディオンピースウイング広島';
 
   const changeVenueType = (type) => {
     const currentTeam =
@@ -6234,6 +6616,20 @@ function CreateStep1({ setView, draft, updateDraft, onSaveDraft }) {
   return (
     <CreateShell setView={setView} backTo="home" step={1} onSaveDraft={onSaveDraft}>
       <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-4 space-y-5">
+
+        <InputBlock icon={<Calendar size={18} />} label="シーズン">
+          <select
+            value={draft.season || '2026-27'}
+            onChange={(e) => handleSeasonChange(e.target.value)}
+            className="field"
+          >
+            {seasonOptions.map((season) => (
+              <option key={season.key} value={season.key}>
+                {season.label}
+              </option>
+            ))}
+          </select>
+        </InputBlock>
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
 
           {/* 節を選択のブロックのすぐ下、試合日のすぐ上 */}
@@ -6262,7 +6658,11 @@ function CreateStep1({ setView, draft, updateDraft, onSaveDraft }) {
           </InputBlock>
 
           <InputBlock icon={<Trophy size={18} />} label="大会">
-            <select className="field">
+            <select
+              value={draft.tournament || selectedSeasonInfo.tournament}
+              onChange={(e) => updateDraft({ tournament: e.target.value })}
+              className="field"
+            >
               <option>明治安田J1リーグ</option>
               <option>ルヴァンカップ</option>
               <option>天皇杯</option>
@@ -6277,7 +6677,7 @@ function CreateStep1({ setView, draft, updateDraft, onSaveDraft }) {
             className="field"
           >
             <option value="">選択してください</option>
-            {matchSchedule.map((match) => (
+            {currentSeasonSchedule.map((match) => (
               <option key={match.section} value={match.section}>
                 第{match.section}節 {match.displayDate} vs {match.opponent}
               </option>
@@ -6550,8 +6950,12 @@ function CreateStep1({ setView, draft, updateDraft, onSaveDraft }) {
 function CreateStep2({ setView, draft, updateDraft, records = [], onSaveDraft }) {
   const [tagInput, setTagInput] = useState('');
 
+  const seasonPlayerOptions = getSeasonPlayerOptions(draft.season || '2026-27');
+
   const selectedMvp =
-    playerOptions.find((player) => player.name === draft.mvp) || null;
+    seasonPlayerOptions.find((player) => player.name === draft.mvp) ||
+    playerOptions.find((player) => player.name === draft.mvp) ||
+    null;
 
   const opponentTeam =
     opponentTeams.find((team) => team.name === draft.opponent) ||
@@ -6709,7 +7113,7 @@ function CreateStep2({ setView, draft, updateDraft, records = [], onSaveDraft })
                 className="w-full border border-gray-200 rounded-xl p-3 font-black text-[#171425] outline-none focus:border-[#4b1c89] focus:ring-4 focus:ring-purple-100 bg-white"
               >
                 <option value="">選択してください</option>
-                {playerOptions.map((player) => (
+                {seasonPlayerOptions.map((player) => (
                   <option key={player.name} value={player.name}>
                     #{player.number} {player.name} / {player.position}
                   </option>
@@ -6872,6 +7276,7 @@ function CreateStep2({ setView, draft, updateDraft, records = [], onSaveDraft })
 
 function ScorersCard({ draft, updateDraft }) {
   const scorers = draft.scorers || [];
+  const seasonPlayerOptions = getSeasonPlayerOptions(draft.season || '2026-27');
 
   const addScorer = () => {
     updateDraft({
@@ -6955,11 +7360,11 @@ function ScorersCard({ draft, updateDraft }) {
                   className="field text-sm"
                 >
                   <option value="">選手を選択</option>
-                  {playerOptions
+                  {seasonPlayerOptions
                     .filter((player) => player.position !== 'GK')
                     .map((player) => (
                       <option key={player.name} value={player.name}>
-                        #{player.number} {player.name}
+                        {player.position} / #{player.number} {player.name}
                       </option>
                     ))}
                 </select>
@@ -6991,6 +7396,7 @@ function SimplePositionBoard({ draft, updateDraft, records = [] }) {
   const formation = draft.formation || '3-4-2-1';
   const slots = formationLayouts[formation] || formationLayouts['3-4-2-1'];
   const lineup = draft.lineup || {};
+  const seasonPlayerOptions = getSeasonPlayerOptions(draft.season || '2026-27');
   const isAwayUniform =
     draft.venueType === 'AWAY' || draft.venueType === 'アウェイ';
 
@@ -7007,7 +7413,13 @@ function SimplePositionBoard({ draft, updateDraft, records = [] }) {
     : 'bg-[#4b1c89] text-white';
   const previousPositionRecord = records.find((record) => {
     const data = record.draftData || {};
-    return data.formation && data.lineup && Object.keys(data.lineup).length > 0;
+
+    return (
+      getRecordSeason(record) === (draft.season || '2026-27') &&
+      data.formation &&
+      data.lineup &&
+      Object.keys(data.lineup).length > 0
+    );
   });
 
   const previousFormation = previousPositionRecord?.draftData?.formation;
@@ -7079,15 +7491,30 @@ function SimplePositionBoard({ draft, updateDraft, records = [] }) {
 
     const allowedPositions = allowedPositionsBySlot[slotKey] || ['GK', 'DF', 'MF', 'FW'];
 
-    return playerOptions.filter((player) => {
-      const isAllowedPosition = allowedPositions.includes(player.position);
+    const positionPriorityBySlot = {
+      SHADOW1: ['FW', 'MF'],
+      SHADOW2: ['FW', 'MF'],
+    };
 
-      const isSpecialDmfPlayer =
-        (slotKey === 'DMF1' || slotKey === 'DMF2') &&
-        player.name === '新井 直人';
+    const positionPriority =
+      positionPriorityBySlot[slotKey] || allowedPositions;
 
-      return isAllowedPosition || isSpecialDmfPlayer;
-    });
+    return seasonPlayerOptions
+      .filter((player) => {
+        const isAllowedPosition = allowedPositions.includes(player.position);
+
+        const isSpecialDmfPlayer =
+          (slotKey === 'DMF1' || slotKey === 'DMF2') &&
+          player.name === '新井 直人';
+
+        return isAllowedPosition || isSpecialDmfPlayer;
+      })
+      .sort((a, b) => {
+        const aPriority = positionPriority.indexOf(a.position);
+        const bPriority = positionPriority.indexOf(b.position);
+
+        return aPriority - bPriority;
+      });
   };
 
   const activeSlot = slots.find((slot) => slot.key === activeSlotKey);
@@ -7189,7 +7616,9 @@ function SimplePositionBoard({ draft, updateDraft, records = [] }) {
 
         {slots.map((slot) => {
           const playerName = lineup[slot.key];
-          const player = playerOptions.find((p) => p.name === playerName);
+          const player =
+            seasonPlayerOptions.find((p) => p.name === playerName) ||
+            playerOptions.find((p) => p.name === playerName);
           const isActive = activeSlotKey === slot.key;
 
           return (
