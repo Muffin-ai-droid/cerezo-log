@@ -1,0 +1,15 @@
+{
+    "name": "SANFRE LOG",
+    "short_name": "SANFRE LOG",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#f8f7fb",
+    "theme_color": "#3b1378",
+    "icons": [
+        {
+            "src": "/app-icon.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        }
+    ]
+}
