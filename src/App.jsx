@@ -3725,6 +3725,7 @@ const getProfileShieldBadge = (count) => {
   return null;
 };
 function MyPageView({ records, setView, profile }) {
+  const [profilePhotoOpen, setProfilePhotoOpen] = useState(false);
   const supporterTitle = getSupporterTitle(records.length);
   const nextTitleCount = (Math.floor(records.length / 10) + 1) * 10;
   const remainingMatches = nextTitleCount - records.length;
@@ -3827,20 +3828,36 @@ function MyPageView({ records, setView, profile }) {
 
 
           <div className="relative z-10 flex items-center gap-4">
-            <div className="w-20 h-20 rounded-3xl bg-white text-[#4b1c89] flex items-center justify-center shadow-xl border-2 border-yellow-300/70 overflow-hidden">
+            <button
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation();
+
+                if (displayPhoto) {
+                  setProfilePhotoOpen(true);
+                }
+              }}
+              className="relative w-20 h-20 rounded-3xl bg-white text-[#4b1c89] flex items-center justify-center shadow-xl border-2 border-yellow-300/70 overflow-hidden shrink-0 active:scale-95"
+            >
               {displayPhoto ? (
-                <img
-                  src={displayPhoto}
-                  alt="profile"
-                  className="w-full h-full object-cover"
-                  style={{
-                    objectPosition: `${displayPhotoX}% ${displayPhotoY}%`,
-                  }}
-                />
+                <>
+                  <img
+                    src={displayPhoto}
+                    alt="profile"
+                    className="w-full h-full object-cover"
+                    style={{
+                      objectPosition: `${displayPhotoX}% ${displayPhotoY}%`,
+                    }}
+                  />
+
+                  <div className="absolute right-1 bottom-1 bg-black/45 text-white text-[9px] font-black rounded-full px-1.5 py-0.5">
+                    拡大
+                  </div>
+                </>
               ) : (
                 <User size={38} strokeWidth={2.5} />
               )}
-            </div>
+            </button>
 
             <div className="flex-1 min-w-0">
               <div className="text-xs font-black text-yellow-300 tracking-[0.2em]">
@@ -3876,6 +3893,34 @@ function MyPageView({ records, setView, profile }) {
             <MyPageStat label="総費用" value={`¥${totalExpense.toLocaleString()}`} unit="" />
           </div>
         </div>
+
+        {profilePhotoOpen && displayPhoto && (
+          <div
+            onClick={() => setProfilePhotoOpen(false)}
+            className="fixed inset-0 z-[999] bg-black/75 backdrop-blur-sm flex items-center justify-center px-5"
+          >
+            <div
+              onClick={(e) => e.stopPropagation()}
+              className="relative w-full max-w-sm"
+            >
+              <button
+                type="button"
+                onClick={() => setProfilePhotoOpen(false)}
+                className="absolute -top-12 right-0 text-white text-sm font-black bg-white/15 border border-white/20 rounded-full px-4 py-2 active:scale-95"
+              >
+                閉じる
+              </button>
+
+              <div className="bg-white rounded-[2rem] p-3 shadow-2xl">
+                <img
+                  src={displayPhoto}
+                  alt="profile large"
+                  className="w-full max-h-[70vh] object-contain rounded-[1.5rem]"
+                />
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* 推し・よく行く場所 */}
         <Card>
