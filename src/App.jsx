@@ -1845,7 +1845,7 @@ function HomeView({
         {/* メインビジュアル */}
         <div className="relative h-[250px] overflow-hidden">
           <img
-            src="https://www.jleague.jp/img/news/2025/11/32339.jpg?_=1760690164"
+            src="https://maido-storage.oss-cn-hongkong.aliyuncs.com/maido/uploads/2024/04/cerezo-osaka-game-repot-ogp.jpg"
             className="absolute inset-0 w-full h-full object-cover opacity-60 scale-105"
             alt="stadium"
           />
