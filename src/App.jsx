@@ -1326,13 +1326,13 @@ function BrandHeader({ back, setView = () => { }, records = [] }) {
               </span>
             </div>
 
-            <div className="mt-2 flex items-center gap-2">
+            <div className="mt-1 flex items-center gap-2">
               <div className="h-px w-16 bg-[#d6b36a]/70"></div>
               <div className="text-[#d6b36a] text-[10px] leading-none">✦</div>
               <div className="h-px w-16 bg-[#d6b36a]/70"></div>
             </div>
 
-            <div className="mt-2 text-[8px] font-bold tracking-[0.24em] text-white/80 whitespace-nowrap">
+            <div className="mt-1 text-[7px] font-bold tracking-[0.24em] text-white/80 whitespace-nowrap">
               CAPTURE EVERY MATCH MEMORY
             </div>
           </div>
