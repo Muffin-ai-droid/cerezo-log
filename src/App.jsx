@@ -2017,7 +2017,7 @@ function HomeView({
           className="interactive-card w-full bg-gradient-to-r from-[#e4007f] to-[#ff5fa2] text-white py-4 rounded-full font-black shadow-xl shadow-pink-900/25 flex items-center justify-center gap-2 active:scale-95 transition"
         >
           <Plus size={18} strokeWidth={3} />
-          新たに紫を彩る
+          新たに桜を彩る
         </button>
       </div>
 
