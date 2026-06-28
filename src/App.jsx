@@ -5798,7 +5798,7 @@ function CreateStep2({ setView, draft, updateDraft, onSaveDraft }) {
 
   const ratingMessages = {
     1: '悔しすぎる',
-    2: 'あと少し',
+    2: '次に期待！',
     3: '楽しめた',
     4: 'かなり満足！',
     5: '最高すぎた！',
