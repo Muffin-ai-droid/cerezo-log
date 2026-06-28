@@ -4696,7 +4696,7 @@ function ProfileSettingsView({ profile, setView, onSaveProfile }) {
                   </div>
 
                   <p className="text-[11px] text-gray-500 font-bold mt-1 leading-5">
-                    写真を指でドラッグして、顔が中央に来るように調整できます。
+                    写真を指でドラッグして、中央に来るように調整できます。
                   </p>
 
                   <button
@@ -4704,7 +4704,7 @@ function ProfileSettingsView({ profile, setView, onSaveProfile }) {
                     onClick={resetPhotoPosition}
                     className="mt-3 bg-white text-[#4b1c89] border border-purple-100 rounded-xl px-3 py-2 text-xs font-black active:scale-[0.98]"
                   >
-                    中央に戻す
+                    リセット
                   </button>
                 </div>
               )}
