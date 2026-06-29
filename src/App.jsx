@@ -4431,8 +4431,8 @@ const stadiumMapPoints = [
     name: 'エディオンピースウイング広島',
     short: 'Eピース',
     area: '広島',
-    x: 25,
-    y: 57,
+    x: 27,
+    y: 63,
     lx: 22,
     ly: 58,
   },
@@ -4469,9 +4469,9 @@ const stadiumMapPoints = [
     short: 'ヤンマー',
     area: '大阪',
     x: 37,
-    y: 67,
+    y: 64,
     lx: 50,
-    ly: 71,
+    ly: 68,
   },
   {
     name: 'サンガスタジアム by KYOCERA',
@@ -4620,11 +4620,16 @@ function StadiumMapSection({ records }) {
   const [showUnvisitedPins, setShowUnvisitedPins] = useState(false);
 
   const visitedStadiums = records.reduce((acc, record) => {
-    const point = stadiumMapPoints.find((stadium) => stadium.name === record.stadium);
+    const stadiumName = record.draftData?.stadium || record.stadium;
+
+    const point = stadiumMapPoints.find((stadium) => {
+      return stadium.name === stadiumName;
+    });
+
     if (!point) return acc;
 
-    if (!acc[record.stadium]) {
-      acc[record.stadium] = {
+    if (!acc[point.name]) {
+      acc[point.name] = {
         ...point,
         count: 0,
         latestDate: record.date,
@@ -4632,8 +4637,9 @@ function StadiumMapSection({ records }) {
       };
     }
 
-    acc[record.stadium].count += 1;
-    acc[record.stadium].records.push(record);
+    acc[point.name].count += 1;
+    acc[point.name].records.push(record);
+
     return acc;
   }, {});
 
@@ -4732,16 +4738,11 @@ function StadiumMapSection({ records }) {
               >
                 <div
                   className={`relative rounded-full flex items-center justify-center font-black border ${visited
-                    ? 'w-7 h-7 text-[10px] bg-[#e4007f] text-white border-yellow-300 shadow-lg'
+                    ? 'w-7 h-7 text-[10px] bg-[#e4007f] text-white border-yellow-300 shadow-lg shadow-pink-900/20'
                     : 'w-3 h-3 text-[0px] bg-white/80 border-gray-300 shadow-sm opacity-80'
-                    } ${isSelected ? 'ring-4 ring-pink-200 scale-125' : ''
-                    }`}
+                    } ${isSelected ? 'ring-4 ring-pink-200 scale-125' : ''}`}
                 >
                   {visited ? visited.count : ''}
-
-                  {visited && (
-                    <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-2 h-2 rotate-45 bg-[#e4007f] border-r border-b border-yellow-300"></span>
-                  )}
                 </div>
               </button>
 
