@@ -759,7 +759,7 @@ const opponentTeams = [
   { name: '名古屋グランパス', short: '名古屋', main: '#dc2626', sub: '#f97316', stadium: '豊田スタジアム' },
   { name: '京都サンガF.C.', short: '京都', main: '#6d28d9', sub: '#dc2626', stadium: 'サンガスタジアム by KYOCERA' },
   { name: 'ガンバ大阪', short: 'G大阪', main: '#1d4ed8', sub: '#111827', stadium: 'パナソニック スタジアム 吹田' },
-  { name: 'サンフレッチェ広島', short: '広島', main: '#4b1c89', sub: '#f1c40f', stadium: 'エディオンピースウイング広島' },
+  { name: 'サンフレッチェ広島', short: '広島', main: '#4b1c89', sub: '#ffffff', stadium: 'エディオンピースウイング広島' },
   { name: 'ヴィッセル神戸', short: '神戸', main: '#7f1d1d', sub: '#111827', stadium: 'ノエビアスタジアム神戸' },
   { name: 'ファジアーノ岡山', short: '岡山', main: '#7f1d1d', sub: '#2563eb', stadium: 'JFE晴れの国スタジアム' },
   { name: 'アビスパ福岡', short: '福岡', main: '#1e3a8a', sub: '#9ca3af', stadium: 'ベスト電器スタジアム' },
@@ -6697,7 +6697,7 @@ function CreateStep1({ setView, draft, updateDraft, onSaveDraft }) {
                   {/* ↓ strokeWidth={0} と className を右側に合わせる */}
                   <Shield size={30} fill="currentColor" strokeWidth={0} className="text-white" />
                 </div>
-                <div className="text-xs font-black mt-2 leading-snug">
+                <div className="h-10 text-xs font-black mt-2 leading-tight flex items-center justify-center text-center">
                   セレッソ大阪
                 </div>
               </div>
@@ -6722,9 +6722,15 @@ function CreateStep1({ setView, draft, updateDraft, onSaveDraft }) {
                   </div>
                 )}
 
-                <div className="text-xs font-black mt-2 leading-snug flex items-center justify-center gap-1">
-                  {selectedTeam ? selectedTeam.name : '対戦相手を選択'}
-                  <ChevronRight size={14} className="rotate-90 text-[#e4007f]" />
+                <div className="h-10 text-xs font-black mt-2 leading-tight flex items-center justify-center gap-1 text-center">
+                  <span className="max-w-[92px] whitespace-normal break-keep">
+                    {selectedTeam ? selectedTeam.name : '対戦相手を選択'}
+                  </span>
+
+                  <ChevronRight
+                    size={14}
+                    className="rotate-90 text-[#e4007f] shrink-0"
+                  />
                 </div>
               </button>
             </div>
