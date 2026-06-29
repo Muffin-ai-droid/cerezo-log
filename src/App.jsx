@@ -4945,8 +4945,7 @@ function ProfileSettingsView({ profile, setView, onSaveProfile }) {
     ...new Set(opponentTeams.map((team) => team.stadium)),
     '国立競技場',
     'YANMAR HANASAKA STADIUM',
-    'ヤマハスタジアム',
-    'デンカビッグスワンスタジアム',
+
   ];
 
   const updateForm = (updates) => {
@@ -6844,8 +6843,7 @@ function CreateStep1({ setView, draft, updateDraft, onSaveDraft }) {
               <option>PEACE STADIUM Connected by SoftBank</option>
 
               {/* 予備・よく使う会場 */}
-              <option>ヤマハスタジアム</option>
-              <option>デンカビッグスワンスタジアム</option>
+
             </select>
           </div>
         </InputBlock>
