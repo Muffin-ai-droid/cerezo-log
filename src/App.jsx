@@ -4428,7 +4428,7 @@ function MyPageView({ records, setView, profile }) {
 
 const stadiumMapPoints = [
   {
-    name: 'YANMAR HANASAKA STADIUM',
+    name: 'エディオンピースウイング広島',
     short: 'Eピース',
     area: '広島',
     x: 25,
