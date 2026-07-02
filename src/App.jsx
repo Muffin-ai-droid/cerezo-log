@@ -1952,7 +1952,7 @@ const stadiumExploreData = [
   },
   {
     name: 'YANMAR HANASAKA STADIUM',
-    short: 'ハナスタ',
+    short: 'ヤンスタ',
     prefecture: '大阪府大阪市',
     x: 38,
     y: 68,
@@ -4225,7 +4225,7 @@ function HomeView({
             <button
               type="button"
               onClick={() => setScheduleOpen(true)}
-              className="flex items-center gap-1 text-[#3b1378] text-xs font-black mb-2 active:scale-95"
+              className="flex items-center gap-1 text-[#831843] text-xs font-black mb-2 active:scale-95"
             >
               <Calendar size={14} className="shrink-0" />
               次の試合
@@ -4409,7 +4409,7 @@ function HomeView({
                 <div className="flex-1 min-w-0">
                   {/* ★修正：日付の横に結果バッジとお気に入りボタンを回り込ませる構造に変更 */}
                   <div className="flex justify-between items-start gap-2">
-                    <div className="text-[11px] text-[#3b1378] font-black">
+                    <div className="text-[11px] text-[#831843] font-black">
                       {record.date}
                     </div>
 
@@ -5791,7 +5791,7 @@ function FavoriteRecordsView({ setView, records, onEdit, onToggleFavorite, onOpe
 
                 <div className="flex-1 min-w-0">
                   <div className="flex justify-between items-start gap-2">
-                    <div className="text-[11px] text-[#3b1378] font-black">
+                    <div className="text-[11px] text-[#831843] font-black">
                       {record.date}
                     </div>
 
@@ -6090,7 +6090,7 @@ function RecordsView({
               type="button"
               onClick={() => setFavoriteOnly(!favoriteOnly)}
               className={`flex-1 py-3 rounded-2xl text-xs font-black border flex items-center justify-center gap-2 ${favoriteOnly
-                ? 'bg-yellow-300 text-[#3b1378] border-yellow-300'
+                ? 'bg-yellow-300 text-[#831843] border-yellow-300'
                 : 'bg-white text-gray-500 border-gray-200'
                 }`}
             >
@@ -6203,7 +6203,7 @@ function RecordsView({
 
                   <div className="flex-1 min-w-0">
                     <div className="flex justify-between items-start gap-2">
-                      <div className="text-[11px] text-[#3b1378] font-black">
+                      <div className="text-[11px] text-[#831843] font-black">
                         {record.date}
                       </div>
 
@@ -7358,7 +7358,7 @@ function MyPageView({ records, setView, profile }) {
                 )}
               </div>
 
-              <div className="inline-flex items-center gap-1 bg-yellow-300 text-[#3b1378] text-xs font-black px-3 py-1 rounded-full mt-2 shadow">
+              <div className="inline-flex items-center gap-1 bg-[#d6b36a] text-[#831843] text-xs font-black px-3 py-1 rounded-full mt-2 shadow border border-yellow-100/70">
                 <Trophy size={13} fill="currentColor" />
                 {supporterTitle}
               </div>
