@@ -5,10 +5,10 @@ import {
   Image as ImageIcon,
   Wallet, Ticket, ShoppingBag, Utensils, Train, MoreHorizontal,
   Clock, Trash2, CheckCircle2, Bookmark, PenSquare, Shirt,
-  Sun, Tv, Shield, Menu, Medal, CirclePlus, Pencil, Building2
+  Sun, Tv, Shield, Menu, Medal, CirclePlus, Pencil, Building2, Share2, Download
 } from 'lucide-react';
 
-const purple = '#e4007f';
+const pink = '#ec4899';
 
 const initialRecords = [];
 
@@ -35,6 +35,8 @@ const defaultDraft = {
   lineup: {},
   scorers: [],
   memo: '',
+  isQuick: false,
+  quickMemo: '',
   tags: [],
   photos: [],
   expenses: { ticket: '', goods: '', food: '', transport: '', other: '' },
@@ -53,11 +55,11 @@ const defaultProfile = {
   favoriteStadium: '',
 };
 
-const sanfrecceTeam = {
+const cerezoTeam = {
   name: 'セレッソ大阪',
   short: 'C大阪',
-  main: '#e4007f',
-  sub: '#102c57',
+  main: '#ec4899',
+  sub: '#1d4ed8',
   stadium: 'YANMAR HANASAKA STADIUM',
 };
 
@@ -65,41 +67,41 @@ const matchSchedule = [
   {
     section: 1,
     date: '2026-08-08',
-    displayDate: '8.8 / 8.9',
-    day: '土日',
-    time: '未定',
-    opponent: 'ファジアーノ岡山',
+    displayDate: '8.8',
+    day: '土',
+    time: '19:15',
+    opponent: 'ジェフユナイテッド千葉',
     stadium: 'YANMAR HANASAKA STADIUM',
     venueType: 'HOME',
   },
   {
     section: 2,
     date: '2026-08-15',
-    displayDate: '8.15 / 8.16',
-    day: '土日',
-    time: '未定',
-    opponent: 'アビスパ福岡',
-    stadium: 'ベスト電器スタジアム',
+    displayDate: '8.15',
+    day: '土',
+    time: '19:00',
+    opponent: '浦和レッズ',
+    stadium: '埼玉スタジアム2002',
     venueType: 'AWAY',
   },
   {
     section: 3,
     date: '2026-08-22',
-    displayDate: '8.22 / 8.23',
-    day: '土日',
-    time: '未定',
-    opponent: '清水エスパルス',
+    displayDate: '8.22',
+    day: '土',
+    time: '19:15',
+    opponent: '川崎フロンターレ',
     stadium: 'YANMAR HANASAKA STADIUM',
     venueType: 'HOME',
   },
   {
     section: 4,
     date: '2026-08-29',
-    displayDate: '8.29 / 8.30',
-    day: '土日',
-    time: '未定',
-    opponent: 'ヴィッセル神戸',
-    stadium: 'ノエビアスタジアム神戸',
+    displayDate: '8.29',
+    day: '土',
+    time: '18:00',
+    opponent: 'ガンバ大阪',
+    stadium: 'パナソニック スタジアム 吹田',
     venueType: 'AWAY',
   },
   {
@@ -107,58 +109,58 @@ const matchSchedule = [
     date: '2026-09-02',
     displayDate: '9.2',
     day: '水',
-    time: '未定',
-    opponent: '柏レイソル',
+    time: '19:00',
+    opponent: '名古屋グランパス',
     stadium: 'YANMAR HANASAKA STADIUM',
     venueType: 'HOME',
   },
   {
     section: 6,
-    date: '2026-09-05',
-    displayDate: '9.5 / 9.6',
-    day: '土日',
-    time: '未定',
-    opponent: '東京ヴェルディ',
-    stadium: 'YANMAR HANASAKA STADIUM',
-    venueType: 'HOME',
+    date: '2026-09-06',
+    displayDate: '9.6',
+    day: '日',
+    time: '18:00',
+    opponent: 'ファジアーノ岡山',
+    stadium: 'JFE晴れの国スタジアム',
+    venueType: 'AWAY',
   },
   {
     section: 7,
     date: '2026-09-12',
-    displayDate: '9.12 / 9.13',
-    day: '土日',
-    time: '未定',
+    displayDate: '9.12',
+    day: '土',
+    time: '19:00',
     opponent: 'サンフレッチェ広島',
-    stadium: 'エディオンピースウイング広島',
-    venueType: 'AWAY',
-  },
-  {
-    section: 8,
-    date: '2026-09-19',
-    displayDate: '9.19 / 9.20',
-    day: '土日',
-    time: '未定',
-    opponent: 'V・ファーレン長崎',
-    stadium: 'PEACE STADIUM Connected by SoftBank',
-    venueType: 'AWAY',
-  },
-  {
-    section: 9,
-    date: '2026-10-10',
-    displayDate: '10.10 / 10.11',
-    day: '土日',
-    time: '未定',
-    opponent: '横浜F・マリノス',
     stadium: 'YANMAR HANASAKA STADIUM',
     venueType: 'HOME',
   },
   {
+    section: 8,
+    date: '2026-09-19',
+    displayDate: '9.19',
+    day: '土',
+    time: '18:00',
+    opponent: 'アビスパ福岡',
+    stadium: 'ベスト電器スタジアム',
+    venueType: 'AWAY',
+  },
+  {
+    section: 9,
+    date: '2026-10-11',
+    displayDate: '10.11',
+    day: '日',
+    time: '15:00',
+    opponent: '東京ヴェルディ',
+    stadium: '味の素スタジアム',
+    venueType: 'AWAY',
+  },
+  {
     section: 10,
     date: '2026-10-17',
-    displayDate: '10.17 / 10.18',
-    day: '土日',
-    time: '未定',
-    opponent: '川崎フロンターレ',
+    displayDate: '10.17',
+    day: '土',
+    time: '14:00',
+    opponent: '京都サンガF.C.',
     stadium: 'YANMAR HANASAKA STADIUM',
     venueType: 'HOME',
   },
@@ -167,48 +169,48 @@ const matchSchedule = [
     date: '2026-10-21',
     displayDate: '10.21',
     day: '水',
-    time: '未定',
-    opponent: '名古屋グランパス',
-    stadium: '豊田スタジアム',
+    time: '19:00',
+    opponent: 'V・ファーレン長崎',
+    stadium: 'PEACE STADIUM Connected by SoftBank',
     venueType: 'AWAY',
   },
   {
     section: 12,
     date: '2026-10-24',
-    displayDate: '10.24 / 10.25',
-    day: '土日',
-    time: '未定',
-    opponent: 'ジェフユナイテッド千葉',
+    displayDate: '10.24',
+    day: '土',
+    time: '14:00',
+    opponent: '清水エスパルス',
     stadium: 'YANMAR HANASAKA STADIUM',
     venueType: 'HOME',
   },
   {
     section: 13,
     date: '2026-10-31',
-    displayDate: '10.31 / 11.1',
-    day: '土日',
-    time: '未定',
-    opponent: '鹿島アントラーズ',
-    stadium: 'メルカリスタジアム',
+    displayDate: '10.31',
+    day: '土',
+    time: '14:00',
+    opponent: '水戸ホーリーホック',
+    stadium: '水戸信用金庫スタジアム',
     venueType: 'AWAY',
   },
   {
     section: 14,
-    date: '2026-11-07',
-    displayDate: '11.7 / 11.8',
-    day: '土日',
-    time: '未定',
-    opponent: 'ガンバ大阪',
-    stadium: 'パナソニック スタジアム 吹田',
+    date: '2026-11-08',
+    displayDate: '11.8',
+    day: '日',
+    time: '14:00',
+    opponent: 'FC町田ゼルビア',
+    stadium: '町田GIONスタジアム',
     venueType: 'AWAY',
   },
   {
     section: 15,
     date: '2026-11-21',
-    displayDate: '11.21 / 11.22',
-    day: '土日',
-    time: '未定',
-    opponent: 'FC東京',
+    displayDate: '11.21',
+    day: '土',
+    time: '14:00',
+    opponent: '横浜F・マリノス',
     stadium: 'YANMAR HANASAKA STADIUM',
     venueType: 'HOME',
   },
@@ -217,9 +219,9 @@ const matchSchedule = [
     date: '2026-11-25',
     displayDate: '11.25',
     day: '水',
-    time: '未定',
-    opponent: '浦和レッズ',
-    stadium: '埼玉スタジアム2002',
+    time: '19:00',
+    opponent: 'FC東京',
+    stadium: '味の素スタジアム',
     venueType: 'AWAY',
   },
   {
@@ -228,27 +230,27 @@ const matchSchedule = [
     displayDate: '11.28 / 11.29',
     day: '土日',
     time: '未定',
-    opponent: '京都サンガF.C.',
-    stadium: 'サンガスタジアム by KYOCERA',
+    opponent: '柏レイソル',
+    stadium: '三協フロンテア柏スタジアム',
     venueType: 'AWAY',
   },
   {
     section: 18,
-    date: '2026-12-05',
-    displayDate: '12.5 / 12.6',
-    day: '土日',
-    time: '未定',
-    opponent: '水戸ホーリーホック',
+    date: '2026-12-06',
+    displayDate: '12.6',
+    day: '日',
+    time: '14:00',
+    opponent: 'ヴィッセル神戸',
     stadium: 'YANMAR HANASAKA STADIUM',
     venueType: 'HOME',
   },
   {
     section: 19,
-    date: '2026-12-12',
-    displayDate: '12.12 / 12.13',
-    day: '土日',
-    time: '未定',
-    opponent: 'FC町田ゼルビア',
+    date: '2026-12-13',
+    displayDate: '12.13',
+    day: '日',
+    time: '14:00',
+    opponent: '鹿島アントラーズ',
     stadium: 'YANMAR HANASAKA STADIUM',
     venueType: 'HOME',
   },
@@ -257,189 +259,9 @@ const matchSchedule = [
     date: '2026-12-19',
     displayDate: '12.19',
     day: '土',
-    time: '未定',
-    opponent: 'ジェフユナイテッド千葉',
-    stadium: 'フクダ電子アリーナ',
-    venueType: 'AWAY',
-  },
-  {
-    section: 21,
-    date: '2027-02-13',
-    displayDate: '2027.2.13 / 2.14',
-    day: '土日',
-    time: '未定',
-    opponent: 'ガンバ大阪',
-    stadium: 'YANMAR HANASAKA STADIUM',
-    venueType: 'HOME',
-  },
-  {
-    section: 22,
-    date: '2027-02-20',
-    displayDate: '2027.2.20 / 2.21',
-    day: '土日',
-    time: '未定',
-    opponent: 'ヴィッセル神戸',
-    stadium: 'YANMAR HANASAKA STADIUM',
-    venueType: 'HOME',
-  },
-  {
-    section: 23,
-    date: '2027-02-27',
-    displayDate: '2027.2.27 / 2.28',
-    day: '土日',
-    time: '未定',
-    opponent: '横浜F・マリノス',
-    stadium: '日産スタジアム',
-    venueType: 'AWAY',
-  },
-  {
-    section: 24,
-    date: '2027-03-06',
-    displayDate: '2027.3.6 / 3.7',
-    day: '土日',
-    time: '未定',
-    opponent: 'サンフレッチェ広島',
-    stadium: 'YANMAR HANASAKA STADIUM',
-    venueType: 'HOME',
-  },
-  {
-    section: 25,
-    date: '2027-03-10',
-    displayDate: '2027.3.10',
-    day: '水',
-    time: '未定',
-    opponent: '水戸ホーリーホック',
-    stadium: 'ケーズデンキスタジアム水戸',
-    venueType: 'AWAY',
-  },
-  {
-    section: 26,
-    date: '2027-03-13',
-    displayDate: '2027.3.13 / 3.14',
-    day: '土日',
-    time: '未定',
-    opponent: 'FC東京',
-    stadium: '味の素スタジアム',
-    venueType: 'AWAY',
-  },
-  {
-    section: 27,
-    date: '2027-03-20',
-    displayDate: '2027.3.20 / 3.21',
-    day: '土日',
-    time: '未定',
-    opponent: '京都サンガF.C.',
-    stadium: 'YANMAR HANASAKA STADIUM',
-    venueType: 'HOME',
-  },
-  {
-    section: 28,
-    date: '2027-04-03',
-    displayDate: '2027.4.3 / 4.4',
-    day: '土日',
-    time: '未定',
-    opponent: '柏レイソル',
-    stadium: '三協フロンテア柏スタジアム',
-    venueType: 'AWAY',
-  },
-  {
-    section: 29,
-    date: '2027-04-09',
-    displayDate: '2027.4.9',
-    day: '金',
-    time: '未定',
-    opponent: 'アビスパ福岡',
-    stadium: 'YANMAR HANASAKA STADIUM',
-    venueType: 'HOME',
-  },
-  {
-    section: 30,
-    date: '2027-04-17',
-    displayDate: '2027.4.17 / 4.18',
-    day: '土日',
-    time: '未定',
-    opponent: '鹿島アントラーズ',
-    stadium: 'YANMAR HANASAKA STADIUM',
-    venueType: 'HOME',
-  },
-  {
-    section: 31,
-    date: '2027-04-24',
-    displayDate: '2027.4.24 / 4.25',
-    day: '土日',
-    time: '未定',
-    opponent: 'ファジアーノ岡山',
-    stadium: 'JFE晴れの国スタジアム',
-    venueType: 'AWAY',
-  },
-  {
-    section: 32,
-    date: '2027-04-29',
-    displayDate: '2027.4.29',
-    day: '木祝',
-    time: '未定',
-    opponent: 'V・ファーレン長崎',
-    stadium: 'YANMAR HANASAKA STADIUM',
-    venueType: 'HOME',
-  },
-  {
-    section: 33,
-    date: '2027-05-03',
-    displayDate: '2027.5.3 / 5.4',
-    day: '月火祝',
-    time: '未定',
-    opponent: '東京ヴェルディ',
-    stadium: '味の素スタジアム',
-    venueType: 'AWAY',
-  },
-  {
-    section: 34,
-    date: '2027-05-09',
-    displayDate: '2027.5.9',
-    day: '日',
-    time: '未定',
+    time: '14:00',
     opponent: '名古屋グランパス',
-    stadium: 'YANMAR HANASAKA STADIUM',
-    venueType: 'HOME',
-  },
-  {
-    section: 35,
-    date: '2027-05-15',
-    displayDate: '2027.5.15 / 5.16',
-    day: '土日',
-    time: '未定',
-    opponent: '清水エスパルス',
-    stadium: 'IAIスタジアム日本平',
-    venueType: 'AWAY',
-  },
-  {
-    section: 36,
-    date: '2027-05-22',
-    displayDate: '2027.5.22 / 5.23',
-    day: '土日',
-    time: '未定',
-    opponent: '川崎フロンターレ',
-    stadium: 'Uvanceとどろきスタジアム by Fujitsu',
-    venueType: 'AWAY',
-  },
-  {
-    section: 37,
-    date: '2027-05-29',
-    displayDate: '2027.5.29 / 5.30',
-    day: '土日',
-    time: '未定',
-    opponent: '浦和レッズ',
-    stadium: 'YANMAR HANASAKA STADIUM',
-    venueType: 'HOME',
-  },
-  {
-    section: 38,
-    date: '2027-06-06',
-    displayDate: '2027.6.6',
-    day: '日',
-    time: '未定',
-    opponent: 'FC町田ゼルビア',
-    stadium: '町田GIONスタジアム',
+    stadium: 'パロマ瑞穂スタジアム',
     venueType: 'AWAY',
   },
 ];
@@ -447,23 +269,23 @@ const matchSchedule = [
 const hundredYearSchedule = [
   {
     section: 1,
-    date: '2026-02-07',
-    displayDate: '2.7',
-    day: '土',
-    time: '16:00',
-    opponent: 'ガンバ大阪',
-    stadium: 'YANMAR HANASAKA STADIUM',
-    venueType: 'HOME',
+    date: '2026-02-06',
+    displayDate: '2.6',
+    day: '金',
+    time: '19:00',
+    opponent: 'V・ファーレン長崎',
+    stadium: 'PEACE STADIUM Connected by SoftBank',
+    venueType: 'AWAY',
   },
   {
     section: 2,
-    date: '2026-02-15',
-    displayDate: '2.15',
-    day: '日',
-    time: '15:00',
-    opponent: 'アビスパ福岡',
-    stadium: 'ベスト電器スタジアム',
-    venueType: 'AWAY',
+    date: '2026-02-14',
+    displayDate: '2.14',
+    day: '土',
+    time: '14:00',
+    opponent: 'ファジアーノ岡山',
+    stadium: 'YANMAR HANASAKA STADIUM',
+    venueType: 'HOME',
   },
   {
     section: 3,
@@ -473,85 +295,85 @@ const hundredYearSchedule = [
     time: '15:00',
     opponent: 'サンフレッチェ広島',
     stadium: 'YANMAR HANASAKA STADIUM',
-    venueType: 'HOME',
-  },
-  {
-    section: 4,
-    date: '2026-02-28',
-    displayDate: '2.28',
-    day: '土',
-    time: '17:00',
-    opponent: 'V・ファーレン長崎',
-    stadium: 'PEACE STADIUM Connected by SoftBank',
     venueType: 'AWAY',
   },
   {
-    section: 5,
-    date: '2026-03-07',
-    displayDate: '3.7',
-    day: '土',
-    time: '15:00',
-    opponent: '清水エスパルス',
+    section: 4,
+    date: '2026-02-27',
+    displayDate: '2.27',
+    day: '金',
+    time: '19:00',
+    opponent: '京都サンガF.C.',
     stadium: 'YANMAR HANASAKA STADIUM',
     venueType: 'HOME',
+  },
+  {
+    section: 5,
+    date: '2026-03-27',
+    displayDate: '3.27',
+    day: '金',
+    time: '19:00',
+    opponent: 'ヴィッセル神戸',
+    stadium: 'ノエビアスタジアム神戸',
+    venueType: 'AWAY',
   },
   {
     section: 6,
     date: '2026-03-14',
     displayDate: '3.14',
     day: '土',
-    time: '14:00',
-    opponent: '京都サンガF.C.',
-    stadium: 'サンガスタジアム by KYOCERA',
-    venueType: 'AWAY',
+    time: '15:00',
+    opponent: 'ガンバ大阪',
+    stadium: 'YANMAR HANASAKA STADIUM',
+    venueType: 'HOME',
   },
   {
     section: 7,
     date: '2026-03-18',
     displayDate: '3.18',
     day: '水',
-    time: '18:30',
-    opponent: 'ファジアーノ岡山',
-    stadium: 'YANMAR HANASAKA STADIUM',
-    venueType: 'HOME',
+    time: '19:00',
+    opponent: '名古屋グランパス',
+    stadium: 'パロマ瑞穂スタジアム',
+    venueType: 'AWAY',
   },
   {
     section: 8,
     date: '2026-03-22',
     displayDate: '3.22',
     day: '日',
-    time: '15:00',
-    opponent: 'ヴィッセル神戸',
-    stadium: 'YANMAR HANASAKA STADIUM',
-    venueType: 'HOME',
+    time: '13:00',
+    opponent: '清水エスパルス',
+    stadium: 'IAIスタジアム日本平',
+    venueType: 'AWAY',
   },
   {
     section: 9,
-    date: '2026-04-04',
-    displayDate: '4.4',
-    day: '土',
-    time: '15:00',
-    opponent: '名古屋グランパス',
-    stadium: '豊田スタジアム',
-    venueType: 'AWAY',
+    date: '2026-04-05',
+    displayDate: '4.5',
+    day: '日',
+    time: '14:00',
+    opponent: 'アビスパ福岡',
+    stadium: 'YANMAR HANASAKA STADIUM',
+    venueType: 'HOME',
   },
   {
     section: 10,
     date: '2026-04-11',
     displayDate: '4.11',
     day: '土',
-    time: '16:00',
-    opponent: 'ガンバ大阪',
-    stadium: 'パナソニック スタジアム 吹田',
-    venueType: 'AWAY',
+    time: '14:00',
+    opponent: '清水エスパルス',
+    stadium: 'YANMAR HANASAKA STADIUM',
+    venueType: 'HOME',
   },
   {
     section: 11,
     date: '2026-04-18',
     displayDate: '4.18',
     day: '土',
-    time: '16:00',
-    opponent: '京都サンガF.C.',
+    time: '14:00',
+    opponent: 'V・ファーレン長崎',
     stadium: 'YANMAR HANASAKA STADIUM',
     venueType: 'HOME',
   },
@@ -562,8 +384,8 @@ const hundredYearSchedule = [
     day: '土',
     time: '16:00',
     opponent: 'サンフレッチェ広島',
-    stadium: 'エディオンピースウイング広島',
-    venueType: 'AWAY',
+    stadium: 'YANMAR HANASAKA STADIUM',
+    venueType: 'HOME',
   },
   {
     section: 13,
@@ -571,39 +393,39 @@ const hundredYearSchedule = [
     displayDate: '4.29',
     day: '水祝',
     time: '14:00',
-    opponent: 'ヴィッセル神戸',
-    stadium: 'ノエビアスタジアム神戸',
+    opponent: 'アビスパ福岡',
+    stadium: 'ベスト電器スタジアム',
     venueType: 'AWAY',
   },
   {
     section: 14,
-    date: '2026-05-03',
-    displayDate: '5.3',
-    day: '日',
-    time: '15:00',
-    opponent: 'アビスパ福岡',
-    stadium: 'YANMAR HANASAKA STADIUM',
-    venueType: 'HOME',
+    date: '2026-05-02',
+    displayDate: '5.2',
+    day: '土',
+    time: '12:55',
+    opponent: 'ファジアーノ岡山',
+    stadium: 'JFE晴れの国スタジアム',
+    venueType: 'AWAY',
   },
   {
     section: 15,
     date: '2026-05-06',
     displayDate: '5.6',
     day: '水休',
-    time: '13:00',
-    opponent: '清水エスパルス',
-    stadium: 'IAIスタジアム日本平',
-    venueType: 'AWAY',
+    time: '15:00',
+    opponent: 'ヴィッセル神戸',
+    stadium: 'YANMAR HANASAKA STADIUM',
+    venueType: 'HOME',
   },
   {
     section: 16,
-    date: '2026-05-09',
-    displayDate: '5.9',
-    day: '土',
-    time: '16:00',
-    opponent: 'V・ファーレン長崎',
-    stadium: 'YANMAR HANASAKA STADIUM',
-    venueType: 'HOME',
+    date: '2026-05-10',
+    displayDate: '5.10',
+    day: '日',
+    time: '15:00',
+    opponent: 'ガンバ大阪',
+    stadium: 'パナソニック スタジアム 吹田',
+    venueType: 'AWAY',
   },
   {
     section: 17,
@@ -611,39 +433,19 @@ const hundredYearSchedule = [
     displayDate: '5.17',
     day: '日',
     time: '15:00',
-    opponent: '名古屋グランパス',
-    stadium: 'YANMAR HANASAKA STADIUM',
-    venueType: 'HOME',
+    opponent: '京都サンガF.C.',
+    stadium: 'サンガスタジアム by KYOCERA',
+    venueType: 'AWAY',
   },
   {
     section: 18,
-    date: '2026-05-24',
-    displayDate: '5.24',
-    day: '日',
-    time: '12:55',
-    opponent: 'ファジアーノ岡山',
-    stadium: 'JFE晴れの国スタジアム',
-    venueType: 'AWAY',
-  },
-  {
-    section: 19,
-    date: '2026-05-30',
-    displayDate: '5.30',
-    day: '土',
-    time: '15:00',
-    opponent: 'FC東京',
-    stadium: 'YANMAR HANASAKA STADIUM',
-    venueType: 'HOME',
-  },
-  {
-    section: 20,
-    date: '2026-06-06',
-    displayDate: '6.6',
+    date: '2026-05-23',
+    displayDate: '5.23',
     day: '土',
     time: '14:00',
-    opponent: 'FC東京',
-    stadium: '国立競技場',
-    venueType: 'AWAY',
+    opponent: '名古屋グランパス',
+    stadium: 'YANMAR HANASAKA STADIUM',
+    venueType: 'HOME',
   },
 ];
 
@@ -746,7 +548,7 @@ const getNextMatch = (records = []) => {
 };
 const opponentTeams = [
   { name: '鹿島アントラーズ', short: '鹿島', main: '#b91c1c', sub: '#0f172a', stadium: 'メルカリスタジアム' },
-  { name: '水戸ホーリーホック', short: '水戸', main: '#2563eb', sub: '#facc15', stadium: 'ケーズデンキスタジアム水戸' },
+  { name: '水戸ホーリーホック', short: '水戸', main: '#2563eb', sub: '#facc15', stadium: '水戸信用金庫スタジアム' },
   { name: '浦和レッズ', short: '浦和', main: '#dc2626', sub: '#111827', stadium: '埼玉スタジアム2002' },
   { name: 'ジェフユナイテッド千葉', short: '千葉', main: '#facc15', sub: '#16a34a', stadium: 'フクダ電子アリーナ' },
   { name: '柏レイソル', short: '柏', main: '#facc15', sub: '#111827', stadium: '三協フロンテア柏スタジアム' },
@@ -756,26 +558,23 @@ const opponentTeams = [
   { name: '川崎フロンターレ', short: '川崎F', main: '#38bdf8', sub: '#111827', stadium: 'Uvanceとどろきスタジアム by Fujitsu' },
   { name: '横浜F・マリノス', short: '横浜FM', main: '#1d4ed8', sub: '#dc2626', stadium: '日産スタジアム' },
   { name: '清水エスパルス', short: '清水', main: '#f97316', sub: '#2563eb', stadium: 'IAIスタジアム日本平' },
-  { name: '名古屋グランパス', short: '名古屋', main: '#dc2626', sub: '#f97316', stadium: '豊田スタジアム' },
+  { name: '名古屋グランパス', short: '名古屋', main: '#dc2626', sub: '#f97316', stadium: 'パロマ瑞穂スタジアム' },
   { name: '京都サンガF.C.', short: '京都', main: '#6d28d9', sub: '#dc2626', stadium: 'サンガスタジアム by KYOCERA' },
   { name: 'ガンバ大阪', short: 'G大阪', main: '#1d4ed8', sub: '#111827', stadium: 'パナソニック スタジアム 吹田' },
-  { name: 'サンフレッチェ広島', short: '広島', main: '#4b1c89', sub: '#ffffff', stadium: 'エディオンピースウイング広島' },
-  { name: 'ヴィッセル神戸', short: '神戸', main: '#8b1414', sub: '#111827', stadium: 'ノエビアスタジアム神戸' },
-  { name: 'ファジアーノ岡山', short: '岡山', main: '#97273a', sub: '#2563eb', stadium: 'JFE晴れの国スタジアム' },
+  { name: 'サンフレッチェ広島', short: '広島', main: '#4b1c89', sub: '#f1f1f1', stadium: 'エディオンピースウイング広島' },
+  { name: 'ヴィッセル神戸', short: '神戸', main: '#8f2424', sub: '#111827', stadium: 'ノエビアスタジアム神戸' },
+  { name: 'ファジアーノ岡山', short: '岡山', main: '#9e223d', sub: '#2563eb', stadium: 'JFE晴れの国スタジアム' },
   { name: 'アビスパ福岡', short: '福岡', main: '#1e3a8a', sub: '#9ca3af', stadium: 'ベスト電器スタジアム' },
   { name: 'V・ファーレン長崎', short: '長崎', main: '#2563eb', sub: '#f97316', stadium: 'PEACE STADIUM Connected by SoftBank' },
 ];
 const stadiumImages = {
-  'ヨドコウ桜スタジアム':
-    'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e8/NagaiBallField220226.jpg/1280px-NagaiBallField220226.jpg',
-
   'エディオンピースウイング広島':
     'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f1/%E3%82%A8%E3%83%87%E3%82%A3%E3%82%AA%E3%83%B3%E3%83%94%E3%83%BC%E3%82%B9%E3%82%A6%E3%82%A4%E3%83%B3%E3%82%B0%E5%BA%83%E5%B3%B6.jpg/1920px-%E3%82%A8%E3%83%87%E3%82%A3%E3%82%AA%E3%83%B3%E3%83%94%E3%83%BC%E3%82%B9%E3%82%A6%E3%82%A4%E3%83%B3%E3%82%B0%E5%BA%83%E5%B3%B6.jpg',
 
   'メルカリスタジアム':
     'https://upload.wikimedia.org/wikipedia/commons/thumb/f/ff/Kashima_Stadium_1.JPG/1920px-Kashima_Stadium_1.JPG',
 
-  'ケーズデンキスタジアム水戸':
+  '水戸信用金庫スタジアム':
     'https://upload.wikimedia.org/wikipedia/commons/thumb/0/01/Ksdenkistadium10050501.jpg/1280px-Ksdenkistadium10050501.jpg',
 
   '埼玉スタジアム2002':
@@ -805,8 +604,8 @@ const stadiumImages = {
   'IAIスタジアム日本平':
     'https://upload.wikimedia.org/wikipedia/commons/thumb/6/66/Nihondaira_stadium20090412a.jpg/1280px-Nihondaira_stadium20090412a.jpg',
 
-  '豊田スタジアム':
-    'https://upload.wikimedia.org/wikipedia/commons/thumb/4/42/Nagoya_Grampus_game_in_Toyota_Stadium_100814.JPG/1280px-Nagoya_Grampus_game_in_Toyota_Stadium_100814.JPG',
+  'パロマ瑞穂スタジアム':
+    'https://corp.mizuno.com/sites/corp/files/2026-04/cc_newsrelease_260414_img02.jpg',
 
   'サンガスタジアム by KYOCERA':
     'https://upload.wikimedia.org/wikipedia/commons/thumb/a/ad/Sanga_stadium_by_kyocera05.jpg/1920px-Sanga_stadium_by_kyocera05.jpg',
@@ -834,33 +633,51 @@ const stadiumImages = {
 };
 
 
-const sanfrecceHomeSeatGroups = [
+const cerezoHomeSeatGroups = [
   {
-    label: 'メイン・バック指定席',
+    label: 'カテゴリー席',
     seats: [
-      'メインSS指定席',
-      'メインS指定席',
-      'メインA指定席',
-      'バックホーム指定席',
-      'バックA指定席',
-      'ミックス指定席',
+      'カテゴリー1',
+      'カテゴリー2',
+      'カテゴリー3',
+      'カテゴリー4',
+      'カテゴリー5',
+      'カテゴリー6',
     ],
   },
   {
-    label: 'サポーター席',
+    label: 'ゴール裏・応援席',
     seats: [
-      'ホームサポーターシート',
-      'バックホーム南',
-      'バックホーム北',
-      'ビジターサポーター席',
+      'セレッソサポーターシート',
+      'ホームゴール裏',
+      'ビジターシート',
+    ],
+  },
+  {
+    label: 'スタンド席',
+    seats: [
+      'メインスタンド',
+      'バックスタンド',
+      'ノースサイドシート',
+      'サウスサイドシート',
+    ],
+  },
+  {
+    label: 'バラエティ席',
+    seats: [
+      'カウンターシート',
+      'テーブルシート',
+      'テラスシート',
+      'ボックスシート',
+      'ペアシート',
+      'ファミリーシート',
     ],
   },
   {
     label: '特別席・その他',
     seats: [
-      'SAKURA SEAT',
-      'プレミアムシート',
-      'ラウンジシート',
+      'プレミアム席',
+      'ラウンジ席',
       '車いす席',
       'その他',
     ],
@@ -916,8 +733,8 @@ const defaultSeatGroups = [
 ];
 
 const getSeatGroups = (stadium, venueType) => {
-  if (stadium === 'ヨドコウ桜スタジアム' || stadium === 'YANMAR HANASAKA STADIUM') {
-    return sanfrecceHomeSeatGroups;
+  if (stadium === 'YANMAR HANASAKA STADIUM') {
+    return cerezoHomeSeatGroups;
   }
 
   if (venueType === 'AWAY') {
@@ -1084,45 +901,45 @@ const formationLayouts = {
 };
 const playerOptions = [
   // GK
-  { name: '中村 航輔', number: '23', position: 'GK' },
-  { name: 'イシボウ 拳', number: '46', position: 'GK' },
-  { name: '阿部 航斗', number: '未定', position: 'GK' },
-  { name: '上林 豪', number: '未定', position: 'GK' },
+  { name: '大迫 敬介', number: '1', position: 'GK' },
+  { name: '田中 雄大', number: '21', position: 'GK' },
+  { name: '小川 煌', number: '43', position: 'GK' },
+  { name: '大内 一生', number: '99', position: 'GK' },
+  { name: 'ヒル 袈依廉', number: '38', position: 'GK', seasons: ['100year'] },
 
   // DF
-  { name: '中村 拓海', number: '2', position: 'DF' },
-  { name: '田中 隼人', number: '3', position: 'DF' },
-  { name: '井上 黎生人', number: '4', position: 'DF' },
-  { name: '登里 享平', number: '6', position: 'DF' },
-  { name: '奥田 勇斗', number: '16', position: 'DF' },
-  { name: 'ディオン クールズ', number: '27', position: 'DF' },
-  { name: 'エゼモクェ チメヅェ海', number: '43', position: 'DF' },
-  { name: '畠中 槙之輔', number: '44', position: 'DF' },
-  { name: '大畑 歩夢', number: '66', position: 'DF' },
-  { name: '鷹啄 トラビス', number: '97', position: 'DF' },
+  { name: '山崎 大地', number: '3', position: 'DF' },
+  { name: '荒木 隼人', number: '4', position: 'DF' },
+  { name: '新井 直人', number: '5', position: 'DF' },
+  { name: '中野 就斗', number: '15', position: 'DF' },
+  { name: '志知 孝明', number: '16', position: 'DF' },
+  { name: '佐々木 翔', number: '19', position: 'DF' },
+  { name: '塩谷 司', number: '33', position: 'DF' },
+  { name: 'キム ジュソン', number: '37', position: 'DF' },
 
   // MF
-  { name: '喜田 陽', number: '5', position: 'MF' },
-  { name: '上門 知樹', number: '7', position: 'MF' },
-  { name: '香川 真司', number: '8', position: 'MF' },
-  { name: '田中 駿汰', number: '10', position: 'MF' },
-  { name: '横山 夢樹', number: '14', position: 'MF' },
-  { name: '阪田 澪哉', number: '17', position: 'MF' },
-  { name: '石渡 ネルソン', number: '18', position: 'MF' },
-  { name: '本間 至恩', number: '19', position: 'MF' },
-  { name: '久保 瑛史', number: '26', position: 'MF' },
-  { name: '大迫 塁', number: '34', position: 'MF' },
-  { name: '吉野 恭平', number: '35', position: 'MF' },
-  { name: '岡澤 昂星', number: '未定', position: 'MF' },
-  { name: '塩尻 哲平', number: '42', position: 'MF' },
-  { name: '柴山 昌也', number: '48', position: 'MF' },
-  { name: 'ルーカス フェルナンデス', number: '77', position: 'MF' },
+  { name: '川辺 駿', number: '6', position: 'MF' },
+  { name: '東 俊希', number: '7', position: 'MF' },
+  { name: '松本 泰志', number: '14', position: 'MF' },
+  { name: '菅 大輝', number: '18', position: 'MF' },
+  { name: '茶島 雄介', number: '25', position: 'MF', seasons: ['100year'] },
+  { name: 'トルガイ アルスラン', number: '30', position: 'MF', seasons: ['100year'] },
+  { name: '越道 草太', number: '32', position: 'MF' },
+  { name: '中島 洋太朗', number: '35', position: 'MF' },
+  { name: '小原 基樹', number: '40', position: 'MF', seasons: ['100year'] },
+  { name: '小林 志紋', number: '45', position: 'MF' },
+  { name: '野口 蓮斗', number: '46', position: 'MF', seasons: ['2026-27'] },
 
   // FW
-  { name: '櫻川 ソロモン', number: '9', position: 'FW' },
-  { name: 'チアゴ アンドラーデ', number: '11', position: 'FW' },
-  { name: '金本 毅騎', number: '39', position: 'FW' },
-  { name: '永添 功樹', number: '45', position: 'FW' },
+  { name: 'ジャーメイン 良', number: '9', position: 'FW', seasons: ['100year'] },
+  { name: '鈴木 章斗', number: '10', position: 'FW' },
+  { name: '加藤 陸次樹', number: '11', position: 'FW' },
+  { name: '木下 康介', number: '17', position: 'FW', seasons: ['100year'] },
+  { name: '鮎川 峻', number: '23', position: 'FW' },
+  { name: '浅野 拓磨', number: '29', position: 'FW', seasons: ['2026-27'] },
+  { name: '中村 草太', number: '39', position: 'FW' },
+  { name: '前田 直輝', number: '41', position: 'FW' },
+
 ];
 
 const getSeasonPlayerOptions = (seasonKey = '2026-27') => {
@@ -1327,10 +1144,13 @@ export default function App() {
       companion: draft.companion === '一人'
         ? '一人で観戦'
         : (draft.companion ? `${draft.companion}と観戦` : ''),
-      tag: draft.tags[0] || '観戦記録',
+      tag: draft.tags[0] || (draft.isQuick ? 'クイック記録' : '観戦記録'),
       img: getStadiumImage(draft.stadium),
       favorite: false,
-      draftData: { ...draft },
+      draftData: {
+        ...draft,
+        memo: draft.memo || draft.quickMemo || '',
+      },
     };
 
     if (editingRecordId) {
@@ -1403,6 +1223,20 @@ export default function App() {
             onDeleteRecords={handleDeleteRecords}
           />
         )}
+        {view === 'tickets' && (
+          <TicketCollectionView
+            records={records}
+            setView={setView}
+            onOpenDetail={openRecordDetail}
+          />
+        )}
+
+        {view === 'explore' && (
+          <StadiumExploreView
+            records={records}
+            setView={setView}
+          />
+        )}
         {view === 'recordDetail' && selectedRecord && (
           <RecordDetailView
             record={records.find((record) => record.id === selectedRecord.id) || selectedRecord}
@@ -1411,6 +1245,14 @@ export default function App() {
             onEdit={handleEditRecord}
             onToggleFavorite={toggleFavorite}
             onDelete={handleDeleteRecord}
+          />
+        )}
+
+        {view === 'shareCard' && selectedRecord && (
+          <ShareCardView
+            record={records.find((record) => record.id === selectedRecord.id) || selectedRecord}
+            setView={setView}
+            backTo="recordDetail"
           />
         )}
 
@@ -1457,6 +1299,16 @@ export default function App() {
             setView={setView}
             draft={draft}
             updateDraft={updateDraft}
+            onSaveDraft={saveCurrentDraft}
+          />
+        )}
+
+        {view === 'quickRecord' && (
+          <QuickRecordView
+            setView={setView}
+            draft={draft}
+            updateDraft={updateDraft}
+            onSave={handleSave}
             onSaveDraft={saveCurrentDraft}
           />
         )}
@@ -1528,26 +1380,26 @@ function BrandHeader({ back, setView = () => { }, records }) {
   };
 
   return (
-    <header className="relative h-[85px] bg-[#7a003f] text-white z-[60] shadow-lg shadow-pink-900/30 overflow-visible border-b-[3px] border-[#c8a45d]/60">
+    <header className="relative h-[85px] bg-[#831843] text-white z-[60] shadow-lg shadow-pink-900/30 overflow-visible border-b-[3px] border-[#60a5fa]/60">
       {/* 背景グラデーション */}
-      <div className="absolute inset-0 bg-gradient-to-r from-[#c6006f] via-[#7a003f] to-[#400021]"></div>
+      <div className="absolute inset-0 bg-gradient-to-r from-[#be185d] via-[#831843] to-[#1e1b4b]"></div>
 
       {/* うっすら光 */}
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_42%_42%,rgba(255,255,255,0.16),transparent_22%),radial-gradient(circle_at_82%_70%,rgba(214,179,106,0.13),transparent_14%)]"></div>
 
       {/* 左の斜め装飾：薄め */}
       <div className="absolute -left-12 top-0 h-full w-20 skew-x-[-28deg] bg-white/8"></div>
-      <div className="absolute left-4 top-0 h-full w-1.5 skew-x-[-28deg] bg-[#c8a45d]/28"></div>
+      <div className="absolute left-4 top-0 h-full w-1.5 skew-x-[-28deg] bg-[#60a5fa]/28"></div>
       <div className="absolute left-10 top-0 h-full w-14 skew-x-[-28deg] bg-pink-300/8"></div>
 
       {/* 右の斜め装飾：薄め */}
       <div className="absolute -right-10 top-0 h-full w-24 skew-x-[-30deg] bg-pink-300/8"></div>
-      <div className="absolute right-8 top-0 h-full w-1.5 skew-x-[-30deg] bg-[#c8a45d]/28"></div>
+      <div className="absolute right-8 top-0 h-full w-1.5 skew-x-[-30deg] bg-[#60a5fa]/28"></div>
       <div className="absolute right-16 top-0 h-full w-px skew-x-[-30deg] bg-white/12"></div>
 
       {/* 下の金ライン */}
-      <div className="absolute left-0 right-0 bottom-0 h-[3px] bg-gradient-to-r from-pink-500 via-[#d6b36a] to-pink-600"></div>
-      <div className="absolute left-1/2 bottom-[-5px] h-4 w-24 -translate-x-1/2 rounded-full bg-[#d6b36a]/20 blur-xl"></div>
+      <div className="absolute left-0 right-0 bottom-0 h-[3px] bg-gradient-to-r from-pink-500 via-[#60a5fa] to-pink-600"></div>
+      <div className="absolute left-1/2 bottom-[-5px] h-4 w-24 -translate-x-1/2 rounded-full bg-[#60a5fa]/20 blur-xl"></div>
 
       <div className="relative z-10 h-full px-5 flex items-center">
         {back && (
@@ -1569,7 +1421,7 @@ function BrandHeader({ back, setView = () => { }, records }) {
               </span>
 
               <span
-                className="text-[25px] italic font-black tracking-[-0.08em] text-[#d6b36a] drop-shadow-[0_4px_10px_rgba(0,0,0,0.35)]"
+                className="text-[25px] italic font-black tracking-[-0.08em] text-[#60a5fa] drop-shadow-[0_4px_10px_rgba(0,0,0,0.35)]"
                 style={{ fontFamily: "'Brush Script MT', 'Segoe Script', cursive" }}
               >
                 log
@@ -1577,9 +1429,9 @@ function BrandHeader({ back, setView = () => { }, records }) {
             </div>
 
             <div className="mt-1 flex items-center gap-2">
-              <div className="h-px w-16 bg-[#d6b36a]/70"></div>
-              <div className="text-[#d6b36a] text-[10px] leading-none">✦</div>
-              <div className="h-px w-16 bg-[#d6b36a]/70"></div>
+              <div className="h-px w-16 bg-[#60a5fa]/70"></div>
+              <div className="text-[#60a5fa] text-[10px] leading-none">✦</div>
+              <div className="h-px w-16 bg-[#60a5fa]/70"></div>
             </div>
 
             <div className="mt-1 text-[7px] font-bold tracking-[0.24em] text-white/80 whitespace-nowrap">
@@ -1598,7 +1450,7 @@ function BrandHeader({ back, setView = () => { }, records }) {
               className="relative w-8 h-8 rounded-full bg-white/8 border border-white/15 flex items-center justify-center active:scale-95"
             >
               <Bell size={20} strokeWidth={2.1} />
-              <span className="absolute top-1 right-1 w-1.5 h-1.5 rounded-full bg-[#d6b36a]"></span>
+              <span className="absolute top-1 right-1 w-1.5 h-1.5 rounded-full bg-[#60a5fa]"></span>
             </button>
 
             <div className="h-8 w-px bg-white/30"></div>
@@ -1621,7 +1473,7 @@ function BrandHeader({ back, setView = () => { }, records }) {
       {noticeOpen && (
         <div className="absolute right-4 top-[124px] w-[295px] bg-white text-[#171425] rounded-2xl shadow-2xl border border-gray-100 p-4 z-[999]">
           <div className="flex items-center justify-between mb-3">
-            <div className="font-black text-[#e4007f] flex items-center gap-2">
+            <div className="font-black text-[#ec4899] flex items-center gap-2">
               <Bell size={18} />
               お知らせ
             </div>
@@ -1645,10 +1497,10 @@ function BrandHeader({ back, setView = () => { }, records }) {
               className="w-full text-left bg-pink-50 hover:bg-pink-100 transition rounded-2xl p-3 border border-pink-100 active:scale-[0.98]"
             >
               <div className="flex items-center justify-between">
-                <div className="text-xs font-black text-[#e4007f]">
+                <div className="text-xs font-black text-[#ec4899]">
                   次の試合
                 </div>
-                <ChevronRight size={14} className="text-[#e4007f]" />
+                <ChevronRight size={14} className="text-[#ec4899]" />
               </div>
 
               <div className="flex items-center gap-2 mt-1">
@@ -1661,7 +1513,7 @@ function BrandHeader({ back, setView = () => { }, records }) {
                 {nextMatch && (
                   <span
                     className={`text-[10px] font-black px-2 py-0.5 rounded-full ${nextMatch.venueType === 'HOME'
-                      ? 'bg-pink-100 text-[#e4007f]'
+                      ? 'bg-pink-100 text-[#ec4899]'
                       : 'bg-yellow-100 text-yellow-700'
                       }`}
                   >
@@ -1672,7 +1524,7 @@ function BrandHeader({ back, setView = () => { }, records }) {
 
               <div className="text-xs text-gray-500 font-bold mt-1">
                 {nextMatch
-                  ? `${nextMatch.time} キックオフ / ${nextMatch.stadium.includes('YANMAR') ? 'ヤンマー' : nextMatch.stadium}`
+                  ? `${nextMatch.time} キックオフ / ${nextMatch.stadium.includes('エディオン') ? 'Eピース' : nextMatch.stadium}`
                   : '試合予定を追加してください'}
               </div>
             </button>
@@ -1694,7 +1546,7 @@ function BrandHeader({ back, setView = () => { }, records }) {
         <div className="fixed right-4 top-[124px] w-[275px] max-h-[calc(100vh-170px)] overflow-y-auto overscroll-contain bg-white text-[#171425] rounded-2xl shadow-2xl border border-gray-100 p-4 pb-6 z-[999]">
           <div className="flex items-center justify-between mb-4">
             <div>
-              <div className="text-xs font-black text-[#e4007f]">
+              <div className="text-xs font-black text-[#ec4899]">
                 CEREZO LOG
               </div>
               <div className="text-lg font-black">
@@ -1729,6 +1581,19 @@ function BrandHeader({ back, setView = () => { }, records }) {
               label="観戦記録を作成"
               onClick={() => movePage('step1')}
             />
+
+            <HeaderMenuItem
+              icon={<Ticket size={18} />}
+              label="チケットコレクション"
+              onClick={() => movePage('tickets')}
+            />
+
+            <HeaderMenuItem
+              icon={<MapPin size={18} />}
+              label="スタジアム探検"
+              onClick={() => movePage('explore')}
+            />
+
 
             <HeaderMenuItem
               icon={<Bookmark size={18} />}
@@ -1785,7 +1650,7 @@ function HeaderMenuItem({ icon, label, onClick }) {
       onClick={onClick}
       className="w-full flex items-center gap-3 bg-[#f8f7fb] hover:bg-pink-50 rounded-2xl p-3 text-left border border-gray-100 transition"
     >
-      <div className="w-10 h-10 rounded-xl bg-white text-[#e4007f] flex items-center justify-center shadow-sm shrink-0">
+      <div className="w-10 h-10 rounded-xl bg-white text-[#ec4899] flex items-center justify-center shadow-sm shrink-0">
         {icon}
       </div>
 
@@ -1795,6 +1660,2260 @@ function HeaderMenuItem({ icon, label, onClick }) {
 
       <ChevronRight size={18} className="text-gray-400" />
     </button>
+  );
+}
+
+const stadiumExploreData = [
+
+  {
+    name: '埼玉スタジアム2002',
+    short: '埼スタ',
+    prefecture: '埼玉県さいたま市',
+    x: 63,
+    y: 49,
+    type: 'away',
+    league: 'J1',
+  },
+  {
+    name: '三協フロンテア柏スタジアム',
+    short: '柏',
+    prefecture: '千葉県柏市',
+    x: 63,
+    y: 60,
+    type: 'away',
+    league: 'J1',
+  },
+  {
+    name: '味の素スタジアム',
+    short: '味スタ',
+    prefecture: '東京都調布市',
+    x: 60,
+    y: 53,
+    type: 'away',
+    league: 'J1',
+  },
+  {
+    name: '国立競技場',
+    short: '国立',
+    prefecture: '東京都新宿区',
+    x: 63,
+    y: 54,
+    type: 'away',
+    league: 'J1',
+  },
+  {
+    name: '町田GIONスタジアム',
+    short: '町田GION',
+    prefecture: '東京都町田市',
+    x: 58,
+    y: 56,
+    type: 'away',
+    league: 'J1',
+  },
+  {
+    name: '日産スタジアム',
+    short: '日産',
+    prefecture: '神奈川県横浜市',
+    x: 61,
+    y: 58,
+    type: 'away',
+    league: 'J1',
+  },
+  {
+    name: 'Uvanceとどろきスタジアム by Fujitsu',
+    short: '等々力',
+    prefecture: '神奈川県川崎市',
+    x: 60,
+    y: 56,
+    type: 'away',
+    league: 'J1',
+  },
+  {
+    name: 'IAIスタジアム日本平',
+    short: '日本平',
+    prefecture: '静岡県静岡市',
+    x: 55,
+    y: 61,
+    type: 'away',
+    league: 'J1',
+  },
+  {
+    name: 'パロマ瑞穂スタジアム',
+    short: '豊田',
+    prefecture: '愛知県豊田市',
+    x: 48,
+    y: 62,
+    type: 'away',
+    league: 'J1',
+  },
+  {
+    name: 'パナソニック スタジアム 吹田',
+    short: 'パナスタ',
+    prefecture: '大阪府吹田市',
+    x: 39,
+    y: 66,
+    type: 'away',
+    league: 'J1',
+  },
+  {
+    name: 'YANMAR HANASAKA STADIUM',
+    short: 'ヤンスタ',
+    prefecture: '大阪府大阪市',
+    x: 38,
+    y: 68,
+    type: 'home',
+    league: 'J1',
+    featured: true,
+  },
+  {
+    name: 'ノエビアスタジアム神戸',
+    short: 'ノエスタ',
+    prefecture: '兵庫県神戸市',
+    x: 35,
+    y: 64,
+    type: 'away',
+    league: 'J1',
+  },
+  {
+    name: 'サンガスタジアム by KYOCERA',
+    short: 'サンガS',
+    prefecture: '京都府亀岡市',
+    x: 36,
+    y: 60,
+    type: 'away',
+    league: 'J1',
+  },
+  {
+    name: 'JFE晴れの国スタジアム',
+    short: '岡山',
+    prefecture: '岡山県岡山市',
+    x: 30,
+    y: 63,
+    type: 'away',
+    league: 'J1',
+  },
+  {
+    name: 'YANMAR HANASAKA STADIUM',
+    short: 'Eピース',
+    prefecture: '広島県広島市',
+    x: 25,
+    y: 65,
+    type: 'home',
+    league: 'J1',
+    featured: true,
+  },
+  {
+    name: 'ベスト電器スタジアム',
+    short: 'ベススタ',
+    prefecture: '福岡県福岡市',
+    x: 12,
+    y: 67,
+    type: 'away',
+    league: 'J1',
+  },
+  {
+    name: 'PEACE STADIUM Connected by SoftBank',
+    short: '長崎',
+    prefecture: '長崎県長崎市',
+    x: 8,
+    y: 73,
+    type: 'away',
+    league: 'J1',
+  },
+];
+
+const getRecordStadiumName = (record) => {
+  return record?.draftData?.stadium || record?.stadium || '';
+};
+
+const getRecordPhotos = (record) => {
+  return record?.draftData?.photos || [];
+};
+
+const getRecordScorersText = (record) => {
+  const scorers = record?.draftData?.scorers || [];
+
+  if (!scorers.length) return '得点者なし';
+
+  return scorers
+    .map((scorer) => {
+      if (typeof scorer === 'string') return scorer;
+      return scorer.name || scorer.player || scorer.scorer || '';
+    })
+    .filter(Boolean)
+    .join('、') || '得点者なし';
+};
+
+const getMemoryResult = (record) => {
+  if (!record) return null;
+
+  const data = record.draftData || {};
+
+  const sanfreScore = Number(data.homeScore ?? 0);
+  const opponentScore = Number(data.awayScore ?? 0);
+
+  if (sanfreScore > opponentScore) return 'win';
+  if (sanfreScore === opponentScore) return 'draw';
+  return 'lose';
+};
+
+const getMemoryResultLabel = (result) => {
+  if (result === 'win') return 'WIN';
+  if (result === 'draw') return 'DRAW';
+  if (result === 'lose') return 'LOSE';
+  return 'NO DATA';
+};
+
+const getMemoryResultText = (result) => {
+  if (result === 'win') return '勝利の記憶';
+  if (result === 'draw') return '引き分けの記憶';
+  if (result === 'lose') return '悔しさの記憶';
+  return 'まだ記録なし';
+};
+
+const sortRecordsByDateDesc = (records = []) => {
+  const getRecordSortTime = (record) => {
+    const idTime = Number(record?.id);
+
+    if (Number.isFinite(idTime) && idTime > 100000000000) {
+      return idTime;
+    }
+
+    const normalizedDate = String(record?.draftData?.date || record?.date || '')
+      .replaceAll('.', '-')
+      .replaceAll('/', '-');
+    const dateTime = new Date(normalizedDate).getTime();
+
+    return Number.isFinite(dateTime) ? dateTime : 0;
+  };
+
+  return [...records].sort((a, b) => getRecordSortTime(b) - getRecordSortTime(a));
+};
+
+function StadiumExploreView({ records, setView }) {
+  const [filter, setFilter] = useState('home');
+  const [query, setQuery] = useState('');
+  const [noticeOpen, setNoticeOpen] = useState(false);
+  const [profileOpen, setProfileOpen] = useState(false);
+  const [exploreMenuOpen, setExploreMenuOpen] = useState(false);
+  const [listOpen, setListOpen] = useState(false);
+  const [mapZoom, setMapZoom] = useState(100);
+  const [mapMode, setMapMode] = useState('home');
+
+  const [selectedStadium, setSelectedStadium] = useState(null);
+
+  const zoomOut = () => {
+    setMapZoom((current) => Math.max(80, current - 10));
+  };
+
+  const zoomIn = () => {
+    setMapZoom((current) => Math.min(140, current + 10));
+  };
+
+  const resetZoom = () => {
+    setMapZoom(100);
+  };
+
+  const [memoryIndex, setMemoryIndex] = useState(0);
+
+  const memoriesByStadium = records.reduce((acc, record) => {
+    const stadiumName = getRecordStadiumName(record);
+
+    if (!stadiumName) return acc;
+
+    if (!acc[stadiumName]) {
+      acc[stadiumName] = [];
+    }
+
+    acc[stadiumName].push(record);
+    return acc;
+  }, {});
+
+  const decoratedStadiums = stadiumExploreData.map((stadium) => {
+    const memories = sortRecordsByDateDesc(memoriesByStadium[stadium.name] || []);
+    const latestMemory = memories[0] || null;
+    const result = getMemoryResult(latestMemory);
+
+    return {
+      ...stadium,
+      memories,
+      latestMemory,
+      visitCount: memories.length,
+      visited: memories.length > 0,
+      favorite: memories.some((record) => record.favorite),
+      hasPhoto: memories.some((record) => getRecordPhotos(record).length > 0),
+      result,
+    };
+  });
+
+  const filteredStadiums = decoratedStadiums.filter((stadium) => {
+    const keyword = query.trim().toLowerCase();
+
+    const matchesQuery =
+      !keyword ||
+      stadium.name.toLowerCase().includes(keyword) ||
+      stadium.short.toLowerCase().includes(keyword) ||
+      stadium.prefecture.toLowerCase().includes(keyword);
+
+    const matchesFilter =
+      filter === 'all' ||
+      (filter === 'memory' && stadium.visited) ||
+      (filter === 'home' && stadium.type === 'home') ||
+      (filter === 'away' && stadium.type === 'away') ||
+      (filter === 'visited' && stadium.visited) ||
+      (filter === 'favorite' && stadium.favorite);
+
+    return matchesQuery && matchesFilter;
+  });
+
+  const visitedCount = decoratedStadiums.filter((stadium) => stadium.visited).length;
+  const totalCount = decoratedStadiums.length;
+  const unvisitedCount = totalCount - visitedCount;
+
+  const nextMatch = getNextMatch(records);
+
+  const recommendStadium =
+    decoratedStadiums.find((stadium) => stadium.name === nextMatch?.stadium) ||
+    decoratedStadiums.find((stadium) => stadium.featured) ||
+    decoratedStadiums[0];
+
+  const latestRecordedStadiumName = getRecordStadiumName(records[0]);
+  const latestRecordedStadium =
+    decoratedStadiums.find((stadium) => stadium.name === latestRecordedStadiumName) || null;
+
+  const selected =
+    decoratedStadiums.find((stadium) => stadium.name === selectedStadium?.name) ||
+    latestRecordedStadium ||
+    recommendStadium;
+
+
+  const selectedMemories = selected?.memories || [];
+  const shownMemory = selectedMemories[memoryIndex] || null;
+  const shownMemoryData = shownMemory?.draftData || {};
+  const shownResult = getMemoryResult(shownMemory);
+
+  useEffect(() => {
+    setMemoryIndex(0);
+  }, [selected?.name]);
+
+  return (
+    <div className="sanf-explore">
+      <ExploreStyleHelper />
+
+      <div className="explore-orb explore-orb-one"></div>
+      <div className="explore-orb explore-orb-two"></div>
+
+      <div className="explore-topbar">
+        <button
+          type="button"
+          onClick={() => setView('home')}
+          className="explore-icon-button"
+          aria-label="ホームに戻る"
+        >
+          <ChevronLeft size={22} />
+        </button>
+
+        <div className="explore-top-title">
+          <div>CEREZO</div>
+          <span>STADIUM EXPLORE</span>
+        </div>
+
+        <div className="explore-top-actions">
+          <button
+            type="button"
+            className="explore-icon-button"
+            onClick={() => {
+              setNoticeOpen((current) => !current);
+              setProfileOpen(false);
+              setExploreMenuOpen(false);
+            }}
+            aria-label="お知らせ"
+          >
+            <Bell size={19} />
+            <span className="explore-dot"></span>
+          </button>
+
+          <button
+            type="button"
+            className="explore-icon-button"
+            onClick={() => {
+              setProfileOpen((current) => !current);
+              setNoticeOpen(false);
+              setExploreMenuOpen(false);
+            }}
+            aria-label="プロフィールメニュー"
+          >
+            <User size={19} />
+          </button>
+        </div>
+
+        {noticeOpen && (
+          <div className="explore-popover explore-popover-right">
+            <div className="explore-popover-kicker">
+              NEXT MATCH
+            </div>
+
+            <div className="explore-popover-title">
+              {nextMatch
+                ? `${nextMatch.displayDate} vs ${nextMatch.opponent}`
+                : '次の試合は未定'}
+            </div>
+
+            <div className="explore-popover-text">
+              {nextMatch
+                ? `${nextMatch.time} / ${nextMatch.stadium}`
+                : '試合予定が入ると、ここに次の遠征先が表示されます。'}
+            </div>
+
+            {recommendStadium && (
+              <button
+                type="button"
+                className="explore-popover-button"
+                onClick={() => {
+                  setSelectedStadium(recommendStadium);
+                  setNoticeOpen(false);
+                }}
+              >
+                地図で見る
+                <ChevronRight size={15} />
+              </button>
+            )}
+          </div>
+        )}
+
+        {profileOpen && (
+          <div className="explore-popover explore-popover-right">
+            <div className="explore-popover-kicker">
+              MY CEREZO LOG
+            </div>
+
+            <div className="explore-popover-title">
+              記憶マップメニュー
+            </div>
+
+            <div className="explore-popover-menu">
+              <button type="button" onClick={() => setView('mypage')}>
+                <User size={15} />
+                マイページ
+              </button>
+
+              <button type="button" onClick={() => setView('records')}>
+                <List size={15} />
+                記録一覧
+              </button>
+
+              <button type="button" onClick={() => setView('stats')}>
+                <BarChart2 size={15} />
+                統計
+              </button>
+
+              <button type="button" onClick={() => setView('tickets')}>
+                <Ticket size={15} />
+                チケット
+              </button>
+            </div>
+          </div>
+        )}
+      </div>
+
+      <section className="explore-panel">
+        <div className="explore-brand-row">
+          <button
+            type="button"
+            className="explore-crest"
+            onClick={() => {
+              setExploreMenuOpen((current) => !current);
+              setNoticeOpen(false);
+              setProfileOpen(false);
+            }}
+            aria-label="遠征メニューを開く"
+          >
+            <span>三</span>
+          </button>
+
+          <div>
+            <h1>
+              CEREZO
+              <br />
+              <span>EXPLORE</span>
+            </h1>
+            <p>桜色の記憶をたどるスタジアム探検</p>
+          </div>
+        </div>
+
+        {exploreMenuOpen && (
+          <div className="explore-action-menu">
+            <div className="explore-action-menu-head">
+              <span>SAKURA EXPEDITION</span>
+              <strong>遠征メニュー</strong>
+            </div>
+
+            <div className="explore-action-menu-grid">
+              <button
+                type="button"
+                onClick={() => {
+                  setSelectedStadium(recommendStadium);
+                  const nextFilter = recommendStadium?.type === 'home' ? 'home' : 'away';
+                  setFilter(nextFilter);
+                  setMapMode(nextFilter);
+                  setExploreMenuOpen(false);
+                }}
+              >
+                <MapPin size={16} />
+                次の遠征先
+              </button>
+
+              <button
+                type="button"
+                onClick={() => {
+                  setView('step1');
+                }}
+              >
+                <Plus size={16} />
+                観戦記録
+              </button>
+
+              <button
+                type="button"
+                onClick={() => {
+                  setView('records');
+                }}
+              >
+                <List size={16} />
+                記録一覧
+              </button>
+
+              <button
+                type="button"
+                onClick={() => {
+                  setView('stats');
+                }}
+              >
+                <BarChart2 size={16} />
+                統計
+              </button>
+            </div>
+          </div>
+        )}
+
+        <div className="explore-team-pill">セレッソ大阪</div>
+
+        <div className="explore-chip-row">
+          <ExploreChip
+            active={filter === 'home'}
+            onClick={() => {
+              setFilter('home');
+              setMapMode('home');
+              setListOpen(false);
+            }}
+          >
+            ホーム
+          </ExploreChip>
+
+          <ExploreChip
+            active={filter === 'away'}
+            onClick={() => {
+              setFilter('away');
+              setMapMode('away');
+              setListOpen(false);
+            }}
+          >
+            アウェイ
+          </ExploreChip>
+
+          <ExploreChip
+            active={filter === 'favorite'}
+            onClick={() => {
+              setFilter('favorite');
+              setMapMode('favorite');
+              setListOpen(false);
+            }}
+          >
+            お気に入り
+          </ExploreChip>
+        </div>
+
+        <div className="explore-legend">
+          <span>
+            <i className="legend-dot visited"></i>
+            訪問済み
+          </span>
+          <span>
+            <i className="legend-dot unvisited"></i>
+            未訪問
+          </span>
+          <button type="button" onClick={() => setFilter('favorite')}>
+            <Star size={14} />
+            お気に入り
+          </button>
+        </div>
+
+        <label className="explore-search">
+          <MapPin size={17} />
+          <input
+            value={query}
+            onChange={(event) => setQuery(event.target.value)}
+            placeholder="スタジアムを検索"
+          />
+        </label>
+
+        <div className="explore-stat-grid">
+          <ExploreStat label="訪問" value={visitedCount} total={totalCount} />
+          <ExploreStat label="未訪問" value={unvisitedCount} total={totalCount} />
+        </div>
+
+      </section>
+
+      <section className="explore-map-card">
+        <div className="explore-map-header">
+          <div>
+            <span>NATIONAL STADIUM MAP</span>
+            <strong>全国スタジアム探索</strong>
+          </div>
+
+          <div className="explore-map-count">
+            {filteredStadiums.length}
+            <small>spots</small>
+          </div>
+        </div>
+
+        <div className="explore-map">
+          <div
+            className="explore-map-inner"
+            style={{
+              transform: `scale(${mapZoom / 100})`,
+            }}
+          >
+            <img
+              src="/japan-map-neon.png"
+              alt="日本地図"
+              className="explore-map-image"
+            />
+
+            <svg className="explore-route-layer" viewBox="0 0 100 100" preserveAspectRatio="none">
+              <defs>
+                <linearGradient id="sanfRoute" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0%" stopColor="#ec4899" />
+                  <stop offset="45%" stopColor="#be185d" />
+                  <stop offset="100%" stopColor="#38bdf8" />
+                </linearGradient>
+              </defs>
+
+              <path
+                d="M76 9 C68 24, 65 38, 63 49 C58 59, 47 62, 39 66 C32 70, 26 71, 22 72 C18 76, 15 80, 9 88"
+                fill="none"
+                stroke="url(#sanfRoute)"
+                strokeWidth="0.55"
+                strokeLinecap="round"
+                opacity="0.9"
+              />
+
+              <path
+                d="M22 72 C36 63, 48 54, 63 54 C68 55, 70 58, 74 63"
+                fill="none"
+                stroke="#f9a8d4"
+                strokeWidth="0.35"
+                strokeLinecap="round"
+                opacity="0.55"
+              />
+            </svg>
+
+            {Array.from({ length: 34 }).map((_, index) => (
+              <span
+                key={index}
+                className="explore-tiny-light"
+                style={{
+                  left: `${8 + ((index * 23) % 82)}%`,
+                  top: `${8 + ((index * 37) % 84)}%`,
+                  animationDelay: `${index * 0.16}s`,
+                }}
+              />
+            ))}
+
+            {filteredStadiums.map((stadium) => (
+              <StadiumNode
+                key={stadium.name}
+                stadium={stadium}
+                active={selected?.name === stadium.name}
+                onClick={() => setSelectedStadium(stadium)}
+              />
+            ))}
+          </div>
+
+          <div className="explore-compass">
+            <span>N</span>
+            <MapPin size={22} fill="currentColor" />
+          </div>
+        </div>
+      </section>
+
+
+      <section className="explore-control-bar explore-control-between">
+        <button
+          type="button"
+          onClick={() => {
+            setSelectedStadium(recommendStadium);
+            setListOpen(false);
+          }}
+          aria-label="次の試合会場へ移動"
+        >
+          <MapPin size={18} />
+        </button>
+
+        <div className="explore-zoom">
+          <button type="button" onClick={zoomOut}>
+            −
+          </button>
+
+          <strong onClick={resetZoom} role="button" tabIndex={0}>
+            {mapZoom}%
+          </strong>
+
+          <button type="button" onClick={zoomIn}>
+            ＋
+          </button>
+        </div>
+
+        <button
+          type="button"
+          className="explore-list-toggle"
+          onClick={() => setListOpen((current) => !current)}
+        >
+          <List size={17} />
+          {listOpen ? '閉じる' : 'リスト'}
+        </button>
+      </section>
+
+      {listOpen && (
+        <section className="explore-list-panel">
+          <div className="explore-list-header">
+            <div>
+              <span>スタジアムリスト</span>
+              <strong>{filteredStadiums.length}件</strong>
+            </div>
+
+            <button type="button" onClick={() => setListOpen(false)}>
+              閉じる
+            </button>
+          </div>
+
+          <div className="explore-list-items">
+            {filteredStadiums.map((stadium) => (
+              <button
+                key={stadium.name}
+                type="button"
+                onClick={() => {
+                  setSelectedStadium(stadium);
+                  setListOpen(false);
+                }}
+                className={selected?.name === stadium.name ? 'active' : ''}
+              >
+                <div>
+                  <strong>{stadium.name}</strong>
+                  <span>{stadium.prefecture}</span>
+                </div>
+
+                <small>
+                  {stadium.favorite ? 'お気に入り' : stadium.visited ? '訪問済み' : stadium.type === 'home' ? 'ホーム' : 'アウェイ'}
+                </small>
+              </button>
+            ))}
+          </div>
+        </section>
+      )}
+
+      <section className={`explore-memory-card memory-${shownResult || 'none'}`}>
+        <div className="memory-photo-wrap">
+          <img
+            src={
+              getRecordPhotos(shownMemory)[0] ||
+              getStadiumImage(selected.name)
+            }
+            alt={selected.name}
+          />
+
+          <div className="memory-result-badge">
+            {getMemoryResultLabel(shownResult)}
+          </div>
+        </div>
+
+        <div className="memory-info">
+          <div className="memory-kicker">
+            {shownMemory ? getMemoryResultText(shownResult) : 'NO MEMORY YET'}
+          </div>
+
+          <h2>{selected.name}</h2>
+          <p>{selected.prefecture}</p>
+
+          {shownMemory ? (
+            <>
+              <div className="memory-score">
+                <span>{shownMemory.date}</span>
+                <strong>
+                  セレッソ大阪 {shownMemoryData.homeScore} - {shownMemoryData.awayScore} {shownMemoryData.opponent || shownMemory.opponent}
+                </strong>
+              </div>
+
+              <div className="memory-mini-grid">
+                <div>
+                  <span>対戦相手</span>
+                  <strong>{shownMemoryData.opponent || shownMemory.opponent || '-'}</strong>
+                </div>
+
+                <div>
+                  <span>MVP</span>
+                  <strong>{shownMemoryData.mvp || '-'}</strong>
+                </div>
+
+                <div>
+                  <span>一緒に観戦</span>
+                  <strong>{shownMemory.companion || shownMemoryData.companion || '-'}</strong>
+                </div>
+
+                <div>
+                  <span>得点者</span>
+                  <strong>{getRecordScorersText(shownMemory)}</strong>
+                </div>
+              </div>
+
+              {shownMemoryData.memo && (
+                <div className="memory-memo">
+                  {shownMemoryData.memo}
+                </div>
+              )}
+
+              {selectedMemories.length > 1 && (
+                <div className="memory-switcher">
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setMemoryIndex((current) =>
+                        current === 0 ? selectedMemories.length - 1 : current - 1
+                      )
+                    }
+                  >
+                    前の記憶
+                  </button>
+
+                  <span>
+                    {memoryIndex + 1} / {selectedMemories.length}
+                  </span>
+
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setMemoryIndex((current) =>
+                        current === selectedMemories.length - 1 ? 0 : current + 1
+                      )
+                    }
+                  >
+                    次の記憶
+                  </button>
+                </div>
+              )}
+            </>
+          ) : (
+            <div className="memory-empty">
+              まだこのスタジアムの観戦記録はありません。
+              <br />
+              いつか訪れたら、ここに桜色の記憶が残ります。
+            </div>
+          )}
+        </div>
+      </section>
+
+      <nav className="explore-bottom-nav">
+        <button type="button" className="active">
+          <MapPin size={19} />
+          探検
+        </button>
+        <button type="button" onClick={() => setView('home')}>
+          <Home size={19} />
+          ホーム
+        </button>
+        <button type="button" onClick={() => setView('records')}>
+          <Ticket size={19} />
+          記録
+        </button>
+        <button type="button" onClick={() => setView('stats')}>
+          <Trophy size={19} />
+          統計
+        </button>
+      </nav>
+    </div>
+  );
+}
+
+function ExploreChip({ active, onClick, children }) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className={active ? 'explore-chip active' : 'explore-chip'}
+    >
+      {children}
+    </button>
+  );
+}
+
+function ExploreStat({ label, value, total }) {
+  return (
+    <div className="explore-stat">
+      <span>{label}</span>
+      <strong>{value}</strong>
+      <small>/ {total}</small>
+    </div>
+  );
+}
+
+function StadiumNode({ stadium, active, onClick }) {
+  const nodeClass = [
+    'explore-node',
+    stadium.visited ? 'visited' : 'unvisited',
+    stadium.featured ? 'featured' : '',
+    stadium.favorite ? 'favorite' : '',
+    stadium.hasPhoto ? 'has-photo' : '',
+    stadium.result ? `result-${stadium.result}` : '',
+    active ? 'active' : '',
+  ].join(' ');
+
+  return (
+    <button
+      type="button"
+      className={nodeClass}
+      style={{
+        left: `${stadium.x}%`,
+        top: `${stadium.y}%`,
+      }}
+      onClick={(event) => {
+        event.stopPropagation();
+        onClick();
+      }}
+      title={stadium.name}
+    >
+      <span className="explore-node-core"></span>
+
+      {stadium.visitCount > 1 && (
+        <span className="explore-node-count">
+          {stadium.visitCount}
+        </span>
+      )}
+
+      {(stadium.featured || active) && (
+        <span className="explore-node-label">
+          {stadium.short}
+        </span>
+      )}
+    </button>
+  );
+}
+
+function ExploreStyleHelper() {
+  return (
+    <style>{`
+      .sanf-explore {
+        position: relative;
+        min-height: 100vh;
+        padding: 16px 14px 118px;
+        color: white;
+        overflow: hidden;
+        background:
+          radial-gradient(circle at 20% 12%, rgba(168, 85, 247, 0.34), transparent 30%),
+          radial-gradient(circle at 78% 42%, rgba(59, 130, 246, 0.2), transparent 28%),
+          linear-gradient(180deg, #03040d 0%, #0b0820 42%, #06030f 100%);
+      }
+
+      .sanf-explore::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background-image:
+          linear-gradient(rgba(255,255,255,0.035) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+        background-size: 28px 28px;
+        mask-image: linear-gradient(to bottom, transparent, black 15%, black 85%, transparent);
+        pointer-events: none;
+      }
+        .explore-popover {
+  position: absolute;
+  top: 52px;
+  width: 270px;
+  border-radius: 22px;
+  padding: 14px;
+  z-index: 999;
+  background: rgba(9, 6, 24, 0.96);
+  border: 1px solid rgba(251,207,232,0.2);
+  box-shadow: 0 22px 50px rgba(0,0,0,0.45);
+  backdrop-filter: blur(18px);
+}
+
+.explore-popover-right {
+  right: 0;
+}
+
+.explore-popover-kicker {
+  color: #f9a8d4;
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  font-weight: 950;
+}
+
+.explore-popover-title {
+  margin-top: 6px;
+  color: white;
+  font-size: 14px;
+  line-height: 1.45;
+  font-weight: 950;
+}
+
+.explore-popover-text {
+  margin-top: 5px;
+  color: rgba(255,255,255,0.58);
+  font-size: 11px;
+  line-height: 1.6;
+  font-weight: 800;
+}
+
+.explore-popover-button {
+  margin-top: 12px;
+  width: 100%;
+  height: 38px;
+  border-radius: 14px;
+  border: 1px solid rgba(251,207,232,0.18);
+  background: rgba(236,72,153,0.18);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 950;
+}
+
+.explore-popover-menu {
+  display: grid;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.explore-popover-menu button {
+  height: 38px;
+  border-radius: 14px;
+  border: 1px solid rgba(251,207,232,0.13);
+  background: rgba(255,255,255,0.055);
+  color: white;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 0 12px;
+  font-size: 12px;
+  font-weight: 950;
+}
+
+      .explore-orb {
+        position: absolute;
+        border-radius: 999px;
+        filter: blur(30px);
+        opacity: 0.55;
+        pointer-events: none;
+      }
+
+      .explore-orb-one {
+        width: 180px;
+        height: 180px;
+        left: -70px;
+        top: 170px;
+        background: #7e22ce;
+      }
+
+      .explore-orb-two {
+        width: 180px;
+        height: 180px;
+        right: -80px;
+        top: 470px;
+        background: #2563eb;
+      }
+
+      .explore-topbar {
+        position: relative;
+        z-index: 120;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 14px;
+      }
+
+      .explore-icon-button {
+        position: relative;
+        width: 42px;
+        height: 42px;
+        border-radius: 16px;
+        border: 1px solid rgba(216, 180, 254, 0.22);
+        background: rgba(15, 12, 33, 0.72);
+        color: #f5e8ff;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 12px 30px rgba(0,0,0,0.22);
+      }
+
+      .explore-dot {
+        position: absolute;
+        top: 9px;
+        right: 9px;
+        width: 7px;
+        height: 7px;
+        background: #ec4899;
+        border-radius: 999px;
+        box-shadow: 0 0 14px #ec4899;
+      }
+
+      .explore-top-title {
+        text-align: center;
+        line-height: 1.05;
+        letter-spacing: 0.22em;
+        font-weight: 900;
+        font-size: 11px;
+        color: rgba(255,255,255,0.9);
+      }
+
+      .explore-top-title span {
+        display: block;
+        margin-top: 4px;
+        font-size: 8px;
+        color: rgba(251,207,232,0.85);
+      }
+
+      .explore-top-actions {
+        display: flex;
+        gap: 8px;
+      }
+
+      .explore-panel,
+      .explore-map-card,
+      .explore-detail-card,
+      .explore-control-bar {
+        position: relative;
+        z-index: 2;
+        border: 1px solid rgba(216, 180, 254, 0.18);
+        background: linear-gradient(180deg, rgba(16, 12, 35, 0.86), rgba(8, 6, 20, 0.74));
+        backdrop-filter: blur(18px);
+        box-shadow: 0 20px 50px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.06);
+      }
+
+      .explore-panel {
+        border-radius: 28px;
+        padding: 18px;
+        margin-bottom: 14px;
+      }
+
+      .explore-brand-row {
+        display: flex;
+        gap: 14px;
+        align-items: center;
+      }
+
+      .explore-crest {
+        width: 56px;
+        height: 56px;
+        border-radius: 18px;
+        background:
+          radial-gradient(circle at 50% 18%, rgba(255,255,255,0.28), transparent 24%),
+          linear-gradient(160deg, #6d28d9, #2e1065);
+        border: 1px solid rgba(251,207,232,0.42);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #f5e8ff;
+        font-size: 27px;
+        font-weight: 900;
+        box-shadow: 0 0 26px rgba(236,72,153,0.38);
+        cursor: pointer;
+        padding: 0;
+      }
+
+      .explore-crest:active {
+        transform: scale(0.96);
+      }
+
+      .explore-brand-row h1 {
+        margin: 0;
+        font-size: 28px;
+        line-height: 0.95;
+        letter-spacing: 0.08em;
+        font-weight: 950;
+        text-shadow: 0 0 18px rgba(249,168,212,0.7);
+      }
+
+      .explore-brand-row h1 span {
+        font-size: 22px;
+        letter-spacing: 0.34em;
+        color: #e9d5ff;
+      }
+
+      .explore-brand-row p {
+        margin: 8px 0 0;
+        font-size: 12px;
+        color: rgba(255,255,255,0.72);
+        font-weight: 700;
+      }
+
+      .explore-action-menu {
+        margin-top: 14px;
+        border-radius: 22px;
+        padding: 13px;
+        border: 1px solid rgba(251,207,232,0.18);
+        background: rgba(255,255,255,0.06);
+        box-shadow: inset 0 1px 0 rgba(255,255,255,0.06);
+      }
+
+      .explore-action-menu-head span {
+        display: block;
+        color: rgba(251,207,232,0.78);
+        font-size: 9px;
+        letter-spacing: 0.18em;
+        font-weight: 950;
+      }
+
+      .explore-action-menu-head strong {
+        display: block;
+        margin-top: 4px;
+        color: white;
+        font-size: 15px;
+        font-weight: 950;
+      }
+
+      .explore-action-menu-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 8px;
+        margin-top: 11px;
+      }
+
+      .explore-action-menu-grid button {
+        height: 42px;
+        border-radius: 15px;
+        border: 1px solid rgba(251,207,232,0.14);
+        background: rgba(0,0,0,0.16);
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 7px;
+        font-size: 12px;
+        font-weight: 950;
+      }
+
+      .explore-team-pill {
+        display: inline-flex;
+        margin-top: 14px;
+        padding: 7px 13px;
+        border-radius: 999px;
+        color: #f5e8ff;
+        font-size: 12px;
+        font-weight: 900;
+        background: rgba(126,34,206,0.28);
+        border: 1px solid rgba(251,207,232,0.28);
+      }
+
+      .explore-chip-row {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 9px;
+        margin-top: 15px;
+      }
+
+      .explore-chip {
+        border: 1px solid rgba(251,207,232,0.18);
+        background: rgba(255,255,255,0.05);
+        color: rgba(255,255,255,0.68);
+        border-radius: 15px;
+        height: 43px;
+        font-size: 13px;
+        font-weight: 950;
+      }
+
+      .explore-chip.active {
+        color: #fff;
+        background: linear-gradient(180deg, rgba(147,51,234,0.72), rgba(88,28,135,0.72));
+        border-color: rgba(251,207,232,0.55);
+        box-shadow: 0 0 22px rgba(236,72,153,0.36);
+      }
+
+      .explore-legend {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        margin-top: 15px;
+        color: rgba(255,255,255,0.72);
+        font-size: 12px;
+        font-weight: 800;
+      }
+
+      .explore-legend span,
+      .explore-legend button {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+      }
+
+      .explore-legend button {
+        color: rgba(255,255,255,0.72);
+        background: transparent;
+        border: 0;
+        font-weight: 900;
+      }
+
+      .legend-dot {
+        width: 12px;
+        height: 12px;
+        border-radius: 999px;
+        display: inline-block;
+      }
+
+      .legend-dot.visited {
+        background: #ec4899;
+        box-shadow: 0 0 14px #ec4899;
+      }
+
+      .legend-dot.unvisited {
+        background: #cbd5e1;
+        opacity: 0.7;
+      }
+
+      .explore-search {
+        margin-top: 15px;
+        height: 48px;
+        border-radius: 17px;
+        border: 1px solid rgba(251,207,232,0.18);
+        background: rgba(255,255,255,0.06);
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 0 14px;
+        color: rgba(255,255,255,0.72);
+      }
+
+      .explore-search input {
+        min-width: 0;
+        flex: 1;
+        background: transparent;
+        border: 0;
+        outline: 0;
+        color: white;
+        font-weight: 800;
+      }
+
+      .explore-search input::placeholder {
+        color: rgba(255,255,255,0.38);
+      }
+
+      .explore-stat-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+        margin-top: 15px;
+      }
+
+      .explore-stat {
+        border-radius: 18px;
+        border: 1px solid rgba(251,207,232,0.14);
+        background: rgba(255,255,255,0.05);
+        padding: 14px;
+      }
+
+      .explore-stat span {
+        display: block;
+        font-size: 12px;
+        color: rgba(255,255,255,0.66);
+        font-weight: 900;
+      }
+
+      .explore-stat strong {
+        font-size: 33px;
+        color: #f9a8d4;
+        line-height: 1;
+        margin-top: 7px;
+        display: inline-block;
+        text-shadow: 0 0 18px rgba(249,168,212,0.45);
+      }
+
+      .explore-stat small {
+        margin-left: 6px;
+        color: rgba(255,255,255,0.45);
+        font-weight: 900;
+      }
+
+      .explore-recommend {
+        width: 100%;
+        margin-top: 15px;
+        border-radius: 19px;
+        border: 1px solid rgba(251,207,232,0.14);
+        background: rgba(255,255,255,0.055);
+        padding: 12px;
+        display: grid;
+        grid-template-columns: 78px 1fr auto;
+        gap: 12px;
+        align-items: center;
+        text-align: left;
+        color: white;
+      }
+
+      .explore-recommend img {
+        width: 78px;
+        height: 58px;
+        border-radius: 14px;
+        object-fit: cover;
+        filter: saturate(1.15) contrast(1.05);
+      }
+
+      .explore-recommend span {
+        display: block;
+        color: rgba(255,255,255,0.58);
+        font-size: 11px;
+        font-weight: 900;
+      }
+
+      .explore-recommend strong {
+        display: block;
+        margin-top: 4px;
+        font-size: 14px;
+        line-height: 1.35;
+        font-weight: 950;
+      }
+
+      .explore-recommend small {
+        display: block;
+        margin-top: 4px;
+        color: rgba(255,255,255,0.55);
+        font-size: 10px;
+        font-weight: 800;
+      }
+
+      .explore-map-card {
+        border-radius: 30px;
+        padding: 14px;
+        margin-bottom: 14px;
+      }
+
+      .explore-map-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 8px;
+      }
+
+      .explore-map-header span {
+        display: block;
+        color: rgba(251,207,232,0.75);
+        font-size: 9px;
+        letter-spacing: 0.18em;
+        font-weight: 900;
+      }
+
+      .explore-map-header strong {
+        display: block;
+        margin-top: 4px;
+        font-size: 17px;
+        font-weight: 950;
+      }
+
+      .explore-map-count {
+        width: 52px;
+        height: 52px;
+        border-radius: 18px;
+        background: rgba(126,34,206,0.32);
+        border: 1px solid rgba(251,207,232,0.18);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        color: #e9d5ff;
+        font-size: 18px;
+        font-weight: 950;
+      }
+
+      .explore-map-count small {
+        font-size: 8px;
+        color: rgba(255,255,255,0.5);
+      }
+
+      .explore-map {
+        position: relative;
+        height: 510px;
+        border-radius: 26px;
+        overflow: hidden;
+        background:
+          radial-gradient(circle at 23% 72%, rgba(236,72,153,0.26), transparent 16%),
+          radial-gradient(circle at 68% 44%, rgba(59,130,246,0.18), transparent 18%),
+          linear-gradient(180deg, rgba(8,8,26,0.96), rgba(3,4,13,0.96));
+      }
+
+      .explore-map::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background-image:
+          radial-gradient(circle, rgba(255,255,255,0.16) 1px, transparent 1.4px);
+        background-size: 22px 22px;
+        opacity: 0.2;
+      }
+
+      .explore-route-layer {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        filter: drop-shadow(0 0 8px rgba(236,72,153,0.9));
+        z-index: 2;
+      }
+
+      
+
+      .explore-tiny-light {
+        position: absolute;
+        width: 3px;
+        height: 3px;
+        border-radius: 999px;
+        background: rgba(255,255,255,0.62);
+        box-shadow: 0 0 9px rgba(255,255,255,0.8);
+        animation: exploreTwinkle 2.6s infinite ease-in-out;
+        z-index: 2;
+      }
+
+      .explore-node {
+  position: absolute;
+  width: 26px;
+  height: 26px;
+  padding: 0;
+  transform: translate(-50%, -50%);
+  z-index: 8;
+  border: 0;
+  background: transparent;
+  color: white;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.explore-node.active {
+  z-index: 40;
+}
+
+.explore-node.featured {
+  width: 38px;
+  height: 38px;
+  z-index: 30;
+}
+
+.explore-node-core {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 14px;
+  height: 14px;
+  transform: translate(-50%, -50%);
+  border-radius: 999px;
+  background: #cbd5e1;
+  box-shadow: 0 0 18px rgba(203,213,225,0.75);
+  pointer-events: none;
+}
+
+.explore-node-core::before {
+  content: '';
+  position: absolute;
+  inset: -7px;
+  border-radius: inherit;
+  border: 1px solid rgba(255,255,255,0.22);
+  animation: explorePulse 2.2s infinite;
+}
+
+.explore-node.visited .explore-node-core {
+  background: #ec4899;
+  box-shadow: 0 0 20px rgba(236,72,153,1);
+}
+
+.explore-node.result-win .explore-node-core {
+  background: linear-gradient(135deg, #ec4899, #60a5fa);
+  box-shadow:
+    0 0 18px rgba(236,72,153,0.95),
+    0 0 26px rgba(214,179,106,0.7);
+}
+
+.explore-node.result-draw .explore-node-core {
+  background: linear-gradient(135deg, #f8fafc, #94a3b8);
+  box-shadow: 0 0 20px rgba(226,232,240,0.85);
+}
+
+.explore-node.result-lose .explore-node-core {
+  background: linear-gradient(135deg, #312e81, #0f172a);
+  box-shadow: 0 0 18px rgba(59,130,246,0.65);
+}
+
+.explore-node.featured .explore-node-core {
+  width: 30px;
+  height: 30px;
+  background: #ec4899;
+  box-shadow:
+    0 0 22px rgba(236,72,153,1),
+    0 0 48px rgba(236,72,153,0.65);
+}
+
+.explore-node.active .explore-node-core {
+  background: #38bdf8;
+  box-shadow:
+    0 0 24px rgba(56,189,248,1),
+    0 0 50px rgba(236,72,153,0.55);
+}
+
+.explore-node.has-photo::after {
+  content: '';
+  position: absolute;
+  inset: -6px;
+  border-radius: 999px;
+  border: 1px solid rgba(250, 204, 21, 0.7);
+  box-shadow: 0 0 16px rgba(250, 204, 21, 0.45);
+  pointer-events: none;
+}
+
+.explore-node-count {
+  position: absolute;
+  right: -5px;
+  top: -5px;
+  min-width: 15px;
+  height: 15px;
+  padding: 0 4px;
+  border-radius: 999px;
+  background: #facc15;
+  color: #2e1065;
+  font-size: 9px;
+  font-weight: 950;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  box-shadow: 0 0 10px rgba(250,204,21,0.7);
+}
+
+.explore-node-label {
+  position: absolute;
+  left: 24px;
+  top: 50%;
+  transform: translateY(-50%);
+  white-space: nowrap;
+  font-size: 11px;
+  font-weight: 950;
+  color: rgba(255,255,255,0.95);
+  text-shadow: 0 0 10px rgba(0,0,0,0.9);
+  pointer-events: none;
+}
+
+.explore-node.featured .explore-node-label {
+  left: 31px;
+  font-size: 13px;
+}
+
+.explore-node:not(.active):not(.featured) .explore-node-label {
+  display: none;
+}
+      .explore-compass {
+        position: absolute;
+        right: 16px;
+        bottom: 18px;
+        width: 54px;
+        height: 54px;
+        border-radius: 999px;
+        border: 1px solid rgba(251,207,232,0.17);
+        background: rgba(255,255,255,0.06);
+        color: #f9a8d4;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 6;
+      }
+
+      .explore-compass span {
+        position: absolute;
+        top: 7px;
+        font-size: 10px;
+        color: rgba(255,255,255,0.7);
+        font-weight: 900;
+      }
+
+      .explore-detail-card {
+        display: grid;
+        grid-template-columns: 96px 1fr;
+        gap: 13px;
+        align-items: center;
+        border-radius: 24px;
+        padding: 12px;
+        margin-bottom: 14px;
+      }
+
+      .explore-detail-card img {
+        width: 96px;
+        height: 86px;
+        object-fit: cover;
+        border-radius: 18px;
+      }
+
+      .explore-detail-info span {
+        color: #f9a8d4;
+        font-size: 10px;
+        letter-spacing: 0.18em;
+        font-weight: 950;
+      }
+
+      .explore-detail-info h2 {
+        margin: 5px 0 0;
+        font-size: 16px;
+        line-height: 1.25;
+        font-weight: 950;
+      }
+
+      .explore-detail-info p {
+        margin: 4px 0 0;
+        color: rgba(255,255,255,0.58);
+        font-size: 12px;
+        font-weight: 800;
+      }
+
+      .explore-detail-badges {
+        display: flex;
+        gap: 7px;
+        margin-top: 9px;
+      }
+
+      .explore-detail-badges b {
+        padding: 5px 8px;
+        border-radius: 999px;
+        background: rgba(255,255,255,0.08);
+        color: rgba(255,255,255,0.58);
+        font-size: 10px;
+      }
+
+      .explore-detail-badges b.is-visited {
+        color: #f5e8ff;
+        background: rgba(236,72,153,0.25);
+      }
+
+      .explore-detail-badges b.is-favorite {
+        color: #fde68a;
+        background: rgba(245,158,11,0.18);
+      }
+
+      .explore-control-bar {
+        border-radius: 24px;
+        padding: 10px;
+        display: grid;
+        grid-template-columns: 46px 1fr 84px;
+        gap: 8px;
+        align-items: center;
+        margin-bottom: 14px;
+      }
+
+      .explore-control-between {
+        margin-top: -2px;
+      }
+
+      .explore-control-bar button {
+        border: 1px solid rgba(251,207,232,0.16);
+        background: rgba(255,255,255,0.06);
+        color: white;
+        height: 42px;
+        border-radius: 16px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 5px;
+        font-size: 11px;
+        font-weight: 900;
+      }
+
+      .explore-zoom {
+        height: 42px;
+        border-radius: 16px;
+        border: 1px solid rgba(251,207,232,0.16);
+        background: rgba(255,255,255,0.06);
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+        color: rgba(255,255,255,0.72);
+      }
+
+      .explore-zoom strong {
+        color: #fff;
+        font-size: 13px;
+      }
+
+      .explore-timeline {
+        height: 42px;
+        border-radius: 16px;
+        border: 1px solid rgba(251,207,232,0.12);
+        background: rgba(255,255,255,0.04);
+        display: grid;
+        grid-template-columns: 1fr 20px 1fr 1fr;
+        align-items: center;
+        text-align: center;
+        font-size: 9px;
+        color: rgba(255,255,255,0.45);
+        font-weight: 900;
+      }
+
+      .explore-timeline i {
+        width: 12px;
+        height: 12px;
+        border-radius: 999px;
+        background: #ec4899;
+        box-shadow: 0 0 18px #ec4899;
+        margin: 0 auto;
+      }
+
+      .explore-timeline strong {
+        color: #fff;
+        font-size: 10px;
+      }
+
+
+      .explore-map-inner {
+        position: absolute;
+        inset: 0;
+        transform-origin: center center;
+        transition: transform 0.25s ease;
+        z-index: 1;
+      }
+
+      .explore-zoom {
+        display: grid;
+        grid-template-columns: 34px 1fr 34px;
+        overflow: hidden;
+      }
+
+      .explore-zoom button {
+        height: 42px;
+        border: 0;
+        background: transparent;
+        color: white;
+        font-size: 19px;
+        font-weight: 950;
+      }
+
+      .explore-zoom strong {
+        color: #fff;
+        font-size: 13px;
+        text-align: center;
+        font-weight: 950;
+        cursor: pointer;
+      }
+
+      .explore-mode-tabs {
+        height: 42px;
+        border-radius: 16px;
+        border: 1px solid rgba(251,207,232,0.12);
+        background: rgba(255,255,255,0.04);
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        align-items: center;
+        padding: 4px;
+        gap: 4px;
+      }
+
+      .explore-mode-tabs button {
+        height: 34px;
+        border-radius: 12px;
+        border: 0;
+        background: transparent;
+        color: rgba(255,255,255,0.48);
+        font-size: 10px;
+        font-weight: 950;
+      }
+
+      .explore-mode-tabs button.active {
+        background: rgba(236,72,153,0.32);
+        color: white;
+        box-shadow: 0 0 16px rgba(236,72,153,0.26);
+      }
+
+      .explore-list-panel {
+        position: relative;
+        z-index: 2;
+        margin-top: -2px;
+        margin-bottom: 14px;
+        border-radius: 24px;
+        padding: 13px;
+        border: 1px solid rgba(251,207,232,0.18);
+        background: rgba(9, 6, 24, 0.88);
+        backdrop-filter: blur(18px);
+        box-shadow: 0 18px 42px rgba(0,0,0,0.34);
+      }
+
+      .explore-list-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 10px;
+      }
+
+      .explore-list-header span {
+        display: block;
+        color: rgba(251,207,232,0.7);
+        font-size: 9px;
+        letter-spacing: 0.18em;
+        font-weight: 950;
+      }
+
+      .explore-list-header strong {
+        display: block;
+        margin-top: 3px;
+        color: white;
+        font-size: 14px;
+        font-weight: 950;
+      }
+
+      .explore-list-header button {
+        border: 0;
+        background: rgba(255,255,255,0.08);
+        color: rgba(255,255,255,0.68);
+        border-radius: 999px;
+        padding: 7px 10px;
+        font-size: 10px;
+        font-weight: 950;
+      }
+
+      .explore-list-items {
+        display: grid;
+        gap: 8px;
+        max-height: 260px;
+        overflow-y: auto;
+        padding-right: 2px;
+      }
+
+      .explore-list-items button {
+        width: 100%;
+        min-height: 54px;
+        border: 1px solid rgba(255,255,255,0.08);
+        background: rgba(255,255,255,0.045);
+        color: white;
+        border-radius: 17px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        padding: 10px 12px;
+        text-align: left;
+      }
+
+      .explore-list-items button.active {
+        border-color: rgba(236,72,153,0.6);
+        background: rgba(236,72,153,0.18);
+      }
+
+      .explore-list-items strong {
+        display: block;
+        font-size: 12px;
+        font-weight: 950;
+        line-height: 1.35;
+      }
+
+      .explore-list-items span {
+        display: block;
+        margin-top: 3px;
+        color: rgba(255,255,255,0.48);
+        font-size: 10px;
+        font-weight: 800;
+      }
+
+      .explore-list-items small {
+        flex-shrink: 0;
+        color: #f9a8d4;
+        font-size: 10px;
+        font-weight: 950;
+      }
+
+      .explore-bottom-nav {
+        position: fixed;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 100%;
+        max-width: 448px;
+        height: 76px;
+        z-index: 50;
+        background: rgba(5, 4, 16, 0.92);
+        border-top: 1px solid rgba(251,207,232,0.16);
+        backdrop-filter: blur(18px);
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        padding-bottom: 8px;
+      }
+
+      .explore-bottom-nav button {
+        background: transparent;
+        border: 0;
+        color: rgba(255,255,255,0.48);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 5px;
+        font-size: 10px;
+        font-weight: 900;
+      }
+
+      .explore-bottom-nav button.active {
+        color: #f9a8d4;
+        text-shadow: 0 0 14px rgba(249,168,212,0.5);
+      }
+
+      .explore-memory-filter-row {
+  margin-top: 9px;
+}
+
+.explore-memory-card {
+  position: relative;
+  z-index: 2;
+  border-radius: 26px;
+  padding: 12px;
+  margin-bottom: 14px;
+  border: 1px solid rgba(216, 180, 254, 0.18);
+  background:
+    linear-gradient(180deg, rgba(16, 12, 35, 0.9), rgba(8, 6, 20, 0.78));
+  backdrop-filter: blur(18px);
+  box-shadow: 0 20px 50px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.06);
+}
+
+.explore-memory-card.memory-win {
+  border-color: rgba(214,179,106,0.4);
+  box-shadow:
+    0 20px 50px rgba(0,0,0,0.35),
+    0 0 28px rgba(214,179,106,0.13);
+}
+
+.explore-memory-card.memory-draw {
+  border-color: rgba(226,232,240,0.34);
+}
+
+.explore-memory-card.memory-lose {
+  border-color: rgba(59,130,246,0.32);
+}
+
+.memory-photo-wrap {
+  position: relative;
+  height: 150px;
+  border-radius: 22px;
+  overflow: hidden;
+  background: rgba(255,255,255,0.06);
+}
+
+.memory-photo-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: saturate(1.12) contrast(1.05);
+}
+
+.memory-photo-wrap::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg, transparent 35%, rgba(0,0,0,0.72) 100%),
+    radial-gradient(circle at 20% 20%, rgba(236,72,153,0.22), transparent 35%);
+}
+
+.memory-result-badge {
+  position: absolute;
+  left: 12px;
+  bottom: 12px;
+  z-index: 2;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: rgba(0,0,0,0.55);
+  border: 1px solid rgba(255,255,255,0.25);
+  color: white;
+  font-size: 11px;
+  font-weight: 950;
+  letter-spacing: 0.16em;
+}
+
+.memory-info {
+  padding: 14px 3px 2px;
+}
+
+.memory-kicker {
+  color: #f9a8d4;
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  font-weight: 950;
+}
+
+.memory-info h2 {
+  margin: 6px 0 0;
+  font-size: 18px;
+  line-height: 1.25;
+  font-weight: 950;
+}
+
+.memory-info p {
+  margin: 4px 0 0;
+  color: rgba(255,255,255,0.56);
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.memory-score {
+  margin-top: 12px;
+  border-radius: 18px;
+  padding: 12px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.08);
+}
+
+.memory-score span {
+  display: block;
+  color: rgba(255,255,255,0.52);
+  font-size: 10px;
+  font-weight: 900;
+}
+
+.memory-score strong {
+  display: block;
+  margin-top: 5px;
+  color: white;
+  font-size: 13px;
+  line-height: 1.45;
+  font-weight: 950;
+}
+
+.memory-mini-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 9px;
+  margin-top: 10px;
+}
+
+.memory-mini-grid div {
+  border-radius: 16px;
+  padding: 10px;
+  background: rgba(255,255,255,0.045);
+  border: 1px solid rgba(255,255,255,0.07);
+}
+
+.memory-mini-grid span {
+  display: block;
+  color: rgba(255,255,255,0.42);
+  font-size: 9px;
+  font-weight: 900;
+}
+
+.memory-mini-grid strong {
+  display: block;
+  margin-top: 4px;
+  color: rgba(255,255,255,0.9);
+  font-size: 11px;
+  line-height: 1.35;
+  font-weight: 950;
+}
+
+.memory-memo {
+  margin-top: 10px;
+  border-radius: 18px;
+  padding: 12px;
+  background: rgba(236,72,153,0.12);
+  border: 1px solid rgba(251,207,232,0.12);
+  color: rgba(255,255,255,0.82);
+  font-size: 12px;
+  line-height: 1.7;
+  font-weight: 700;
+}
+
+.memory-switcher {
+  margin-top: 12px;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 8px;
+  align-items: center;
+}
+
+.memory-switcher button {
+  height: 36px;
+  border-radius: 14px;
+  border: 1px solid rgba(251,207,232,0.16);
+  background: rgba(255,255,255,0.06);
+  color: white;
+  font-size: 11px;
+  font-weight: 900;
+}
+
+.memory-switcher span {
+  color: rgba(255,255,255,0.58);
+  font-size: 11px;
+  font-weight: 900;
+}
+
+.memory-empty {
+  margin-top: 12px;
+  border-radius: 18px;
+  padding: 14px;
+  background: rgba(255,255,255,0.045);
+  border: 1px dashed rgba(251,207,232,0.16);
+  color: rgba(255,255,255,0.58);
+  font-size: 12px;
+  line-height: 1.7;
+  font-weight: 800;
+}
+
+      @keyframes explorePulse {
+        0% {
+          transform: scale(0.8);
+          opacity: 0.7;
+        }
+        100% {
+          transform: scale(1.8);
+          opacity: 0;
+        }
+      }
+
+      @keyframes exploreTwinkle {
+        0%, 100% {
+          opacity: 0.18;
+          transform: scale(0.8);
+        }
+        50% {
+          opacity: 0.9;
+          transform: scale(1.2);
+        }
+      }
+
+      .explore-map {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  height: auto;
+  border-radius: 26px;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 23% 72%, rgba(236,72,153,0.16), transparent 16%),
+    radial-gradient(circle at 68% 44%, rgba(59,130,246,0.12), transparent 18%),
+    linear-gradient(180deg, rgba(8,8,26,0.96), rgba(3,4,13,0.96));
+}
+
+.explore-map-image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  opacity: 0.96;
+  filter:
+    drop-shadow(0 0 22px rgba(168, 85, 247, 0.36))
+    saturate(1.12)
+    contrast(1.06);
+  z-index: 1;
+  pointer-events: none;
+  user-select: none;
+}
+    `}</style>
   );
 }
 function HomeView({
@@ -1839,34 +3958,57 @@ function HomeView({
 
   return (
     <div>
-      <section className="relative bg-[#e4007f] text-white overflow-visible">
+      <section className="relative bg-[#381078] text-white overflow-visible">
         <BrandHeader setView={setView} records={records} />
 
         {/* メインビジュアル */}
         <div className="relative h-[250px] overflow-hidden">
           <img
-            src="https://maido-storage.oss-cn-hongkong.aliyuncs.com/maido/uploads/2024/04/cerezo-osaka-game-repot-ogp.jpg"
+            src="https://www.jleague.jp/img/news/2025/11/32339.jpg?_=1760690164"
             className="absolute inset-0 w-full h-full object-cover opacity-60 scale-105"
             alt="stadium"
           />
 
-          <div className="absolute inset-0 bg-gradient-to-b from-[#a00059]/40 via-[#e4007f]/65 to-[#e4007f]/95"></div>
+          <div className="absolute inset-0 bg-gradient-to-b from-[#26095a]/40 via-[#3b1378]/65 to-[#3b1378]/95"></div>
           <div className="absolute inset-0 bg-[linear-gradient(120deg,rgba(255,255,255,0.08)_0%,transparent_35%,transparent_65%,rgba(250,204,21,0.12)_100%)]"></div>
 
           <div className="absolute left-5 right-5 top-8">
-            <div className="inline-flex items-center gap-2 bg-white/15 backdrop-blur-md border border-white/15 text-white px-3 py-1.5 rounded-lg text-xs font-black mb-4 shadow-lg">
-              <Medal size={14} className="text-yellow-300" />
-              FORZA CEREZO!
+            <div className="flex items-center gap-2 mb-4">
+              <div className="inline-flex items-center gap-2 bg-white/15 backdrop-blur-md border border-white/15 text-white px-3 py-1.5 rounded-lg text-xs font-black shadow-lg">
+                <Medal size={14} className="text-yellow-300" />
+                SAKURA PRIDE
+              </div>
+
+              <button
+                type="button"
+                onClick={() => setView('tickets')}
+                className="inline-flex items-center gap-1.5 bg-white/20 backdrop-blur-md border border-white/20 text-white px-3 py-1.5 rounded-lg text-xs font-black shadow-lg active:scale-95"
+              >
+                <Ticket size={14} className="text-yellow-200" />
+                桜色のチケットを見る
+              </button>
+
             </div>
 
             <h1 className="text-[26px] font-black leading-snug tracking-tight drop-shadow-md">
-              今日も、桜の記憶を残そう。
+              今日も、桜色の記憶を残そう。
             </h1>
 
-            <p className="mt-4 text-sm text-white/95 font-bold leading-7 drop-shadow-sm">
-              セレッソのある日常を、<br />
-              あなただけのアルバムに。
-            </p>
+            <div className="mt-4 flex items-end justify-between gap-3">
+              <p className="text-sm text-white/95 font-bold leading-7 drop-shadow-sm">
+                セレッソのある日常を、<br />
+                あなただけのアルバムに。
+              </p>
+
+              <button
+                type="button"
+                onClick={() => setView('explore')}
+                className="shrink-0 inline-flex items-center gap-1.5 bg-pink-900/55 backdrop-blur-md border border-pink-200/30 text-white px-2.5 py-2 rounded-2xl text-[11px] font-black shadow-lg active:scale-95"
+              >
+                <MapPin size={14} className="text-pink-200" />
+                スタジアム探検
+              </button>
+            </div>
           </div>
         </div>
       </section>
@@ -1883,12 +4025,12 @@ function HomeView({
             <button
               type="button"
               onClick={() => setScheduleOpen(true)}
-              className="flex items-center gap-1 text-[#e4007f] text-xs font-black mb-2 active:scale-95"
+              className="flex items-center gap-1 text-[#3b1378] text-xs font-black mb-2 active:scale-95"
             >
               <Calendar size={14} className="shrink-0" />
               次の試合
             </button>
-            <p className="text-[9px] text-[#e4007f] font-black mb-1">
+            <p className="text-[9px] text-[#ec4899] font-black mb-1">
               タップでカレンダーを表示
             </p>
             {nextMatch ? (
@@ -1900,7 +4042,7 @@ function HomeView({
 
                   <span
                     className={`text-[7px] font-black px-1.5 py-0.5 rounded-full shrink-0 ${nextMatch.venueType === 'HOME'
-                      ? 'bg-pink-100 text-[#e4007f]'
+                      ? 'bg-pink-100 text-[#ec4899]'
                       : 'bg-yellow-100 text-yellow-700'
                       }`}
                   >
@@ -1941,7 +4083,7 @@ function HomeView({
       {saveMessage && (
         <div className="fixed left-1/2 top-[60px] z-[900] w-full max-w-md -translate-x-1/2 px-5">
           <div className="bg-white/95 backdrop-blur-md border border-pink-100 rounded-2xl shadow-xl shadow-pink-900/20 p-4 flex items-center gap-3">
-            <div className="w-10 h-10 rounded-full bg-pink-100 text-[#e4007f] flex items-center justify-center shrink-0">
+            <div className="w-10 h-10 rounded-full bg-pink-100 text-[#ec4899] flex items-center justify-center shrink-0">
               <CheckCircle2 size={22} />
             </div>
 
@@ -1995,7 +4137,7 @@ function HomeView({
               <button
                 type="button"
                 onClick={onContinueDraft}
-                className="bg-[#e4007f] text-white text-xs font-black py-3 rounded-2xl active:scale-95"
+                className="bg-[#ec4899] text-white text-xs font-black py-3 rounded-2xl active:scale-95"
               >
                 続きを書く
               </button>
@@ -2014,10 +4156,10 @@ function HomeView({
       <div className="px-6 mt-5">
         <button
           onClick={onStartCreate}
-          className="interactive-card w-full bg-gradient-to-r from-[#e4007f] to-[#ff5fa2] text-white py-4 rounded-full font-black shadow-xl shadow-pink-900/25 flex items-center justify-center gap-2 active:scale-95 transition"
+          className="interactive-card w-full bg-gradient-to-r from-[#ec4899] to-[#5d20a8] text-white py-4 rounded-full font-black shadow-xl shadow-pink-900/25 flex items-center justify-center gap-2 active:scale-95 transition"
         >
           <Plus size={18} strokeWidth={3} />
-          新たに桜を彩る
+          新たに桜色を彩る
         </button>
       </div>
 
@@ -2029,7 +4171,7 @@ function HomeView({
               {showAllRecords ? 'すべての記録を表示中' : '最新3件を表示中'}
             </p>
 
-            <p className="text-[11px] text-[#e4007f] font-black mt-1">
+            <p className="text-[11px] text-[#ec4899] font-black mt-1">
               タップで詳細・編集できます。
             </p>
           </div>
@@ -2037,7 +4179,7 @@ function HomeView({
           <button
             type="button"
             onClick={() => setShowAllRecords(!showAllRecords)}
-            className="interactive-icon text-[#e4007f] text-xs font-black flex items-center"
+            className="interactive-icon text-[#ec4899] text-xs font-black flex items-center"
           >
             {showAllRecords ? '閉じる' : 'すべて見る'}
             <ChevronRight
@@ -2067,14 +4209,14 @@ function HomeView({
                 <div className="flex-1 min-w-0">
                   {/* ★修正：日付の横に結果バッジとお気に入りボタンを回り込ませる構造に変更 */}
                   <div className="flex justify-between items-start gap-2">
-                    <div className="text-[11px] text-[#e4007f] font-black">
+                    <div className="text-[11px] text-[#3b1378] font-black">
                       {record.date}
                     </div>
 
                     <div className="flex items-center gap-2">
                       <span
                         className={`text-[10px] font-black px-2 py-1 rounded-full ${result === 'WIN'
-                          ? 'bg-pink-100 text-[#e4007f]'
+                          ? 'bg-pink-100 text-[#ec4899]'
                           : result === 'DRAW'
                             ? 'bg-gray-100 text-gray-500'
                             : 'bg-red-50 text-red-500'
@@ -2114,7 +4256,7 @@ function HomeView({
                     <Users size={11} /> {record.companion}
                   </div>
 
-                  <span className="inline-block mt-2 bg-pink-100 text-[#e4007f] text-[10px] font-black px-3 py-1 rounded-full">
+                  <span className="inline-block mt-2 bg-pink-100 text-[#ec4899] text-[10px] font-black px-3 py-1 rounded-full">
                     #{record.tag}
                   </span>
                 </div>
@@ -2151,7 +4293,7 @@ function MatchScheduleModal({ onClose, records = [] }) {
         className="w-full max-w-sm max-h-[82vh] bg-white rounded-[1.8rem] shadow-2xl overflow-hidden"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="bg-gradient-to-r from-[#a00059] to-[#e4007f] text-white p-5">
+        <div className="bg-gradient-to-r from-[#2b0b63] to-[#ec4899] text-white p-5">
           <div className="flex items-center justify-between">
             <div>
               <div className="text-[11px] font-black text-yellow-300 tracking-widest">
@@ -2180,7 +4322,7 @@ function MatchScheduleModal({ onClose, records = [] }) {
         <div className="p-4 overflow-y-auto max-h-[62vh] space-y-5">
           {Object.entries(groupedSchedule).map(([month, matches]) => (
             <div key={month}>
-              <div className="sticky top-0 bg-white/95 backdrop-blur-sm py-2 text-[#e4007f] text-sm font-black border-b border-pink-100">
+              <div className="sticky top-0 bg-white/95 backdrop-blur-sm py-2 text-[#ec4899] text-sm font-black border-b border-pink-100">
                 {month}
               </div>
 
@@ -2202,7 +4344,7 @@ function MatchScheduleModal({ onClose, records = [] }) {
                       <div className="flex items-start gap-3">
                         <div
                           className={`w-12 h-12 rounded-2xl flex flex-col items-center justify-center shrink-0 ${match.venueType === 'HOME'
-                            ? 'bg-[#e4007f] text-white'
+                            ? 'bg-[#ec4899] text-white'
                             : 'bg-yellow-100 text-yellow-700'
                             }`}
                         >
@@ -2221,7 +4363,7 @@ function MatchScheduleModal({ onClose, records = [] }) {
                             </div>
 
                             {isNextMatch && (
-                              <span className="bg-[#e4007f] text-white text-[9px] font-black px-2 py-0.5 rounded-full">
+                              <span className="bg-[#ec4899] text-white text-[9px] font-black px-2 py-0.5 rounded-full">
                                 NEXT
                               </span>
                             )}
@@ -2263,7 +4405,7 @@ function DetailScorersCard({ scorers }) {
 
   return (
     <Card>
-      <div className="flex items-center gap-2 text-[#e4007f] font-black mb-4">
+      <div className="flex items-center gap-2 text-[#ec4899] font-black mb-4">
         <Trophy size={18} />
         得点者
       </div>
@@ -2278,7 +4420,7 @@ function DetailScorersCard({ scorers }) {
                 key={scorer.id || index}
                 className="flex items-center gap-3 bg-[#f8f7fb] border border-gray-100 rounded-2xl p-3"
               >
-                <div className="w-10 h-10 rounded-xl bg-[#e4007f] text-white flex items-center justify-center font-black shrink-0">
+                <div className="w-10 h-10 rounded-xl bg-[#ec4899] text-white flex items-center justify-center font-black shrink-0">
                   {player ? player.number : index + 1}
                 </div>
 
@@ -2293,7 +4435,7 @@ function DetailScorersCard({ scorers }) {
                   </div>
                 </div>
 
-                <div className="text-xs font-black text-[#e4007f] bg-pink-50 px-2 py-1 rounded-full">
+                <div className="text-xs font-black text-[#ec4899] bg-pink-50 px-2 py-1 rounded-full">
                   GOAL
                 </div>
               </div>
@@ -2345,19 +4487,33 @@ function RecordDetailView({ record, setView, backTo, onEdit, onToggleFavorite, o
       stadium: record.stadium || data.stadium || '',
     };
 
+  const shareScorers = (data.scorers || []).filter(
+    (scorer) => scorer.player || scorer.minute
+  );
+
+  const scorerText = shareScorers.length > 0
+    ? shareScorers
+      .map((scorer) => {
+        const name = scorer.player || '得点者未入力';
+        const minute = scorer.minute ? `${scorer.minute}分` : '';
+        return minute ? `${name} ${minute}` : name;
+      })
+      .join(' / ')
+    : '';
+
   return (
     <div className="min-h-screen bg-[#f8f7fb] pb-28">
       <BrandHeader back={backTo} setView={setView} />
 
       <section className="px-5 py-6 space-y-4">
         {/* メインカード */}
-        <div className="relative overflow-hidden rounded-[1.8rem] bg-gradient-to-br from-[#a00059] via-[#e4007f] to-[#ff7ab8] text-white shadow-xl shadow-pink-900/25">
+        <div className="relative overflow-hidden rounded-[1.8rem] bg-gradient-to-br from-[#831843] via-[#ec4899] to-[#6d28d9] text-white shadow-xl shadow-pink-900/25">
           <img
             src={record.img}
             alt={record.stadium}
             className="absolute inset-0 w-full h-full object-cover opacity-35"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#21054b] via-[#e4007f]/80 to-[#a00059]/70"></div>
+          <div className="absolute inset-0 bg-gradient-to-t from-[#21054b] via-[#3b1378]/80 to-[#831843]/70"></div>
 
           <div className="relative z-10 p-5">
             <div className="flex items-center justify-between mb-5">
@@ -2388,7 +4544,7 @@ function RecordDetailView({ record, setView, backTo, onEdit, onToggleFavorite, o
               <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-3">
                 <div className="text-center">
                   <div className="w-12 h-12 mx-auto flex items-center justify-center">
-                    <TeamBadge team={sanfrecceTeam} size="small" />
+                    <TeamBadge team={cerezoTeam} size="small" />
                   </div>
                   <div className="text-xs font-black mt-2">
                     C大阪
@@ -2396,14 +4552,27 @@ function RecordDetailView({ record, setView, backTo, onEdit, onToggleFavorite, o
                 </div>
 
                 <div className="text-center">
-                  <div className="text-[42px] font-black leading-none tracking-[-0.08em]">
+                  <div className="text-[58px] font-black leading-none tracking-[-0.1em]">
                     {homeScore}
-                    <span className="text-white/60 mx-1">-</span>
+                    <span className="text-white/45 mx-2">-</span>
                     {awayScore}
                   </div>
-                  <div className="text-[10px] font-black text-yellow-300 mt-2 tracking-widest">
+
+                  <div className="mt-2 text-[10px] font-black text-[#60a5fa] tracking-[0.32em]">
                     FULL TIME
                   </div>
+
+                  {shareScorers.length > 0 && (
+                    <div className="mt-3 mx-auto max-w-[155px] rounded-2xl bg-white/10 border border-white/15 px-3 py-2">
+                      <div className="text-[8px] font-black text-white/45 tracking-[0.22em]">
+                        SCORERS
+                      </div>
+
+                      <div className="mt-1 text-[10px] font-black text-white/90 leading-snug">
+                        {scorerText}
+                      </div>
+                    </div>
+                  )}
                 </div>
 
                 <div className="text-center min-w-0">
@@ -2461,7 +4630,7 @@ function RecordDetailView({ record, setView, backTo, onEdit, onToggleFavorite, o
               <div className="text-xs text-gray-500 font-black mb-2">
                 満足度
               </div>
-              <div className="text-2xl font-black text-[#e4007f]">
+              <div className="text-2xl font-black text-[#ec4899]">
                 {data.rating || '-'}
               </div>
               <div className="flex justify-center mt-1">
@@ -2482,13 +4651,13 @@ function RecordDetailView({ record, setView, backTo, onEdit, onToggleFavorite, o
               </div>
               {selectedMvp ? (
                 <>
-                  <div className="w-12 h-12 mx-auto rounded-2xl bg-gradient-to-br from-[#e4007f] to-[#a00059] text-white flex flex-col items-center justify-center shadow-md">
+                  <div className="w-12 h-12 mx-auto rounded-2xl bg-gradient-to-br from-[#ec4899] to-[#831843] text-white flex flex-col items-center justify-center shadow-md">
                     <div className="text-[9px] font-black text-white/70">No.</div>
                     <div className="text-xl font-black leading-none">
                       {selectedMvp.number}
                     </div>
                   </div>
-                  <div className="text-[11px] font-black text-[#e4007f] mt-2 truncate">
+                  <div className="text-[11px] font-black text-[#ec4899] mt-2 truncate">
                     {selectedMvp.name}
                   </div>
                 </>
@@ -2503,7 +4672,7 @@ function RecordDetailView({ record, setView, backTo, onEdit, onToggleFavorite, o
               <div className="text-xs text-gray-500 font-black mb-2">
                 合計費用
               </div>
-              <div className="text-xl font-black text-[#e4007f] leading-tight">
+              <div className="text-xl font-black text-[#ec4899] leading-tight">
                 ¥{totalExpense.toLocaleString()}
               </div>
               <div className="text-[10px] text-gray-400 font-bold mt-1">
@@ -2515,7 +4684,7 @@ function RecordDetailView({ record, setView, backTo, onEdit, onToggleFavorite, o
 
         {/* メモ */}
         <Card>
-          <div className="flex items-center gap-2 text-[#e4007f] font-black mb-3">
+          <div className="flex items-center gap-2 text-[#ec4899] font-black mb-3">
             <PenSquare size={17} />
             思い出メモ
           </div>
@@ -2526,7 +4695,7 @@ function RecordDetailView({ record, setView, backTo, onEdit, onToggleFavorite, o
 
         {/* タグ */}
         <Card>
-          <div className="flex items-center gap-2 text-[#e4007f] font-black mb-3">
+          <div className="flex items-center gap-2 text-[#ec4899] font-black mb-3">
             <TagIcon size={17} />
             タグ
           </div>
@@ -2536,7 +4705,7 @@ function RecordDetailView({ record, setView, backTo, onEdit, onToggleFavorite, o
               tags.map((tag) => (
                 <span
                   key={tag}
-                  className="bg-pink-100 text-[#e4007f] text-xs font-black px-3 py-1.5 rounded-full"
+                  className="bg-pink-100 text-[#ec4899] text-xs font-black px-3 py-1.5 rounded-full"
                 >
                   #{tag}
                 </span>
@@ -2549,7 +4718,7 @@ function RecordDetailView({ record, setView, backTo, onEdit, onToggleFavorite, o
 
         {/* 写真 */}
         <Card>
-          <div className="flex items-center gap-2 text-[#e4007f] font-black mb-3">
+          <div className="flex items-center gap-2 text-[#ec4899] font-black mb-3">
             <ImageIcon size={17} />
             写真
           </div>
@@ -2574,18 +4743,18 @@ function RecordDetailView({ record, setView, backTo, onEdit, onToggleFavorite, o
 
         {/* タイムライン */}
         <Card>
-          <div className="flex items-center gap-2 text-[#e4007f] font-black mb-4">
+          <div className="flex items-center gap-2 text-[#ec4899] font-black mb-4">
             <Clock size={17} />
             タイムライン
           </div>
 
           {timeline.length > 0 ? (
-            <div className="relative ml-3 border-l-2 border-[#e4007f] space-y-4">
+            <div className="relative ml-3 border-l-2 border-[#ec4899] space-y-4">
               {timeline.map((item) => (
                 <div key={item.id} className="relative pl-6">
-                  <div className="absolute -left-[9px] top-1 w-4 h-4 rounded-full border-2 border-[#e4007f] bg-white"></div>
+                  <div className="absolute -left-[9px] top-1 w-4 h-4 rounded-full border-2 border-[#ec4899] bg-white"></div>
                   <div className="bg-[#f8f7fb] rounded-2xl p-3 border border-gray-100">
-                    <div className="text-xs font-black text-[#e4007f]">
+                    <div className="text-xs font-black text-[#ec4899]">
                       {item.time}
                     </div>
                     <div className="text-sm font-bold mt-1">
@@ -2601,6 +4770,32 @@ function RecordDetailView({ record, setView, backTo, onEdit, onToggleFavorite, o
             </div>
           )}
         </Card>
+
+        <Card>
+          <button
+            type="button"
+            onClick={() => setView('shareCard')}
+            className="w-full flex items-center justify-between gap-3 rounded-2xl bg-gradient-to-r from-[#ec4899] to-[#6d28d9] text-white p-4 shadow-lg shadow-pink-900/20 active:scale-[0.99]"
+          >
+            <div className="flex items-center gap-3 text-left">
+              <div className="w-11 h-11 rounded-2xl bg-white/15 border border-white/20 flex items-center justify-center">
+                <Share2 size={20} />
+              </div>
+
+              <div>
+                <div className="text-sm font-black">
+                  共有カードを作成
+                </div>
+                <div className="text-xs text-white/80 font-bold mt-1">
+                  スクショしてSNSに載せられるカードを表示します
+                </div>
+              </div>
+            </div>
+
+            <ChevronRight size={18} className="shrink-0" />
+          </button>
+        </Card>
+
       </section>
 
       <BottomAction>
@@ -2626,6 +4821,732 @@ function RecordDetailView({ record, setView, backTo, onEdit, onToggleFavorite, o
   );
 }
 
+function ShareCardView({ record, setView, backTo = 'recordDetail' }) {
+  const data = record.draftData || {};
+  const cardRef = useRef(null);
+  const [isSaving, setIsSaving] = useState(false);
+  const [saveError, setSaveError] = useState('');
+
+  const scoreMatch = record.score?.match(/(\d+)\s*-\s*(\d+)/);
+  const homeScore = data.homeScore ?? (scoreMatch ? scoreMatch[1] : '-');
+  const awayScore = data.awayScore ?? (scoreMatch ? scoreMatch[2] : '-');
+
+  const homeNumber = Number(homeScore);
+  const awayNumber = Number(awayScore);
+  const hasScore = !Number.isNaN(homeNumber) && !Number.isNaN(awayNumber);
+
+  const resultLabel = hasScore
+    ? homeNumber > awayNumber
+      ? 'WIN'
+      : homeNumber < awayNumber
+        ? 'LOSE'
+        : 'DRAW'
+    : 'RECORD';
+
+  const resultSymbol =
+    resultLabel === 'WIN'
+      ? '○'
+      : resultLabel === 'DRAW'
+        ? '△'
+        : resultLabel === 'LOSE'
+          ? '●'
+          : '✦';
+
+  const resultTheme = {
+    bg: 'from-[#831843]/96 via-[#ec4899]/92 to-[#1e1b4b]/96',
+    chip: 'bg-pink-200 text-[#831843] border-pink-100',
+    accent: 'text-yellow-300',
+    glow: 'bg-pink-300/25',
+    shadow: 'shadow-pink-900/25',
+  };
+
+  const selectedMvp =
+    playerOptions.find((player) => player.name === data.mvp) || null;
+
+  const opponentTeam =
+    opponentTeams.find((team) => team.name === record.opponent) ||
+    opponentTeams.find((team) => team.name === data.opponent) ||
+    {
+      name: record.opponent || data.opponent || '対戦相手未入力',
+      short: record.opponent || data.opponent || '未入力',
+      main: '#6b7280',
+      sub: '#e5e7eb',
+      stadium: record.stadium || data.stadium || '',
+    };
+
+  const displayStadium =
+    record.stadium === 'YANMAR HANASAKA STADIUM'
+      ? 'Eピース'
+      : record.stadium || 'スタジアム未設定';
+
+  const displayMvp = selectedMvp
+    ? `No.${selectedMvp.number} ${selectedMvp.name}`
+    : data.mvp || '未選択';
+
+
+
+  const shareScorers = (data.scorers || []).filter(
+    (scorer) => scorer.player || scorer.minute
+  );
+
+  const scorerText = shareScorers.length > 0
+    ? shareScorers
+      .map((scorer) => {
+        const name = scorer.player || '得点者未入力';
+        const minute = scorer.minute ? `${scorer.minute}分` : '';
+        return minute ? `${name} ${minute}` : name;
+      })
+      .join(' / ')
+    : '';
+
+  const handleSaveImage = async () => {
+    if (isSaving) return;
+
+    setIsSaving(true);
+    setSaveError('');
+
+    try {
+      if (document.fonts?.ready) {
+        await document.fonts.ready;
+      }
+
+      const canvas = document.createElement('canvas');
+      const width = 1080;
+      const height = 1500;
+      const scale = 2;
+
+      canvas.width = width * scale;
+      canvas.height = height * scale;
+
+      const ctx = canvas.getContext('2d');
+      ctx.scale(scale, scale);
+
+      const roundRect = (x, y, w, h, r) => {
+        const radius = Math.min(r, w / 2, h / 2);
+
+        ctx.beginPath();
+        ctx.moveTo(x + radius, y);
+        ctx.lineTo(x + w - radius, y);
+        ctx.quadraticCurveTo(x + w, y, x + w, y + radius);
+        ctx.lineTo(x + w, y + h - radius);
+        ctx.quadraticCurveTo(x + w, y + h, x + w - radius, y + h);
+        ctx.lineTo(x + radius, y + h);
+        ctx.quadraticCurveTo(x, y + h, x, y + h - radius);
+        ctx.lineTo(x, y + radius);
+        ctx.quadraticCurveTo(x, y, x + radius, y);
+        ctx.closePath();
+      };
+
+      const fillRoundRect = (x, y, w, h, r, fillStyle) => {
+        roundRect(x, y, w, h, r);
+        ctx.fillStyle = fillStyle;
+        ctx.fill();
+      };
+
+      const strokeRoundRect = (x, y, w, h, r, strokeStyle, lineWidth = 2) => {
+        roundRect(x, y, w, h, r);
+        ctx.strokeStyle = strokeStyle;
+        ctx.lineWidth = lineWidth;
+        ctx.stroke();
+      };
+
+      const drawText = ({
+        text,
+        x,
+        y,
+        font,
+        color = '#ffffff',
+        align = 'left',
+        baseline = 'alphabetic',
+        maxWidth,
+      }) => {
+        ctx.font = font;
+        ctx.fillStyle = color;
+        ctx.textAlign = align;
+        ctx.textBaseline = baseline;
+
+        if (maxWidth) {
+          ctx.fillText(String(text), x, y, maxWidth);
+        } else {
+          ctx.fillText(String(text), x, y);
+        }
+      };
+
+      const drawWrappedText = ({
+        text,
+        x,
+        y,
+        maxWidth,
+        lineHeight,
+        maxLines,
+        font,
+        color = '#ffffff',
+        align = 'left',
+      }) => {
+        const source = String(text || '');
+        const chars = Array.from(source);
+        const lines = [];
+
+        ctx.font = font;
+
+        let line = '';
+
+        for (const char of chars) {
+          const testLine = line + char;
+
+          if (ctx.measureText(testLine).width > maxWidth && line) {
+            lines.push(line);
+            line = char;
+
+            if (lines.length === maxLines) break;
+          } else {
+            line = testLine;
+          }
+        }
+
+        if (line && lines.length < maxLines) {
+          lines.push(line);
+        }
+
+        const isTruncated = lines.join('').length < source.length;
+
+        if (isTruncated && lines.length > 0) {
+          let lastLine = lines[lines.length - 1];
+
+          while (ctx.measureText(`${lastLine}...`).width > maxWidth && lastLine.length > 0) {
+            lastLine = lastLine.slice(0, -1);
+          }
+
+          lines[lines.length - 1] = `${lastLine}...`;
+        }
+
+        lines.forEach((lineText, index) => {
+          drawText({
+            text: lineText,
+            x,
+            y: y + index * lineHeight,
+            font,
+            color,
+            align,
+          });
+        });
+      };
+
+      const drawTeamBadge = ({ x, y, main, sub }) => {
+        const size = 138;
+        const cx = x + size / 2;
+
+        ctx.save();
+
+        // 背景の角丸エンブレム
+        roundRect(x, y, size, size, 34);
+        ctx.clip();
+
+        ctx.fillStyle = main || '#ec4899';
+        ctx.fillRect(x, y, size, size);
+
+        // 右下の差し色
+        ctx.fillStyle = sub || '#f1f1f1';
+        ctx.beginPath();
+        ctx.moveTo(x + size, y + size * 0.42);
+        ctx.lineTo(x + size, y + size);
+        ctx.lineTo(x + size * 0.42, y + size);
+        ctx.closePath();
+        ctx.fill();
+
+        // うっすら斜めライン
+        ctx.globalAlpha = 0.14;
+        ctx.fillStyle = '#ffffff';
+        ctx.beginPath();
+        ctx.moveTo(x + size * 0.08, y);
+        ctx.lineTo(x + size * 0.28, y);
+        ctx.lineTo(x + size * 0.92, y + size);
+        ctx.lineTo(x + size * 0.72, y + size);
+        ctx.closePath();
+        ctx.fill();
+        ctx.globalAlpha = 1;
+
+        ctx.restore();
+
+        // 外枠
+        strokeRoundRect(x, y, size, size, 34, 'rgba(255,255,255,0.30)', 3);
+
+        // 文字なしの白い盾マーク
+        ctx.save();
+
+        ctx.fillStyle = 'rgba(255,255,255,0.94)';
+        ctx.beginPath();
+        ctx.moveTo(cx, y + 28);
+        ctx.bezierCurveTo(x + size * 0.70, y + 34, x + size * 0.90, y + 48, x + size * 0.88, y + 72);
+        ctx.bezierCurveTo(x + size * 0.85, y + 101, x + size * 0.66, y + 119, cx, y + 128);
+        ctx.bezierCurveTo(x + size * 0.34, y + 119, x + size * 0.15, y + 101, x + size * 0.12, y + 72);
+        ctx.bezierCurveTo(x + size * 0.10, y + 48, x + size * 0.30, y + 34, cx, y + 28);
+        ctx.closePath();
+        ctx.fill();
+
+        // 盾の内側に薄いライン
+        ctx.strokeStyle = 'rgba(75,28,137,0.22)';
+        ctx.lineWidth = 4;
+        ctx.beginPath();
+        ctx.moveTo(cx, y + 45);
+        ctx.lineTo(cx, y + 105);
+        ctx.stroke();
+
+        ctx.restore();
+      };
+
+      const safeHomeScore = homeScore || '-';
+      const safeAwayScore = awayScore || '-';
+      const safeOpponent = record.opponent || data.opponent || '対戦相手未入力';
+      const safeDate = record.date || data.date || '日付未入力';
+
+
+      // 背景
+      const bg = ctx.createLinearGradient(0, 0, width, height);
+      bg.addColorStop(0, '#831843');
+      bg.addColorStop(0.45, '#ec4899');
+      bg.addColorStop(1, '#170330');
+
+      ctx.fillStyle = bg;
+      ctx.fillRect(0, 0, width, height);
+
+      // 光の装飾
+      ctx.globalAlpha = 0.22;
+      ctx.fillStyle = '#60a5fa';
+      ctx.beginPath();
+      ctx.arc(930, 140, 210, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.globalAlpha = 0.18;
+      ctx.fillStyle = '#ec4899';
+      ctx.beginPath();
+      ctx.arc(120, 1280, 260, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.globalAlpha = 1;
+
+      // 外枠
+      strokeRoundRect(34, 34, width - 68, height - 68, 56, 'rgba(214,179,106,0.42)', 4);
+      strokeRoundRect(54, 54, width - 108, height - 108, 44, 'rgba(255,255,255,0.12)', 2);
+
+      // 上部
+      drawText({
+        text: 'MATCH MEMORY',
+        x: 86,
+        y: 120,
+        font: '900 34px system-ui, -apple-system, BlinkMacSystemFont, "Noto Sans JP", sans-serif',
+        color: '#facc15',
+      });
+
+      drawText({
+        text: safeDate,
+        x: 86,
+        y: 168,
+        font: '800 32px system-ui, -apple-system, BlinkMacSystemFont, "Noto Sans JP", sans-serif',
+        color: 'rgba(255,255,255,0.86)',
+      });
+
+      fillRoundRect(width - 300, 82, 214, 64, 32, '#e9d5ff');
+      strokeRoundRect(width - 300, 82, 214, 64, 32, 'rgba(255,255,255,0.5)', 2);
+
+      drawText({
+        text: `${resultLabel} ${resultSymbol}`,
+        x: width - 193,
+        y: 116,
+        font: '900 30px system-ui, -apple-system, BlinkMacSystemFont, "Noto Sans JP", sans-serif',
+        color: '#831843',
+        align: 'center',
+        baseline: 'middle',
+      });
+
+      // スコアカード
+      fillRoundRect(72, 235, 936, 420, 48, 'rgba(255,255,255,0.12)');
+      strokeRoundRect(72, 235, 936, 420, 48, 'rgba(255,255,255,0.20)', 3);
+
+      drawText({
+        text: 'CEREZO OSAKA',
+        x: width / 2,
+        y: 302,
+        font: '900 28px system-ui, -apple-system, BlinkMacSystemFont, "Noto Sans JP", sans-serif',
+        color: 'rgba(255,255,255,0.72)',
+        align: 'center',
+      });
+
+      drawTeamBadge({
+        x: 150,
+        y: 365,
+        main: cerezoTeam.main,
+        sub: cerezoTeam.sub,
+      });
+
+      drawTeamBadge({
+        x: 792,
+        y: 365,
+        main: opponentTeam.main,
+        sub: opponentTeam.sub,
+      });
+
+      drawText({
+        text: `${safeHomeScore} - ${safeAwayScore}`,
+        x: width / 2,
+        y: 448,
+        font: '900 104px system-ui, -apple-system, BlinkMacSystemFont, "Noto Sans JP", sans-serif',
+        color: '#ffffff',
+        align: 'center',
+        baseline: 'middle',
+      });
+
+      drawText({
+        text: 'SCORE',
+        x: width / 2,
+        y: 525,
+        font: '900 24px system-ui, -apple-system, BlinkMacSystemFont, "Noto Sans JP", sans-serif',
+        color: '#facc15',
+        align: 'center',
+      });
+
+      drawWrappedText({
+        text: `セレッソ大阪 vs ${safeOpponent}`,
+        x: width / 2,
+        y: 592,
+        maxWidth: 820,
+        lineHeight: 38,
+        maxLines: 2,
+        font: '900 34px system-ui, -apple-system, BlinkMacSystemFont, "Noto Sans JP", sans-serif',
+        color: '#ffffff',
+        align: 'center',
+      });
+
+      // 情報カード
+      fillRoundRect(72, 720, 936, 132, 34, 'rgba(255,255,255,0.12)');
+      strokeRoundRect(72, 720, 936, 132, 34, 'rgba(255,255,255,0.18)', 2);
+
+      drawText({
+        text: 'STADIUM',
+        x: 116,
+        y: 768,
+        font: '900 24px system-ui, -apple-system, BlinkMacSystemFont, "Noto Sans JP", sans-serif',
+        color: 'rgba(255,255,255,0.62)',
+      });
+
+      drawWrappedText({
+        text: displayStadium,
+        x: 116,
+        y: 816,
+        maxWidth: 850,
+        lineHeight: 38,
+        maxLines: 1,
+        font: '900 36px system-ui, -apple-system, BlinkMacSystemFont, "Noto Sans JP", sans-serif',
+        color: '#ffffff',
+      });
+
+      fillRoundRect(72, 890, 936, 132, 34, 'rgba(255,255,255,0.12)');
+      strokeRoundRect(72, 890, 936, 132, 34, 'rgba(255,255,255,0.18)', 2);
+
+      drawText({
+        text: 'MY MVP',
+        x: 116,
+        y: 938,
+        font: '900 24px system-ui, -apple-system, BlinkMacSystemFont, "Noto Sans JP", sans-serif',
+        color: 'rgba(255,255,255,0.62)',
+      });
+
+      drawWrappedText({
+        text: displayMvp,
+        x: 116,
+        y: 986,
+        maxWidth: 850,
+        lineHeight: 38,
+        maxLines: 1,
+        font: '900 36px system-ui, -apple-system, BlinkMacSystemFont, "Noto Sans JP", sans-serif',
+        color: '#ffffff',
+      });
+
+      if (data.memo) {
+        fillRoundRect(72, 1060, 936, 190, 34, 'rgba(255,255,255,0.12)');
+        strokeRoundRect(72, 1060, 936, 190, 34, 'rgba(255,255,255,0.18)', 2);
+
+        drawText({
+          text: 'MEMO',
+          x: 116,
+          y: 1108,
+          font: '900 24px system-ui, -apple-system, BlinkMacSystemFont, "Noto Sans JP", sans-serif',
+          color: 'rgba(255,255,255,0.62)',
+        });
+
+        drawWrappedText({
+          text: String(data.memo).slice(0, 90),
+          x: 116,
+          y: 1156,
+          maxWidth: 850,
+          lineHeight: 40,
+          maxLines: 2,
+          font: '800 30px system-ui, -apple-system, BlinkMacSystemFont, "Noto Sans JP", sans-serif',
+          color: '#ffffff',
+        });
+      }
+
+      // 下部
+      drawText({
+        text: 'CEREZO LOG',
+        x: 86,
+        y: 1408,
+        font: '900 24px system-ui, -apple-system, BlinkMacSystemFont, "Noto Sans JP", sans-serif',
+        color: 'rgba(255,255,255,0.70)',
+      });
+
+      drawText({
+        text: `${resultLabel} ${resultSymbol}`,
+        x: width - 86,
+        y: 1408,
+        font: '900 24px system-ui, -apple-system, BlinkMacSystemFont, "Noto Sans JP", sans-serif',
+        color: 'rgba(255,255,255,0.70)',
+        align: 'right',
+      });
+
+      const blob = await new Promise((resolve) => {
+        canvas.toBlob(resolve, 'image/png');
+      });
+
+      if (!blob) {
+        throw new Error('Canvas image creation failed');
+      }
+
+      const fileDate = String(record.date || 'match').replace(/[./]/g, '-');
+      const fileOpponent = String(record.opponent || 'opponent').replace(/[\\/:*?"<>|]/g, '');
+
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+
+      link.href = url;
+      link.download = `cerezo-log-${fileDate}-${fileOpponent}.png`;
+
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+
+      setTimeout(() => {
+        URL.revokeObjectURL(url);
+      }, 1000);
+    } catch (error) {
+      console.error(error);
+      setSaveError('画像保存に失敗しました。スクリーンショットで保存してください。');
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  return (
+    <div className="min-h-screen bg-[#f8f7fb] pb-28">
+      <BrandHeader back={backTo} setView={setView} />
+
+      <section className="px-5 py-6 space-y-4">
+        <div>
+          <div className="flex items-center gap-2 text-[#ec4899] font-black text-sm mb-1">
+            <Share2 size={18} />
+            SHARE CARD
+          </div>
+
+          <h1 className="text-2xl font-black text-[#171425]">
+            共有カード
+          </h1>
+
+          <p className="text-xs text-gray-500 font-bold mt-1 leading-6">
+            画像を保存できます。
+          </p>
+        </div>
+
+        <div className="bg-white rounded-[2rem] border border-gray-200 shadow-sm p-3">
+          <div
+            ref={cardRef}
+            className="relative overflow-hidden rounded-[2rem] min-h-[560px] text-white shadow-2xl shadow-pink-900/25 bg-[#831843]"
+          >
+            {/* 背景 */}
+            <div className="absolute inset-0 bg-gradient-to-br from-[#170330] via-[#ec4899] to-[#831843]"></div>
+
+            {/* 光 */}
+            <div className="absolute -top-24 -right-24 w-64 h-64 rounded-full bg-[#60a5fa]/20 blur-3xl"></div>
+            <div className="absolute -bottom-28 -left-24 w-72 h-72 rounded-full bg-pink-300/20 blur-3xl"></div>
+
+            {/* 斜め装飾 */}
+            <div className="absolute -right-16 top-0 h-full w-28 rotate-[14deg] bg-white/8"></div>
+            <div className="absolute -right-2 top-0 h-full w-2 rotate-[14deg] bg-[#60a5fa]/70"></div>
+            <div className="absolute left-0 top-0 h-full w-2 bg-[#60a5fa]"></div>
+
+            {/* うっすら大文字 */}
+            <div className="absolute -bottom-5 right-3 text-[74px] font-black tracking-[-0.08em] text-white/5 leading-none">
+              CEREZO
+            </div>
+
+            <div className="relative z-10 min-h-[560px] p-5 flex flex-col">
+              {/* 上部 */}
+              <div className="flex items-start justify-between gap-3">
+                <div>
+                  <div className="text-[10px] font-black tracking-[0.32em] text-[#60a5fa]">
+                    MATCHDAY MEMORY
+                  </div>
+
+                  <div className="mt-2 text-[22px] font-black tracking-[-0.06em]">
+                    CEREZO LOG
+                  </div>
+
+                  <div className="mt-1 h-[2px] w-20 bg-[#60a5fa] rounded-full"></div>
+                </div>
+
+                <div className="rounded-full bg-[#60a5fa] text-[#831843] px-3 py-1 text-[11px] font-black border border-white/30 shadow-lg">
+                  {resultLabel} {resultSymbol}
+                </div>
+              </div>
+
+              {/* 日付 */}
+              <div className="mt-7">
+                <div className="text-[11px] font-black text-white/55 tracking-[0.22em]">
+                  DATE
+                </div>
+                <div className="text-2xl font-black mt-1">
+                  {record.date}
+                </div>
+              </div>
+
+              {/* メインスコア */}
+              <div className="mt-8 rounded-[1.8rem] bg-white/10 border border-white/15 p-5 shadow-lg shadow-black/10">
+                <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-3">
+                  <div className="text-center min-w-0">
+                    <div className="w-14 h-14 mx-auto flex items-center justify-center">
+                      <TeamBadge team={cerezoTeam} />
+                    </div>
+                    <div className="text-[12px] font-black mt-2 truncate">
+                      C大阪
+                    </div>
+                  </div>
+
+                  <div className="text-center">
+                    <div className="text-[58px] font-black leading-none tracking-[-0.1em]">
+                      {homeScore}
+                      <span className="text-white/45 mx-2">-</span>
+                      {awayScore}
+                    </div>
+
+                    <div className="mt-2 text-[10px] font-black text-[#60a5fa] tracking-[0.32em]">
+                      FULL TIME
+                    </div>
+                  </div>
+
+                  <div className="text-center min-w-0">
+                    <div className="w-14 h-14 mx-auto flex items-center justify-center">
+                      <TeamBadge team={opponentTeam} />
+                    </div>
+                    <div className="text-[12px] font-black mt-2 truncate">
+                      {opponentTeam.short || record.opponent}
+                    </div>
+                  </div>
+                </div>
+
+                <div className="mt-5 text-center">
+                  <div className="text-[11px] font-black text-white/55 tracking-[0.2em]">
+                    MATCH
+                  </div>
+                  <div className="text-sm font-black mt-1 leading-relaxed">
+                    セレッソ大阪 vs {record.opponent}
+                  </div>
+                </div>
+              </div>
+
+              {/* 詳細情報 */}
+              <div className="mt-5 grid gap-3">
+                <div className="rounded-2xl bg-white/10 border border-white/15 px-4 py-3">
+                  <div className="text-[10px] font-black text-[#60a5fa] tracking-[0.22em] mb-1">
+                    STADIUM
+                  </div>
+                  <div className="text-[15px] font-black leading-snug">
+                    {displayStadium}
+                  </div>
+                </div>
+
+                <div className="rounded-2xl bg-white/10 border border-white/15 px-4 py-3">
+                  <div className="text-[10px] font-black text-[#60a5fa] tracking-[0.22em] mb-1">
+                    MY MVP
+                  </div>
+                  <div className="text-[15px] font-black leading-snug">
+                    {displayMvp}
+                  </div>
+                </div>
+
+                {data.memo ? (
+                  <div className="rounded-2xl bg-white/10 border border-white/15 px-4 py-3">
+                    <div className="text-[10px] font-black text-[#60a5fa] tracking-[0.22em] mb-1">
+                      MEMORY
+                    </div>
+                    <div className="text-sm font-bold leading-6 text-white/90">
+                      {String(data.memo).slice(0, 58)}
+                      {String(data.memo).length > 58 ? '...' : ''}
+                    </div>
+                  </div>
+                ) : null}
+              </div>
+
+              {/* 下部 */}
+              <div className="mt-auto pt-5 flex items-end justify-between">
+                <div>
+                  <div className="text-[10px] font-black text-white/45 tracking-[0.25em]">
+                    CAPTURE EVERY MATCH MEMORY
+                  </div>
+                  <div className="text-[13px] font-black text-[#60a5fa] mt-1">
+                    CEREZO OSAKA
+                  </div>
+                </div>
+
+                <div className="text-right">
+                  <div className="text-[22px] font-black text-white">
+                    {resultSymbol}
+                  </div>
+                  <div className="text-[10px] font-black text-white/50 tracking-[0.2em]">
+                    {resultLabel}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {saveError && (
+          <div className="bg-red-50 border border-red-100 rounded-2xl p-4 text-xs text-red-600 font-bold leading-6">
+            {saveError}
+          </div>
+        )}
+
+        <div className="bg-yellow-50 border border-yellow-100 rounded-2xl p-4">
+          <div className="text-sm font-black text-yellow-700">
+            使い方
+          </div>
+          <div className="text-xs text-yellow-700 font-bold leading-6 mt-1">
+            「画像保存」を押すと、この共有カードだけをPNG画像として保存できます。保存できない場合はスクリーンショットでもOKです。
+          </div>
+        </div>
+      </section>
+
+      <BottomAction>
+        <button
+          onClick={() => setView(backTo)}
+          className="secondary-btn"
+        >
+          <ChevronLeft size={20} />
+          戻る
+        </button>
+
+        <button
+          onClick={handleSaveImage}
+          disabled={isSaving}
+          className="primary-btn flex-[1.4] disabled:opacity-60 disabled:active:scale-100"
+        >
+          <Download size={18} />
+          {isSaving ? '保存中...' : '画像保存'}
+        </button>
+      </BottomAction>
+    </div>
+  );
+}
+
 function FavoriteRecordsView({ setView, records, onEdit, onToggleFavorite, onOpenDetail }) {
   const favoriteRecords = records.filter((record) => record.favorite);
 
@@ -2635,7 +5556,7 @@ function FavoriteRecordsView({ setView, records, onEdit, onToggleFavorite, onOpe
 
       <section className="px-5 py-6">
         <div className="mb-5">
-          <div className="flex items-center gap-2 text-[#e4007f] font-black text-sm mb-1">
+          <div className="flex items-center gap-2 text-[#ec4899] font-black text-sm mb-1">
             <Bookmark size={18} fill="currentColor" />
             FAVORITE RECORDS
           </div>
@@ -2668,7 +5589,7 @@ function FavoriteRecordsView({ setView, records, onEdit, onToggleFavorite, onOpe
 
                 <div className="flex-1 min-w-0">
                   <div className="flex justify-between items-start gap-2">
-                    <div className="text-[11px] text-[#e4007f] font-black">
+                    <div className="text-[11px] text-[#3b1378] font-black">
                       {record.date}
                     </div>
 
@@ -2716,7 +5637,7 @@ function FavoriteRecordsView({ setView, records, onEdit, onToggleFavorite, onOpe
           </div>
         ) : (
           <div className="bg-white rounded-[1.8rem] border border-gray-100 p-8 text-center shadow-sm">
-            <div className="w-16 h-16 mx-auto rounded-2xl bg-pink-50 text-[#e4007f] flex items-center justify-center mb-4">
+            <div className="w-16 h-16 mx-auto rounded-2xl bg-pink-50 text-[#ec4899] flex items-center justify-center mb-4">
               <Bookmark size={30} />
             </div>
 
@@ -2732,7 +5653,7 @@ function FavoriteRecordsView({ setView, records, onEdit, onToggleFavorite, onOpe
               type="button"
               // ★ setView('home') を setView('records') に変更しました
               onClick={() => setView('records')}
-              className="mt-5 bg-[#e4007f] text-white text-sm font-black px-5 py-3 rounded-full shadow-lg shadow-pink-900/20"
+              className="mt-5 bg-[#ec4899] text-white text-sm font-black px-5 py-3 rounded-full shadow-lg shadow-pink-900/20"
             >
               記録一覧を見る
             </button>
@@ -2866,7 +5787,7 @@ function RecordsView({
           <button
             type="button"
             onClick={() => setView('home')}
-            className="text-xs font-black text-[#e4007f] bg-pink-50 border border-pink-100 px-3 py-2 rounded-full"
+            className="text-xs font-black text-[#ec4899] bg-pink-50 border border-pink-100 px-3 py-2 rounded-full"
           >
             ホームへ
           </button>
@@ -2874,7 +5795,7 @@ function RecordsView({
 
         {/* 検索・絞り込み */}
         <div className="bg-white rounded-[1.6rem] p-4 border border-gray-100 shadow-sm mb-5">
-          <div className="flex items-center gap-2 text-[#e4007f] font-black mb-3">
+          <div className="flex items-center gap-2 text-[#ec4899] font-black mb-3">
             <List size={18} />
             記録を探す
           </div>
@@ -2883,7 +5804,7 @@ function RecordsView({
             value={keyword}
             onChange={(e) => setKeyword(e.target.value)}
             placeholder="対戦相手・スタジアム・タグで検索"
-            className="w-full h-12 rounded-2xl bg-[#f8f7fb] border border-gray-200 px-4 text-sm font-bold outline-none focus:border-[#e4007f]"
+            className="w-full h-12 rounded-2xl bg-[#f8f7fb] border border-gray-200 px-4 text-sm font-bold outline-none focus:border-[#ec4899]"
           />
 
           <div className="mt-4">
@@ -2902,7 +5823,7 @@ function RecordsView({
                   type="button"
                   onClick={() => setVenueFilter(item.value)}
                   className={`py-2 rounded-xl text-xs font-black border ${venueFilter === item.value
-                    ? 'bg-[#e4007f] text-white border-[#e4007f]'
+                    ? 'bg-[#ec4899] text-white border-[#ec4899]'
                     : 'bg-white text-gray-500 border-gray-200'
                     }`}
                 >
@@ -2921,7 +5842,7 @@ function RecordsView({
               <select
                 value={seasonFilter}
                 onChange={(e) => setSeasonFilter(e.target.value)}
-                className="w-full h-9 appearance-none rounded-xl bg-[#f8f7fb] border border-gray-200 px-3 pr-9 text-xs font-black text-[#171425] outline-none focus:border-[#e4007f]"
+                className="w-full h-9 appearance-none rounded-xl bg-[#f8f7fb] border border-gray-200 px-3 pr-9 text-xs font-black text-[#171425] outline-none focus:border-[#ec4899]"
               >
                 <option value="ALL">全シーズン</option>
                 <option value="2026-27">2026/27シーズン</option>
@@ -2930,7 +5851,7 @@ function RecordsView({
 
               <ChevronRight
                 size={15}
-                className="absolute right-3 top-1/2 -translate-y-1/2 rotate-90 text-[#e4007f] pointer-events-none"
+                className="absolute right-3 top-1/2 -translate-y-1/2 rotate-90 text-[#ec4899] pointer-events-none"
               />
             </div>
           </div>
@@ -2952,7 +5873,7 @@ function RecordsView({
                   type="button"
                   onClick={() => setResultFilter(item.value)}
                   className={`py-2 rounded-xl text-xs font-black border ${resultFilter === item.value
-                    ? 'bg-[#e4007f] text-white border-[#e4007f]'
+                    ? 'bg-[#ec4899] text-white border-[#ec4899]'
                     : 'bg-white text-gray-500 border-gray-200'
                     }`}
                 >
@@ -2967,7 +5888,7 @@ function RecordsView({
               type="button"
               onClick={() => setFavoriteOnly(!favoriteOnly)}
               className={`flex-1 py-3 rounded-2xl text-xs font-black border flex items-center justify-center gap-2 ${favoriteOnly
-                ? 'bg-yellow-300 text-[#e4007f] border-yellow-300'
+                ? 'bg-yellow-300 text-[#3b1378] border-yellow-300'
                 : 'bg-white text-gray-500 border-gray-200'
                 }`}
             >
@@ -2995,7 +5916,7 @@ function RecordsView({
                 {filteredRecords.length}件の記録
               </div>
 
-              <p className="text-[11px] text-[#e4007f] font-black mt-1">
+              <p className="text-[11px] text-[#ec4899] font-black mt-1">
                 {selectMode
                   ? '削除したい記録を選択してください。'
                   : 'タップで詳細・編集できます。'}
@@ -3026,7 +5947,7 @@ function RecordsView({
               <button
                 type="button"
                 onClick={selectAllFilteredRecords}
-                className="text-[11px] font-black text-[#e4007f] bg-pink-50 border border-pink-100 px-3 py-2 rounded-full"
+                className="text-[11px] font-black text-[#ec4899] bg-pink-50 border border-pink-100 px-3 py-2 rounded-full"
               >
                 表示中をすべて選択
               </button>
@@ -3080,14 +6001,14 @@ function RecordsView({
 
                   <div className="flex-1 min-w-0">
                     <div className="flex justify-between items-start gap-2">
-                      <div className="text-[11px] text-[#e4007f] font-black">
+                      <div className="text-[11px] text-[#3b1378] font-black">
                         {record.date}
                       </div>
 
                       <div className="flex items-center gap-2">
                         <span
                           className={`text-[10px] font-black px-2 py-1 rounded-full ${result === 'WIN'
-                            ? 'bg-pink-100 text-[#e4007f]'
+                            ? 'bg-pink-100 text-[#ec4899]'
                             : result === 'DRAW'
                               ? 'bg-gray-100 text-gray-500'
                               : 'bg-red-50 text-red-500'
@@ -3135,7 +6056,7 @@ function RecordsView({
                     </div>
 
                     <div className="flex items-center gap-2 mt-2">
-                      <span className="bg-pink-100 text-[#e4007f] text-[10px] font-black px-3 py-1 rounded-full">
+                      <span className="bg-pink-100 text-[#ec4899] text-[10px] font-black px-3 py-1 rounded-full">
                         #{record.tag}
                       </span>
 
@@ -3150,7 +6071,7 @@ function RecordsView({
           </div>
         ) : (
           <div className="bg-white rounded-[1.8rem] border border-gray-100 p-8 text-center shadow-sm">
-            <div className="w-16 h-16 mx-auto rounded-2xl bg-pink-50 text-[#e4007f] flex items-center justify-center mb-4">
+            <div className="w-16 h-16 mx-auto rounded-2xl bg-pink-50 text-[#ec4899] flex items-center justify-center mb-4">
               <List size={30} />
             </div>
 
@@ -3165,7 +6086,7 @@ function RecordsView({
             <button
               type="button"
               onClick={resetFilters}
-              className="mt-5 bg-[#e4007f] text-white text-sm font-black px-5 py-3 rounded-full shadow-lg shadow-pink-900/20"
+              className="mt-5 bg-[#ec4899] text-white text-sm font-black px-5 py-3 rounded-full shadow-lg shadow-pink-900/20"
             >
               条件をリセット
             </button>
@@ -3318,7 +6239,7 @@ function StatsView({ records, setView }) {
       label: '勝ち',
       value: wins,
       rightText: `${wins}勝`,
-      barClass: 'bg-[#e4007f]',
+      barClass: 'bg-[#ec4899]',
     },
     {
       label: '引き分け',
@@ -3339,7 +6260,7 @@ function StatsView({ records, setView }) {
       label: '得点',
       value: totalGoals,
       rightText: `${totalGoals}点`,
-      barClass: 'bg-[#e4007f]',
+      barClass: 'bg-[#ec4899]',
     },
     {
       label: '失点',
@@ -3374,7 +6295,7 @@ function StatsView({ records, setView }) {
         <div className="bg-white rounded-2xl border border-pink-100 shadow-sm p-3">
           <div className="flex items-center justify-between gap-3 mb-2">
             <div>
-              <div className="text-[10px] font-black text-[#e4007f]">
+              <div className="text-[10px] font-black text-[#ec4899]">
                 SEASON
               </div>
               <div className="text-xs font-black text-[#171425]">
@@ -3382,7 +6303,7 @@ function StatsView({ records, setView }) {
               </div>
             </div>
 
-            <div className="text-[10px] font-black text-white bg-[#e4007f] rounded-full px-2.5 py-1">
+            <div className="text-[10px] font-black text-white bg-[#ec4899] rounded-full px-2.5 py-1">
               {filteredRecords.length}試合
             </div>
           </div>
@@ -3397,7 +6318,7 @@ function StatsView({ records, setView }) {
 
               <ChevronRight
                 size={15}
-                className={`text-[#e4007f] transition ${seasonSelectOpen ? 'rotate-90' : ''
+                className={`text-[#ec4899] transition ${seasonSelectOpen ? 'rotate-90' : ''
                   }`}
               />
             </button>
@@ -3416,7 +6337,7 @@ function StatsView({ records, setView }) {
                       setSeasonSelectOpen(false);
                     }}
                     className={`w-full text-left px-4 py-3 text-xs font-black border-b border-gray-100 last:border-b-0 ${selectedSeasonFilter === season.key
-                      ? 'bg-pink-50 text-[#e4007f]'
+                      ? 'bg-pink-50 text-[#ec4899]'
                       : 'bg-white text-[#171425]'
                       }`}
                   >
@@ -3430,7 +6351,7 @@ function StatsView({ records, setView }) {
       </div>
       <section className="px-5 py-6">
         <div className="mb-5">
-          <div className="flex items-center gap-2 text-[#e4007f] font-black text-sm mb-1">
+          <div className="flex items-center gap-2 text-[#ec4899] font-black text-sm mb-1">
             <BarChart2 size={18} />
             観戦データ
           </div>
@@ -3448,7 +6369,7 @@ function StatsView({ records, setView }) {
           className="w-full mb-4 bg-white border border-pink-100 rounded-2xl p-4 shadow-sm flex items-center justify-between active:scale-[0.98]"
         >
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-2xl bg-pink-50 text-[#e4007f] flex items-center justify-center">
+            <div className="w-10 h-10 rounded-2xl bg-pink-50 text-[#ec4899] flex items-center justify-center">
               <BarChart2 size={20} />
             </div>
 
@@ -3464,7 +6385,7 @@ function StatsView({ records, setView }) {
 
           <ChevronRight
             size={20}
-            className={`text-[#e4007f] transition ${showSeasonStats ? 'rotate-90' : ''
+            className={`text-[#ec4899] transition ${showSeasonStats ? 'rotate-90' : ''
               }`}
           />
         </button>
@@ -3476,7 +6397,7 @@ function StatsView({ records, setView }) {
             <Card>
               <div className="flex items-center justify-between mb-4">
                 <div>
-                  <div className="flex items-center gap-2 text-[#e4007f] font-black">
+                  <div className="flex items-center gap-2 text-[#ec4899] font-black">
                     <BarChart2 size={18} />
                     シーズン成績
                   </div>
@@ -3485,7 +6406,7 @@ function StatsView({ records, setView }) {
                   </p>
                 </div>
 
-                <div className="bg-pink-50 text-[#e4007f] border border-pink-100 rounded-full px-3 py-1 text-xs font-black">
+                <div className="bg-pink-50 text-[#ec4899] border border-pink-100 rounded-full px-3 py-1 text-xs font-black">
                   AUTO
                 </div>
               </div>
@@ -3572,7 +6493,7 @@ function StatsView({ records, setView }) {
           </>
         )}
         {/* メイン統計 */}
-        <div className="relative overflow-hidden rounded-[1.8rem] bg-gradient-to-br from-[#a00059] via-[#e4007f] to-[#ff7ab8] text-white p-5 shadow-xl shadow-pink-900/25 mb-4">
+        <div className="relative overflow-hidden rounded-[1.8rem] bg-gradient-to-br from-[#831843] via-[#ec4899] to-[#6d28d9] text-white p-5 shadow-xl shadow-pink-900/25 mb-4">
           <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_80%_20%,rgba(250,204,21,0.2),transparent_28%)]"></div>
 
           <div className="relative z-10">
@@ -3615,7 +6536,7 @@ function StatsView({ records, setView }) {
 
         {/* HOME / AWAY */}
         <Card>
-          <div className="flex items-center gap-2 text-[#e4007f] font-black mb-4">
+          <div className="flex items-center gap-2 text-[#ec4899] font-black mb-4">
             <Flag size={18} />
             HOME / AWAY
           </div>
@@ -3630,7 +6551,7 @@ function StatsView({ records, setView }) {
 
         {/* 費用 */}
         <Card>
-          <div className="flex items-center gap-2 text-[#e4007f] font-black mb-4">
+          <div className="flex items-center gap-2 text-[#ec4899] font-black mb-4">
             <Wallet size={18} />
             観戦費用
           </div>
@@ -3638,14 +6559,14 @@ function StatsView({ records, setView }) {
           <div className="grid grid-cols-2 gap-3 mb-4">
             <div className="bg-pink-50 rounded-2xl p-4">
               <div className="text-xs text-gray-500 font-black">合計費用</div>
-              <div className="text-2xl font-black text-[#e4007f] mt-1">
+              <div className="text-2xl font-black text-[#ec4899] mt-1">
                 ¥{totalExpense.toLocaleString()}
               </div>
             </div>
 
             <div className="bg-pink-50 rounded-2xl p-4">
               <div className="text-xs text-gray-500 font-black">平均費用</div>
-              <div className="text-2xl font-black text-[#e4007f] mt-1">
+              <div className="text-2xl font-black text-[#ec4899] mt-1">
                 ¥{averageExpense.toLocaleString()}
               </div>
             </div>
@@ -3697,7 +6618,7 @@ function SeasonStatMiniCard({ label, value, unit, sub }) {
         {label}
       </div>
 
-      <div className="text-2xl font-black text-[#e4007f] mt-1 leading-none">
+      <div className="text-2xl font-black text-[#ec4899] mt-1 leading-none">
         {value}
         {unit && (
           <span className="text-sm text-gray-500 ml-1">
@@ -3720,7 +6641,7 @@ function SeasonBarGraph({ title, icon, data, emptyText }) {
   return (
     <Card>
       <div className="flex items-center justify-between mb-4">
-        <div className="flex items-center gap-2 text-[#e4007f] font-black">
+        <div className="flex items-center gap-2 text-[#ec4899] font-black">
           {icon}
           {title}
         </div>
@@ -3763,7 +6684,7 @@ function GraphBar({ label, value, maxValue, rightText, barClass }) {
           {label}
         </div>
 
-        <div className="text-sm font-black text-[#e4007f]">
+        <div className="text-sm font-black text-[#ec4899]">
           {rightText}
         </div>
       </div>
@@ -3785,7 +6706,7 @@ function VenueCompareGraph({ homeSummary, awaySummary }) {
     <Card>
       <div className="flex items-center justify-between mb-4">
         <div>
-          <div className="flex items-center gap-2 text-[#e4007f] font-black">
+          <div className="flex items-center gap-2 text-[#ec4899] font-black">
             <MapPin size={18} />
             ホーム / アウェイ成績
           </div>
@@ -3801,16 +6722,16 @@ function VenueCompareGraph({ homeSummary, awaySummary }) {
           label="HOME"
           summary={homeSummary}
           maxGames={maxGames}
-          barClass="bg-[#e4007f]"
-          badgeClass="bg-pink-100 text-[#e4007f]"
+          barClass="bg-[#ec4899]"
+          badgeClass="bg-pink-100 text-[#ec4899]"
         />
 
         <VenueCompareRow
           label="AWAY"
           summary={awaySummary}
           maxGames={maxGames}
-          barClass="bg-[#d6b36a]"
-          badgeClass="bg-[#efe0b4] text-[#7a5519] border border-[#d6b36a]/40"
+          barClass="bg-[#60a5fa]"
+          badgeClass="bg-[#efe0b4] text-[#7a5519] border border-[#60a5fa]/40"
         />
       </div>
     </Card>
@@ -3842,7 +6763,7 @@ function VenueCompareRow({ label, summary, maxGames, barClass, badgeClass }) {
 
       <div className="grid grid-cols-3 gap-2 mt-3">
         <div className="bg-white rounded-xl p-2 text-center border border-gray-100">
-          <div className="text-lg font-black text-[#e4007f]">
+          <div className="text-lg font-black text-[#ec4899]">
             {summary.wins}
           </div>
           <div className="text-[10px] text-gray-400 font-black">
@@ -3884,7 +6805,7 @@ function CleanSheetGraph({ cleanSheets, totalGames, cleanSheetRate }) {
     <Card>
       <div className="flex items-center justify-between mb-4">
         <div>
-          <div className="flex items-center gap-2 text-[#e4007f] font-black">
+          <div className="flex items-center gap-2 text-[#ec4899] font-black">
             <Shield size={18} />
             クリーンシート率
           </div>
@@ -3900,11 +6821,11 @@ function CleanSheetGraph({ cleanSheets, totalGames, cleanSheetRate }) {
           <div
             className="w-28 h-28 rounded-full p-3 shrink-0"
             style={{
-              background: `conic-gradient(#e4007f ${rate}%, #ede9fe ${rate}% 100%)`,
+              background: `conic-gradient(#ec4899 ${rate}%, #ede9fe ${rate}% 100%)`,
             }}
           >
             <div className="w-full h-full rounded-full bg-white flex flex-col items-center justify-center shadow-inner">
-              <div className="text-2xl font-black text-[#e4007f] leading-none">
+              <div className="text-2xl font-black text-[#ec4899] leading-none">
                 {cleanSheetRate}
               </div>
               <div className="text-[10px] font-black text-gray-400 mt-1">
@@ -3925,7 +6846,7 @@ function CleanSheetGraph({ cleanSheets, totalGames, cleanSheetRate }) {
               {totalGames}試合中、{cleanSheets}試合がクリーンシートです。
             </div>
 
-            <div className="mt-3 bg-pink-50 text-[#e4007f] rounded-2xl px-3 py-2 text-xs font-black">
+            <div className="mt-3 bg-pink-50 text-[#ec4899] rounded-2xl px-3 py-2 text-xs font-black">
               守備の安定度を見える化
             </div>
           </div>
@@ -3947,7 +6868,7 @@ function VenueStatCard({ label, records }) {
   return (
     <div className="bg-[#f8f7fb] rounded-2xl p-4 border border-gray-100">
       <div className="text-xs text-gray-500 font-black">{label}</div>
-      <div className="text-3xl font-black text-[#e4007f] mt-1">
+      <div className="text-3xl font-black text-[#ec4899] mt-1">
         {records.length}
         <span className="text-sm text-gray-500 ml-1">試合</span>
       </div>
@@ -3972,7 +6893,7 @@ function ExpenseStatRow({ label, value }) {
 function RankingBlock({ icon, title, items, emptyText }) {
   return (
     <Card>
-      <div className="flex items-center gap-2 text-[#e4007f] font-black mb-4">
+      <div className="flex items-center gap-2 text-[#ec4899] font-black mb-4">
         {icon}
         {title}
       </div>
@@ -3986,8 +6907,8 @@ function RankingBlock({ icon, title, items, emptyText }) {
             >
               <div
                 className={`w-8 h-8 rounded-full flex items-center justify-center font-black text-sm ${index === 0
-                  ? 'bg-yellow-300 text-[#e4007f]'
-                  : 'bg-pink-100 text-[#e4007f]'
+                  ? 'bg-yellow-300 text-[#ec4899]'
+                  : 'bg-pink-100 text-[#ec4899]'
                   }`}
               >
                 {index + 1}
@@ -4015,14 +6936,14 @@ function getSupporterTitle(matchCount) {
 
   const titles = [
     'CEREZO SUPPORTER',
-    '桜の記録者',
+    '桜色の記録者',
     'スタジアムの住人',
-    '桜の戦士',
+    '桜色の戦士',
     'スタジアムマスター',
     '勝利の目撃者',
-    '桜の戦術家',
+    '桜色の戦術家',
     'レジェンドサポーター',
-    '桜の永久サポーター',
+    '桜色の永久サポーター',
   ];
 
   return titles[Math.min(level, titles.length - 1)];
@@ -4057,8 +6978,8 @@ const profileShieldBadges = [
     name: '金の盾',
     label: '50',
     condition: '観戦記録を50試合保存する',
-    description: '桜の記憶を積み重ねた本格サポーターの証。',
-    bg: 'linear-gradient(135deg, #fef3c7, #d6b36a, #92400e)',
+    description: '桜色の記憶を積み重ねた本格サポーターの証。',
+    bg: 'linear-gradient(135deg, #fef3c7, #60a5fa, #92400e)',
     text: '#fff7ed',
     border: 'rgba(255,255,255,0.7)',
   },
@@ -4068,8 +6989,8 @@ const profileShieldBadges = [
     name: '伝説の盾',
     label: '100',
     condition: '観戦記録を100試合保存する',
-    description: 'セレッソ大阪と歩んだ歴史そのもの。',
-    bg: 'linear-gradient(135deg, #ede9fe, #7c3aed, #2e1065)',
+    description: 'セレッソと歩んだ歴史そのもの。',
+    bg: 'linear-gradient(135deg, #ede9fe, #be185d, #2e1065)',
     text: '#ffffff',
     border: 'rgba(255,255,255,0.75)',
   },
@@ -4169,7 +7090,7 @@ function MyPageView({ records, setView, profile }) {
               setView('profileSettings');
             }
           }}
-          className="relative overflow-hidden rounded-[1.8rem] bg-gradient-to-br from-[#a00059] via-[#e4007f] to-[#ff7ab8] text-white p-5 shadow-xl shadow-pink-900/25 mb-5 cursor-pointer active:scale-[0.98] transition"
+          className="relative overflow-hidden rounded-[1.8rem] bg-gradient-to-br from-[#831843] via-[#ec4899] to-[#6d28d9] text-white p-5 shadow-xl shadow-pink-900/25 mb-5 cursor-pointer active:scale-[0.98] transition"
         >
           <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_85%_10%,rgba(250,204,21,0.22),transparent_28%)]"></div>
           <div className="pointer-events-none absolute -right-10 -bottom-12 w-36 h-36 rounded-full border border-white/10"></div>
@@ -4192,7 +7113,7 @@ function MyPageView({ records, setView, profile }) {
                   setProfilePhotoOpen(true);
                 }
               }}
-              className="relative w-20 h-20 rounded-3xl bg-white text-[#e4007f] flex items-center justify-center shadow-xl border-2 border-yellow-300/70 overflow-hidden shrink-0 active:scale-95"
+              className="relative w-20 h-20 rounded-3xl bg-white text-[#ec4899] flex items-center justify-center shadow-xl border-2 border-yellow-300/70 overflow-hidden shrink-0 active:scale-95"
             >
               {displayPhoto ? (
                 <>
@@ -4235,7 +7156,7 @@ function MyPageView({ records, setView, profile }) {
                 )}
               </div>
 
-              <div className="inline-flex items-center gap-1 bg-yellow-300 text-[#e4007f] text-xs font-black px-3 py-1 rounded-full mt-2 shadow">
+              <div className="inline-flex items-center gap-1 bg-yellow-300 text-[#3b1378] text-xs font-black px-3 py-1 rounded-full mt-2 shadow">
                 <Trophy size={13} fill="currentColor" />
                 {supporterTitle}
               </div>
@@ -4292,7 +7213,7 @@ function MyPageView({ records, setView, profile }) {
 
         {/* 推し・よく行く場所 */}
         <Card>
-          <div className="flex items-center gap-2 text-[#e4007f] font-black mb-4">
+          <div className="flex items-center gap-2 text-[#ec4899] font-black mb-4">
             <Star size={18} />
             マイデータ
           </div>
@@ -4331,7 +7252,7 @@ function MyPageView({ records, setView, profile }) {
         {/* 最新の観戦記録 */}
         <Card>
           <div className="flex items-center justify-between mb-4">
-            <div className="flex items-center gap-2 text-[#e4007f] font-black">
+            <div className="flex items-center gap-2 text-[#ec4899] font-black">
               <Calendar size={18} />
               最新の観戦記録
             </div>
@@ -4339,7 +7260,7 @@ function MyPageView({ records, setView, profile }) {
             <button
               type="button"
               onClick={() => setView('home')}
-              className="text-xs font-black text-[#e4007f] flex items-center gap-1"
+              className="text-xs font-black text-[#ec4899] flex items-center gap-1"
             >
               ホームへ
               <ChevronRight size={14} />
@@ -4348,7 +7269,7 @@ function MyPageView({ records, setView, profile }) {
 
           {latestRecord ? (
             <div className="bg-[#f8f7fb] rounded-2xl p-3 border border-gray-100">
-              <div className="text-[11px] text-[#e4007f] font-black">
+              <div className="text-[11px] text-[#ec4899] font-black">
                 {latestRecord.date}
               </div>
               <div className="font-black text-sm mt-1">
@@ -4358,7 +7279,7 @@ function MyPageView({ records, setView, profile }) {
                 <MapPin size={12} />
                 {latestRecord.stadium}
               </div>
-              <span className="inline-block mt-3 bg-pink-100 text-[#e4007f] text-[10px] font-black px-3 py-1 rounded-full">
+              <span className="inline-block mt-3 bg-pink-100 text-[#ec4899] text-[10px] font-black px-3 py-1 rounded-full">
                 #{latestRecord.tag}
               </span>
             </div>
@@ -4373,7 +7294,7 @@ function MyPageView({ records, setView, profile }) {
 
         {/* メニュー */}
         <Card>
-          <div className="flex items-center gap-2 text-[#e4007f] font-black mb-4">
+          <div className="flex items-center gap-2 text-[#ec4899] font-black mb-4">
             <Menu size={18} />
             メニュー
           </div>
@@ -4428,7 +7349,7 @@ function MyPageView({ records, setView, profile }) {
 
 const stadiumMapPoints = [
   {
-    name: 'エディオンピースウイング広島',
+    name: 'YANMAR HANASAKA STADIUM',
     short: 'Eピース',
     area: '広島',
     x: 27,
@@ -4464,6 +7385,7 @@ const stadiumMapPoints = [
     ly: 58,
   },
 
+
   {
     name: 'YANMAR HANASAKA STADIUM',
     short: 'ヤンマー',
@@ -4483,7 +7405,7 @@ const stadiumMapPoints = [
     ly: 56,
   },
   {
-    name: '豊田スタジアム',
+    name: 'パロマ瑞穂スタジアム',
     short: '豊田',
     area: '愛知',
     x: 46,
@@ -4582,7 +7504,7 @@ const stadiumMapPoints = [
     ly: 53,
   },
   {
-    name: 'ケーズデンキスタジアム水戸',
+    name: '水戸信用金庫スタジアム',
     short: '水戸',
     area: '茨城',
     x: 62,
@@ -4655,7 +7577,7 @@ function StadiumMapSection({ records }) {
   return (
     <Card>
       <div className="flex items-center justify-between mb-4">
-        <div className="flex items-center gap-2 text-[#e4007f] font-black">
+        <div className="flex items-center gap-2 text-[#ec4899] font-black">
           <MapPin size={18} />
           観戦マップ
         </div>
@@ -4666,14 +7588,14 @@ function StadiumMapSection({ records }) {
       </div>
 
       <p className="text-xs text-gray-500 font-bold mb-4">
-        観戦したスタジアムが紫で表示されます。ピンを押すと記録を確認できます。
+        観戦したスタジアムが桜色で表示されます。ピンを押すと記録を確認できます。
 
         <div className="flex justify-end mb-3">
           <button
             type="button"
             onClick={() => setShowUnvisitedPins(!showUnvisitedPins)}
             className={`text-[10px] font-black rounded-full px-3 py-1.5 border active:scale-95 ${showUnvisitedPins
-              ? 'bg-[#e4007f] text-white border-[#e4007f]'
+              ? 'bg-[#ec4899] text-white border-[#ec4899]'
               : 'bg-white text-gray-500 border-gray-200'
               }`}
           >
@@ -4695,7 +7617,7 @@ function StadiumMapSection({ records }) {
 
         {/* タイトル */}
         <div className="absolute left-4 top-4 z-30">
-          <div className="text-[10px] font-black text-[#e4007f] tracking-[0.28em] bg-white/90 rounded-full px-2 py-1 shadow-sm">
+          <div className="text-[10px] font-black text-[#ec4899] tracking-[0.28em] bg-white/90 rounded-full px-2 py-1 shadow-sm">
             CEREZO AWAY MAP
           </div>
           <div className="text-xs font-black text-[#171425] mt-1 bg-white/90 rounded-full px-2 py-1 shadow-sm inline-block">
@@ -4706,7 +7628,7 @@ function StadiumMapSection({ records }) {
         {/* 凡例 */}
         <div className="absolute right-3 top-3 z-30 bg-white/90 backdrop-blur-sm rounded-2xl px-3 py-2 border border-gray-100 shadow-sm">
           <div className="flex items-center gap-2 text-[10px] font-black text-gray-500">
-            <span className="w-3 h-3 rounded-full bg-[#e4007f] inline-block border border-yellow-300"></span>
+            <span className="w-3 h-3 rounded-full bg-[#ec4899] inline-block border border-yellow-300"></span>
             訪問済み
           </div>
           <div className="flex items-center gap-2 text-[10px] font-black text-gray-400 mt-1">
@@ -4738,7 +7660,7 @@ function StadiumMapSection({ records }) {
               >
                 <div
                   className={`relative rounded-full flex items-center justify-center font-black border ${visited
-                    ? 'w-7 h-7 text-[10px] bg-[#e4007f] text-white border-yellow-300 shadow-lg shadow-pink-900/20'
+                    ? 'w-7 h-7 text-[10px] bg-[#ec4899] text-white border-yellow-300 shadow-lg shadow-pink-900/20'
                     : 'w-3 h-3 text-[0px] bg-white/80 border-gray-300 shadow-sm opacity-80'
                     } ${isSelected ? 'ring-4 ring-pink-200 scale-125' : ''}`}
                 >
@@ -4754,7 +7676,7 @@ function StadiumMapSection({ records }) {
                     top: `${point.ly + mapPinOffset.y}%`,
                   }}
                 >
-                  <div className="bg-white/95 border border-pink-100 rounded-full px-2.5 py-1 shadow-sm text-[9px] font-black text-[#e4007f] whitespace-nowrap">
+                  <div className="bg-white/95 border border-pink-100 rounded-full px-2.5 py-1 shadow-sm text-[9px] font-black text-[#ec4899] whitespace-nowrap">
                     {point.short}
                   </div>
                 </div>
@@ -4787,7 +7709,7 @@ function StadiumMapSection({ records }) {
               />
 
               <div className="text-right">
-                <div className="text-2xl font-black text-[#e4007f]">
+                <div className="text-2xl font-black text-[#ec4899]">
                   {selectedVisit ? selectedVisit.count : 0}
                 </div>
 
@@ -4805,7 +7727,7 @@ function StadiumMapSection({ records }) {
                   key={record.id}
                   className="bg-white rounded-2xl p-3 border border-gray-100"
                 >
-                  <div className="text-[11px] text-[#e4007f] font-black">
+                  <div className="text-[11px] text-[#ec4899] font-black">
                     {record.date}
                   </div>
                   <div className="text-sm font-black text-[#171425] mt-1">
@@ -4851,7 +7773,7 @@ function AwayRecordSection({ records }) {
   return (
     <Card>
       <div className="flex items-center justify-between mb-4">
-        <div className="flex items-center gap-2 text-[#e4007f] font-black">
+        <div className="flex items-center gap-2 text-[#ec4899] font-black">
           <Train size={18} />
           遠征記録
         </div>
@@ -4864,7 +7786,7 @@ function AwayRecordSection({ records }) {
       <div className="grid grid-cols-2 gap-3 mb-4">
         <div className="bg-pink-50 rounded-2xl p-4">
           <div className="text-xs text-gray-500 font-black">遠征試合数</div>
-          <div className="text-2xl font-black text-[#e4007f] mt-1">
+          <div className="text-2xl font-black text-[#ec4899] mt-1">
             {awayRecords.length}
             <span className="text-sm text-gray-500 ml-1">試合</span>
           </div>
@@ -4872,7 +7794,7 @@ function AwayRecordSection({ records }) {
 
         <div className="bg-pink-50 rounded-2xl p-4">
           <div className="text-xs text-gray-500 font-black">訪問スタジアム</div>
-          <div className="text-2xl font-black text-[#e4007f] mt-1">
+          <div className="text-2xl font-black text-[#ec4899] mt-1">
             {awayStadiumCount}
             <span className="text-sm text-gray-500 ml-1">会場</span>
           </div>
@@ -4895,7 +7817,7 @@ function AwayRecordSection({ records }) {
                   />
 
                   <div className="flex-1 min-w-0">
-                    <div className="text-[11px] text-[#e4007f] font-black">
+                    <div className="text-[11px] text-[#ec4899] font-black">
                       {record.date}
                     </div>
 
@@ -4911,7 +7833,7 @@ function AwayRecordSection({ records }) {
                     </div>
                   </div>
 
-                  <div className="bg-[#f3e3b0] text-[#8a6424] rounded-full px-3 py-1 text-[10px] font-black shrink-0">
+                  <div className="bg-[#dbeafe] text-[#1d4ed8] rounded-full px-3 py-1 text-[10px] font-black shrink-0">
                     AWAY
                   </div>
                 </div>
@@ -4923,7 +7845,7 @@ function AwayRecordSection({ records }) {
             <button
               type="button"
               onClick={() => setShowAllAwayRecords(!showAllAwayRecords)}
-              className="w-full mt-4 bg-pink-50 text-[#e4007f] border border-pink-100 rounded-2xl py-3 text-sm font-black active:scale-[0.98]"
+              className="w-full mt-4 bg-pink-50 text-[#ec4899] border border-pink-100 rounded-2xl py-3 text-sm font-black active:scale-[0.98]"
             >
               {showAllAwayRecords ? '3件だけ表示' : '全て見る'}
             </button>
@@ -4942,11 +7864,12 @@ function ProfileSettingsView({ profile, setView, onSaveProfile }) {
   const photoDragRef = useRef(null);
 
   const stadiumOptions = [
-    'ヨドコウ桜スタジアム',
+    'エディオンピースウイング広島',
     ...new Set(opponentTeams.map((team) => team.stadium)),
     '国立競技場',
     'YANMAR HANASAKA STADIUM',
-
+    'ヤマハスタジアム',
+    'デンカビッグスワンスタジアム',
   ];
 
   const updateForm = (updates) => {
@@ -5027,7 +7950,7 @@ function ProfileSettingsView({ profile, setView, onSaveProfile }) {
 
       <section className="px-5 py-6">
         <div className="mb-5">
-          <div className="flex items-center gap-2 text-[#e4007f] font-black text-sm mb-1">
+          <div className="flex items-center gap-2 text-[#ec4899] font-black text-sm mb-1">
             <Shield size={18} />
             MY PROFILE
           </div>
@@ -5050,7 +7973,7 @@ function ProfileSettingsView({ profile, setView, onSaveProfile }) {
                   onPointerMove={handlePhotoPointerMove}
                   onPointerUp={handlePhotoPointerUp}
                   onPointerCancel={handlePhotoPointerUp}
-                  className="relative w-28 h-28 rounded-3xl bg-pink-50 text-[#e4007f] border-2 border-pink-100 flex items-center justify-center overflow-hidden shrink-0 touch-none cursor-grab active:cursor-grabbing"
+                  className="relative w-28 h-28 rounded-3xl bg-pink-50 text-[#ec4899] border-2 border-pink-100 flex items-center justify-center overflow-hidden shrink-0 touch-none cursor-grab active:cursor-grabbing"
                 >
                   {form.photo ? (
                     <>
@@ -5074,7 +7997,7 @@ function ProfileSettingsView({ profile, setView, onSaveProfile }) {
                 </div>
 
                 <div className="flex-1">
-                  <label className="inline-flex items-center justify-center gap-2 bg-[#e4007f] text-white text-sm font-black px-4 py-3 rounded-2xl shadow-lg shadow-pink-900/20 cursor-pointer active:scale-95">
+                  <label className="inline-flex items-center justify-center gap-2 bg-[#ec4899] text-white text-sm font-black px-4 py-3 rounded-2xl shadow-lg shadow-pink-900/20 cursor-pointer active:scale-95">
                     <ImageIcon size={17} />
                     写真を選ぶ
                     <input
@@ -5102,7 +8025,7 @@ function ProfileSettingsView({ profile, setView, onSaveProfile }) {
               </div>
               {form.photo && (
                 <div className="mt-4 bg-pink-50 border border-pink-100 rounded-2xl p-3">
-                  <div className="text-xs font-black text-[#e4007f]">
+                  <div className="text-xs font-black text-[#ec4899]">
                     写真の位置調整
                   </div>
 
@@ -5113,7 +8036,7 @@ function ProfileSettingsView({ profile, setView, onSaveProfile }) {
                   <button
                     type="button"
                     onClick={resetPhotoPosition}
-                    className="mt-3 bg-white text-[#e4007f] border border-pink-100 rounded-xl px-3 py-2 text-xs font-black active:scale-[0.98]"
+                    className="mt-3 bg-white text-[#ec4899] border border-pink-100 rounded-xl px-3 py-2 text-xs font-black active:scale-[0.98]"
                   >
                     リセット
                   </button>
@@ -5131,12 +8054,13 @@ function ProfileSettingsView({ profile, setView, onSaveProfile }) {
 
             <InputBlock icon={<Trophy size={18} />} label="推し選手">
               <select
-                value={form.favoritePlayer || ''} // ✨ ここを少し変更
+                value={form.favoritePlayer || ''}
                 onChange={(e) => updateForm({ favoritePlayer: e.target.value })}
                 className="field"
               >
-                <option value="">選択してください</option> {/* ✨ これを追加！ */}
-                {playerOptions.map((player) => (
+                <option value="">選択してください</option>
+
+                {getSeasonPlayerOptions('2026-27').map((player) => (
                   <option key={player.name} value={player.name}>
                     No.{player.number} {player.name} / {player.position}
                   </option>
@@ -5168,9 +8092,9 @@ function ProfileSettingsView({ profile, setView, onSaveProfile }) {
             プレビュー
           </div>
 
-          <div className="relative overflow-hidden rounded-[1.5rem] bg-gradient-to-br from-[#a00059] via-[#e4007f] to-[#ff7ab8] text-white p-4">
+          <div className="relative overflow-hidden rounded-[1.5rem] bg-gradient-to-br from-[#831843] via-[#ec4899] to-[#6d28d9] text-white p-4">
             <div className="flex items-center gap-3">
-              <div className="w-16 h-16 rounded-2xl bg-white text-[#e4007f] flex items-center justify-center border-2 border-yellow-300/70 overflow-hidden">
+              <div className="w-16 h-16 rounded-2xl bg-white text-[#ec4899] flex items-center justify-center border-2 border-yellow-300/70 overflow-hidden">
                 {form.photo ? (
                   <img
                     src={form.photo}
@@ -5237,7 +8161,7 @@ function ShieldListModal({ recordsCount, onClose }) {
         onClick={(e) => e.stopPropagation()}
         className="w-full max-w-sm bg-white rounded-[2rem] shadow-2xl overflow-hidden"
       >
-        <div className="bg-gradient-to-br from-[#a00059] via-[#e4007f] to-[#ff7ab8] text-white p-5">
+        <div className="bg-gradient-to-br from-[#831843] via-[#ec4899] to-[#6d28d9] text-white p-5">
           <div className="flex items-center justify-between">
             <div>
               <div className="text-xs font-black text-yellow-300 tracking-[0.2em]">
@@ -5297,7 +8221,7 @@ function ShieldListModal({ recordsCount, onClose }) {
 
                     <div
                       className={`text-[10px] font-black rounded-full px-2 py-1 ${unlocked
-                        ? 'bg-[#e4007f] text-white'
+                        ? 'bg-[#ec4899] text-white'
                         : 'bg-gray-200 text-gray-500'
                         }`}
                     >
@@ -5305,7 +8229,7 @@ function ShieldListModal({ recordsCount, onClose }) {
                     </div>
                   </div>
 
-                  <div className="text-[11px] text-[#e4007f] font-black mt-1">
+                  <div className="text-[11px] text-[#ec4899] font-black mt-1">
                     {badge.condition}
                   </div>
 
@@ -5394,7 +8318,7 @@ function MyPageStat({ label, value, unit }) {
 function FavoritePlayerRow({ player, fallbackName }) {
   return (
     <div className="flex items-center gap-3 bg-[#f8f7fb] rounded-2xl p-3 border border-gray-100">
-      <div className="w-10 h-10 rounded-xl bg-pink-100 text-[#e4007f] flex items-center justify-center shrink-0">
+      <div className="w-10 h-10 rounded-xl bg-pink-100 text-[#ec4899] flex items-center justify-center shrink-0">
         <Trophy size={18} />
       </div>
 
@@ -5408,14 +8332,14 @@ function FavoritePlayerRow({ player, fallbackName }) {
         </div>
 
         {player && (
-          <div className="text-[11px] text-[#e4007f] font-black mt-1">
+          <div className="text-[11px] text-[#ec4899] font-black mt-1">
             背番号 {player.number} / {player.position}
           </div>
         )}
       </div>
 
       {player && (
-        <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#e4007f] to-[#a00059] text-white flex flex-col items-center justify-center shadow-md shrink-0">
+        <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#ec4899] to-[#831843] text-white flex flex-col items-center justify-center shadow-md shrink-0">
           <div className="text-[8px] font-black tracking-widest text-white/75">
             No.
           </div>
@@ -5435,7 +8359,7 @@ function FavoritePlayerRow({ player, fallbackName }) {
 function ProfileInfoRow({ icon, label, value }) {
   return (
     <div className="flex items-center gap-3 bg-[#f8f7fb] rounded-2xl p-3 border border-gray-100">
-      <div className="w-10 h-10 rounded-xl bg-pink-100 text-[#e4007f] flex items-center justify-center shrink-0">
+      <div className="w-10 h-10 rounded-xl bg-pink-100 text-[#ec4899] flex items-center justify-center shrink-0">
         {icon}
       </div>
 
@@ -5508,7 +8432,7 @@ function AttendanceCalendarView({ records, setView, onOpenDetail }) {
 
       <section className="px-5 py-6">
         <div className="mb-5">
-          <div className="flex items-center gap-2 text-[#e4007f] font-black text-sm mb-1">
+          <div className="flex items-center gap-2 text-[#ec4899] font-black text-sm mb-1">
             <Calendar size={18} />
             ATTENDANCE CALENDAR
           </div>
@@ -5518,7 +8442,7 @@ function AttendanceCalendarView({ records, setView, onOpenDetail }) {
           </h1>
 
           <p className="text-xs text-gray-500 font-bold mt-1">
-            行った試合の日に紫のマークが付きます
+            行った試合の日に桜色のマークが付きます
           </p>
         </div>
 
@@ -5527,7 +8451,7 @@ function AttendanceCalendarView({ records, setView, onOpenDetail }) {
             <button
               type="button"
               onClick={() => moveMonth(-1)}
-              className="w-10 h-10 rounded-full bg-pink-50 text-[#e4007f] flex items-center justify-center"
+              className="w-10 h-10 rounded-full bg-pink-50 text-[#ec4899] flex items-center justify-center"
             >
               <ChevronLeft size={20} />
             </button>
@@ -5539,7 +8463,7 @@ function AttendanceCalendarView({ records, setView, onOpenDetail }) {
             <button
               type="button"
               onClick={() => moveMonth(1)}
-              className="w-10 h-10 rounded-full bg-pink-50 text-[#e4007f] flex items-center justify-center"
+              className="w-10 h-10 rounded-full bg-pink-50 text-[#ec4899] flex items-center justify-center"
             >
               <ChevronRight size={20} />
             </button>
@@ -5571,7 +8495,7 @@ function AttendanceCalendarView({ records, setView, onOpenDetail }) {
                     }
                   }}
                   className={`h-11 rounded-2xl text-sm font-black relative flex items-center justify-center ${hasRecord
-                    ? 'bg-[#e4007f] text-white shadow-md shadow-pink-900/20'
+                    ? 'bg-[#ec4899] text-white shadow-md shadow-pink-900/20'
                     : 'bg-[#f8f7fb] text-gray-500 border border-gray-100'
                     }`}
                 >
@@ -5588,7 +8512,7 @@ function AttendanceCalendarView({ records, setView, onOpenDetail }) {
 
         <Card>
           <div className="flex items-center justify-between mb-4">
-            <div className="font-black text-[#e4007f]">
+            <div className="font-black text-[#ec4899]">
               この月の参戦記録
             </div>
 
@@ -5613,7 +8537,7 @@ function AttendanceCalendarView({ records, setView, onOpenDetail }) {
                   />
 
                   <div className="min-w-0 flex-1">
-                    <div className="text-[11px] text-[#e4007f] font-black">
+                    <div className="text-[11px] text-[#ec4899] font-black">
                       {record.date}
                     </div>
 
@@ -5643,7 +8567,7 @@ function AttendanceCalendarView({ records, setView, onOpenDetail }) {
 const badgeDefinitions = [
   {
     id: 'first-match',
-    title: 'はじめての紫',
+    title: 'はじめての桜色',
     description: '初めて観戦記録を作成',
     icon: <Ticket size={24} />,
     condition: (stats) => stats.total >= 1,
@@ -5651,7 +8575,7 @@ const badgeDefinitions = [
   },
   {
     id: 'five-matches',
-    title: '紫の常連',
+    title: '桜色の常連',
     description: '観戦記録を5試合作成',
     icon: <Calendar size={24} />,
     condition: (stats) => stats.total >= 5,
@@ -5659,7 +8583,7 @@ const badgeDefinitions = [
   },
   {
     id: 'ten-matches',
-    title: 'セレッソ生活',
+    title: 'サンフレ生活',
     description: '観戦記録を10試合作成',
     icon: <Medal size={24} />,
     condition: (stats) => stats.total >= 10,
@@ -5731,7 +8655,7 @@ const badgeDefinitions = [
   },
   {
     id: 'thirty-matches',
-    title: '紫の民',
+    title: '桜色の民',
     description: '観戦記録を30試合作成',
     icon: <Shield size={24} />,
     condition: (stats) => stats.total >= 30,
@@ -6082,7 +9006,7 @@ function BadgeCollectionView({ records, setView }) {
 
       <section className="px-5 py-6">
         <div className="mb-5">
-          <div className="flex items-center gap-2 text-[#e4007f] font-black text-sm mb-1">
+          <div className="flex items-center gap-2 text-[#ec4899] font-black text-sm mb-1">
             <Medal size={18} />
             BADGE COLLECTION
           </div>
@@ -6103,7 +9027,7 @@ function BadgeCollectionView({ records, setView }) {
                 獲得バッジ
               </div>
 
-              <div className="text-3xl font-black text-[#e4007f] mt-1">
+              <div className="text-3xl font-black text-[#ec4899] mt-1">
                 {unlockedBadges.length}
                 <span className="text-sm text-gray-400 ml-1">
                   / {badgeDefinitions.length}
@@ -6111,14 +9035,14 @@ function BadgeCollectionView({ records, setView }) {
               </div>
             </div>
 
-            <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#e4007f] to-[#a00059] text-white flex items-center justify-center shadow-lg shadow-pink-900/20">
+            <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#ec4899] to-[#831843] text-white flex items-center justify-center shadow-lg shadow-pink-900/20">
               <Medal size={32} />
             </div>
           </div>
 
           <div className="mt-4 h-3 bg-gray-100 rounded-full overflow-hidden">
             <div
-              className="h-full bg-[#e4007f] rounded-full"
+              className="h-full bg-[#ec4899] rounded-full"
               style={{
                 width: `${(unlockedBadges.length / badgeDefinitions.length) * 100}%`,
               }}
@@ -6140,7 +9064,7 @@ function BadgeCollectionView({ records, setView }) {
               >
                 <div
                   className={`w-14 h-14 rounded-2xl flex items-center justify-center mb-3 ${unlocked
-                    ? 'bg-gradient-to-br from-[#e4007f] to-[#a00059] text-white shadow-md shadow-pink-900/20'
+                    ? 'bg-gradient-to-br from-[#ec4899] to-[#831843] text-white shadow-md shadow-pink-900/20'
                     : 'bg-gray-200 text-gray-400'
                     }`}
                 >
@@ -6158,7 +9082,7 @@ function BadgeCollectionView({ records, setView }) {
                 <div className="mt-3 flex items-center justify-between">
                   <span
                     className={`text-[10px] font-black px-2 py-1 rounded-full ${unlocked
-                      ? 'bg-pink-100 text-[#e4007f]'
+                      ? 'bg-pink-100 text-[#ec4899]'
                       : 'bg-gray-200 text-gray-500'
                       }`}
                   >
@@ -6193,7 +9117,7 @@ function PhotoAlbumView({ records, setView }) {
 
       <section className="px-5 py-6">
         <div className="mb-5">
-          <div className="flex items-center gap-2 text-[#e4007f] font-black text-sm mb-1">
+          <div className="flex items-center gap-2 text-[#ec4899] font-black text-sm mb-1">
             <ImageIcon size={18} />
             PHOTO ALBUM
           </div>
@@ -6209,7 +9133,7 @@ function PhotoAlbumView({ records, setView }) {
 
         <Card>
           <div className="flex items-center justify-between mb-4">
-            <div className="font-black text-[#e4007f]">
+            <div className="font-black text-[#ec4899]">
               アルバム一覧
             </div>
 
@@ -6245,7 +9169,7 @@ function PhotoAlbumView({ records, setView }) {
                     </div>
 
                     <div className="p-3">
-                      <div className="text-[11px] text-[#e4007f] font-black">
+                      <div className="text-[11px] text-[#ec4899] font-black">
                         {record.date}
                       </div>
 
@@ -6261,7 +9185,7 @@ function PhotoAlbumView({ records, setView }) {
                       </div>
 
                       {record.tag && (
-                        <span className="inline-block mt-2 bg-pink-100 text-[#e4007f] text-[9px] font-black px-2 py-1 rounded-full">
+                        <span className="inline-block mt-2 bg-pink-100 text-[#ec4899] text-[9px] font-black px-2 py-1 rounded-full">
                           #{record.tag}
                         </span>
                       )}
@@ -6288,7 +9212,7 @@ function PhotoAlbumView({ records, setView }) {
       {activeAlbum && (
         <div className="fixed inset-0 z-[1000] bg-[#f8f7fb] flex flex-col">
           {/* アルバムのヘッダー */}
-          <div className="h-[70px] px-5 bg-gradient-to-r from-[#a00059] to-[#e4007f] text-white flex items-center justify-between shrink-0 shadow-md">
+          <div className="h-[70px] px-5 bg-gradient-to-r from-[#831843] to-[#ec4899] text-white flex items-center justify-between shrink-0 shadow-md">
             <div className="min-w-0 flex-1">
               <div className="text-[10px] font-black text-yellow-300">
                 {activeAlbum.date}
@@ -6354,7 +9278,7 @@ function MyPageMenuItem({ icon, title, text, onClick }) {
       onClick={onClick}
       className="w-full flex items-center gap-3 bg-[#f8f7fb] rounded-2xl p-3 border border-gray-100 text-left hover:bg-pink-50"
     >
-      <div className="w-10 h-10 rounded-xl bg-white text-[#e4007f] flex items-center justify-center shadow-sm shrink-0">
+      <div className="w-10 h-10 rounded-xl bg-white text-[#ec4899] flex items-center justify-center shadow-sm shrink-0">
         {icon}
       </div>
 
@@ -6374,12 +9298,515 @@ function MyPageMenuItem({ icon, title, text, onClick }) {
 function MiniStat({ icon, label, value, unit }) {
   return (
     <div className="px-2">
-      <div className="flex items-center gap-1 text-[#e4007f] text-xs font-bold mb-2">
+      <div className="flex items-center gap-1 text-[#ec4899] text-xs font-bold mb-2">
         {icon} {label}
       </div>
-      <div className="text-3xl font-black text-[#e4007f]">
+      <div className="text-3xl font-black text-[#ec4899]">
         {value} <span className="text-xs text-gray-500 font-bold">{unit}</span>
       </div>
+    </div>
+  );
+}
+
+const getTicketScoreData = (record) => {
+  const data = record.draftData || {};
+  const scoreMatch = record.score?.match(/(\d+)\s*-\s*(\d+)/);
+
+  const sanfreScore = data.homeScore !== undefined && data.homeScore !== ''
+    ? Number(data.homeScore)
+    : Number(scoreMatch?.[1] || 0);
+
+  const opponentScore = data.awayScore !== undefined && data.awayScore !== ''
+    ? Number(data.awayScore)
+    : Number(scoreMatch?.[2] || 0);
+
+  const result = sanfreScore > opponentScore
+    ? 'WIN'
+    : sanfreScore === opponentScore
+      ? 'DRAW'
+      : 'LOSE';
+
+  return { sanfreScore, opponentScore, result };
+};
+
+const getTicketOpponent = (record) => {
+  const opponentName = record.draftData?.opponent || record.opponent || '';
+
+  return opponentTeams.find((team) =>
+    team.name === opponentName ||
+    team.short === opponentName ||
+    opponentName.includes(team.short) ||
+    opponentName.includes(team.name)
+  ) || {
+    name: opponentName || '対戦相手',
+    short: opponentName ? opponentName.replace('セレッソ大阪', '').trim() : '相手',
+    main: '#ec4899',
+    sub: '#60a5fa',
+  };
+};
+
+const getTicketMatchMeta = (record) => {
+  const data = record.draftData || {};
+  const scheduleMatch = getScheduleMatchFromRecord(record);
+  const seasonInfo = getSeasonInfo(data.season || record.season || '2026-27');
+  const opponent = getTicketOpponent(record);
+
+  const rawTournament = data.tournament || seasonInfo.tournament || 'J1リーグ';
+  const tournament = rawTournament.includes('ルヴァン')
+    ? 'ルヴァンカップ'
+    : rawTournament.includes('百年')
+      ? '百年構想リーグ'
+      : rawTournament.includes('天皇杯')
+        ? '天皇杯'
+        : 'J1リーグ';
+
+  const section = data.matchSection || scheduleMatch?.section || '';
+  const venueType = data.venueType || scheduleMatch?.venueType || (record.stadium?.includes('エディオン') ? 'HOME' : 'AWAY');
+  const date = data.date ? data.date.replaceAll('-', '.') : record.date || '';
+  const time = scheduleMatch?.time && scheduleMatch.time !== '未定' ? `${scheduleMatch.time} KICK OFF` : '';
+  const stadium = data.stadium || record.stadium || scheduleMatch?.stadium || '';
+
+  return {
+    season: data.season || record.season || '2026-27',
+    date,
+    tournament,
+    section,
+    venueType,
+    time,
+    stadium,
+    opponent,
+    seat: [data.seat, data.seatBlock, data.seatRow, data.seatNumber]
+      .filter(Boolean)
+      .join(' '),
+  };
+};
+
+const getTicketRareBadges = (record) => {
+  const data = record.draftData || {};
+  const { result, sanfreScore } = getTicketScoreData(record);
+  const tags = data.tags || (record.tag ? [record.tag] : []);
+  const badges = [];
+
+  if (tags.some((tag) => String(tag).includes('初'))) badges.push('初観戦');
+  if (tags.some((tag) => String(tag).includes('逆転'))) badges.push('劇的逆転勝利');
+  if (tags.some((tag) => String(tag).includes('ダービー'))) badges.push('ダービー');
+  if (data.weather && String(data.weather).includes('雨')) badges.push('雨の観戦');
+  if (result === 'WIN' && sanfreScore >= 4) badges.push('ゴールラッシュ');
+  if ((data.photos || []).length >= 3) badges.push('フォトメモリー');
+  if (moneyToNumber(data.expenses?.ticket) + moneyToNumber(data.expenses?.goods) + moneyToNumber(data.expenses?.food) + moneyToNumber(data.expenses?.transport) + moneyToNumber(data.expenses?.other) >= 20000) badges.push('豪遊遠征');
+
+  return badges.slice(0, 3);
+};
+
+function TicketCollectionView({ records, setView, onOpenDetail }) {
+  const [activeSeason, setActiveSeason] = useState('all');
+  const [rareInfoOpen, setRareInfoOpen] = useState(false);
+
+  const sortedRecords = [...records].sort((a, b) => {
+    const aDate = normalizeDate(a.draftData?.date || a.date);
+    const bDate = normalizeDate(b.draftData?.date || b.date);
+    return new Date(bDate) - new Date(aDate);
+  });
+
+  const filteredRecords = sortedRecords.filter((record) => {
+    if (activeSeason === 'all') return true;
+    if (activeSeason === 'rare') return getTicketRareBadges(record).length > 0;
+    return getRecordSeason(record) === activeSeason;
+  });
+
+  const winCount = records.filter((record) => getTicketScoreData(record).result === 'WIN').length;
+  const stadiumCount = new Set(records.map((record) => record.stadium).filter(Boolean)).size;
+  const rareCount = records.filter((record) => getTicketRareBadges(record).length > 0).length;
+
+  return (
+    <div className="min-h-screen bg-[#08031d] text-white pb-24">
+      <div className="relative overflow-hidden min-h-screen">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_0%,rgba(139,92,246,0.38),transparent_35%),radial-gradient(circle_at_95%_22%,rgba(214,179,106,0.18),transparent_32%),linear-gradient(180deg,#100533_0%,#070218_45%,#050111_100%)]"></div>
+        <div className="absolute inset-x-0 top-0 h-48 bg-[linear-gradient(120deg,rgba(255,255,255,0.08)_0%,transparent_38%,rgba(126,34,206,0.16)_100%)]"></div>
+
+        <div className="relative z-10 px-4 pt-5">
+          <div className="flex items-center justify-between mb-5">
+            <button
+              type="button"
+              onClick={() => setView('home')}
+              className="w-11 h-11 rounded-2xl bg-white/8 border border-white/10 flex items-center justify-center active:scale-95"
+            >
+              <ChevronLeft size={25} strokeWidth={2.8} />
+            </button>
+
+            <div className="text-center">
+              <h1 className="text-[24px] font-black tracking-tight">チケットコレクション</h1>
+              <p className="text-[10px] tracking-[0.24em] text-white/50 font-black mt-1">MATCH MEMORY TICKETS</p>
+            </div>
+
+            <div className="relative">
+              <button
+                type="button"
+                onClick={() => setRareInfoOpen(!rareInfoOpen)}
+                className="w-11 h-11 rounded-2xl bg-white/8 border border-white/10 flex items-center justify-center active:scale-95"
+              >
+                <MoreHorizontal size={24} />
+              </button>
+
+              {rareInfoOpen && (
+                <div className="absolute right-0 top-[54px] w-[285px] rounded-[1.6rem] bg-white text-[#171425] shadow-2xl border border-pink-100 p-4 z-[999]">
+                  <div className="flex items-start justify-between gap-3 mb-3">
+                    <div>
+                      <div className="text-[10px] font-black text-[#ec4899] tracking-[0.22em]">
+                        RARE TICKET
+                      </div>
+                      <div className="text-base font-black mt-1">
+                        レアチケットの表示条件
+                      </div>
+                    </div>
+
+                    <button
+                      type="button"
+                      onClick={() => setRareInfoOpen(false)}
+                      className="text-[10px] font-black text-gray-400"
+                    >
+                      閉じる
+                    </button>
+                  </div>
+
+                  <p className="text-xs text-gray-500 font-bold leading-5 mb-3">
+                    下の条件に1つでも当てはまると、チケットにレアバッジが付きます。
+                  </p>
+
+                  <div className="space-y-2">
+                    <RareConditionItem
+                      icon={<TagIcon size={15} />}
+                      title="初観戦"
+                      desc="タグに「初」が含まれている"
+                    />
+
+                    <RareConditionItem
+                      icon={<TagIcon size={15} />}
+                      title="劇的逆転勝利"
+                      desc="タグに「逆転」が含まれている"
+                    />
+
+                    <RareConditionItem
+                      icon={<TagIcon size={15} />}
+                      title="ダービー"
+                      desc="タグに「ダービー」が含まれている"
+                    />
+
+                    <RareConditionItem
+                      icon={<Sun size={15} />}
+                      title="雨の観戦"
+                      desc="天気に「雨」が含まれている"
+                    />
+
+                    <RareConditionItem
+                      icon={<Trophy size={15} />}
+                      title="ゴールラッシュ"
+                      desc="勝利して、セレッソが4得点以上"
+                    />
+
+                    <RareConditionItem
+                      icon={<ImageIcon size={15} />}
+                      title="フォトメモリー"
+                      desc="写真を3枚以上登録している"
+                    />
+
+                    <RareConditionItem
+                      icon={<Wallet size={15} />}
+                      title="豪遊遠征"
+                      desc="観戦費用の合計が20,000円以上"
+                    />
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+
+          <div className="grid grid-cols-4 rounded-[1.35rem] border border-white/10 bg-white/[0.07] backdrop-blur-xl shadow-2xl shadow-pink-950/30 divide-x divide-white/10 overflow-hidden mb-4">
+            <TicketStat icon={<Ticket size={16} />} label="コレクション" value={records.length} unit="枚" />
+            <TicketStat icon={<Trophy size={16} />} label="勝利" value={winCount} unit="試合" />
+            <TicketStat icon={<Building2 size={16} />} label="スタジアム" value={stadiumCount} unit="ヶ所" />
+            <TicketStat icon={<Star size={16} />} label="レア" value={rareCount} unit="枚" gold />
+          </div>
+
+          <div className="flex gap-3 overflow-x-auto pb-2 mb-4 ticket-tab-scroll">
+            <TicketFilterButton active={activeSeason === 'all'} onClick={() => setActiveSeason('all')}>すべて</TicketFilterButton>
+            {seasonOptions.map((season) => (
+              <TicketFilterButton
+                key={season.key}
+                active={activeSeason === season.key}
+                onClick={() => setActiveSeason(season.key)}
+              >
+                {season.key === '2026-27' ? '2026/27' : '百年構想'}
+              </TicketFilterButton>
+            ))}
+            <TicketFilterButton active={activeSeason === 'rare'} onClick={() => setActiveSeason('rare')}>レア</TicketFilterButton>
+          </div>
+
+          {filteredRecords.length === 0 ? (
+            <div className="mt-16 text-center px-6">
+              <div className="mx-auto w-20 h-20 rounded-[1.7rem] bg-white/8 border border-white/10 flex items-center justify-center text-pink-200 mb-5">
+                <Ticket size={40} />
+              </div>
+              <h2 className="text-xl font-black">まだチケットがありません</h2>
+              <p className="text-sm text-white/55 font-bold leading-6 mt-3">
+                観戦記録を保存すると、ここに思い出のチケットが自動で追加されます。
+              </p>
+              <button
+                type="button"
+                onClick={() => setView('step1')}
+                className="mt-6 bg-white text-[#ec4899] rounded-full px-6 py-3 text-sm font-black shadow-lg active:scale-95"
+              >
+                最初のチケットを作る
+              </button>
+            </div>
+          ) : (
+            <>
+              <div className="ticket-list-hint">
+                タップで詳細を表示
+              </div>
+
+              <div className="space-y-4">
+                {filteredRecords.map((record) => (
+                  <MemoryTicketCard
+                    key={record.id}
+                    record={record}
+                    onOpenDetail={() => onOpenDetail(record, 'tickets')}
+                  />
+                ))}
+              </div>
+            </>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function TicketStat({ icon, label, value, unit, gold }) {
+  return (
+    <div className="px-2 py-3 text-center min-w-0">
+      <div className={`flex items-center justify-center gap-1 text-[10px] font-black ${gold ? 'text-yellow-300' : 'text-pink-200'}`}>
+        {icon}
+        <span className="truncate">{label}</span>
+      </div>
+      <div className="mt-1 text-[24px] font-black leading-none">
+        {value}<span className="text-[10px] font-bold text-white/70 ml-1">{unit}</span>
+      </div>
+    </div>
+  );
+}
+function RareConditionItem({ icon, title, desc }) {
+  return (
+    <div className="flex gap-3 rounded-2xl bg-pink-50 border border-pink-100 px-3 py-2.5">
+      <div className="w-8 h-8 rounded-xl bg-white text-[#ec4899] flex items-center justify-center shrink-0 shadow-sm">
+        {icon}
+      </div>
+
+      <div className="min-w-0">
+        <div className="text-xs font-black text-[#ec4899]">
+          {title}
+        </div>
+        <div className="text-[11px] font-bold text-gray-500 leading-5 mt-0.5">
+          {desc}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function TicketFilterButton({ active, onClick, children }) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className={`shrink-0 rounded-full px-5 py-2.5 text-sm font-black border active:scale-95 ${active
+        ? 'bg-gradient-to-r from-[#be185d] to-[#5b21b6] text-white border-pink-300/30 shadow-lg shadow-pink-950/30'
+        : 'bg-white/7 text-white/65 border-white/10'
+        }`}
+    >
+      {children}
+    </button>
+  );
+}
+
+
+function TicketStadiumIllustration({ away = false }) {
+  return (
+    <svg viewBox="0 0 120 120" className="stadium-svg" aria-hidden="true">
+      <defs>
+        <linearGradient id="ticketBadgeFill" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stopColor="#ffffff" stopOpacity="0.18" />
+          <stop offset="100%" stopColor="#ffffff" stopOpacity="0.04" />
+        </linearGradient>
+
+        <linearGradient id="ticketBadgeStroke" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stopColor="#ffffff" stopOpacity="1" />
+          <stop offset="100%" stopColor="#d8c9ff" stopOpacity="0.62" />
+        </linearGradient>
+      </defs>
+
+      {/* crown */}
+      <path
+        className="badge-crown"
+        d="M35 25l9 10 16-13 16 13 9-10 6 18H29l6-18Z"
+      />
+
+      {/* shield */}
+      <path
+        className="badge-shield"
+        d="M60 108C35 95 26 77 26 48V40c13-2 24-7 34-16c10 9 21 14 34 16v8c0 29-9 47-34 60Z"
+      />
+
+      {/* inner shield */}
+      <path
+        className="badge-shield-inner"
+        d="M60 99C40 88 33 73 33 49v-3c10-2 19-6 27-13c8 7 17 11 27 13v3c0 24-7 39-27 50Z"
+      />
+
+      {/* vertical stripes */}
+      <path className="badge-stripe" d="M49 39v43" />
+      <path className="badge-stripe" d="M60 35v51" />
+      <path className="badge-stripe" d="M71 39v43" />
+
+      {/* football */}
+      <circle className="badge-ball" cx="60" cy="61" r="9" />
+      <path
+        className="badge-ball-lines"
+        d="M60 52l4 3-1 5h-6l-1-5 4-3Zm-8 10l5 2m11-2l-5 2m-8 6l5-2m11 2l-5-2"
+      />
+
+      {/* wing accents */}
+      <path className="badge-wing" d="M24 54c8-6 14-7 20-5" />
+      <path className="badge-wing" d="M96 54c-8-6-14-7-20-5" />
+
+      {/* away spark */}
+      {away && (
+        <>
+          <path className="badge-spark" d="M18 42l4 4-4 4-4-4 4-4Z" />
+          <path className="badge-spark" d="M102 42l4 4-4 4-4-4 4-4Z" />
+        </>
+      )}
+    </svg>
+  );
+}
+function MemoryTicketCard({ record, onOpenDetail }) {
+  const meta = getTicketMatchMeta(record);
+  const opponent = meta.opponent;
+  const { sanfreScore, opponentScore, result } = getTicketScoreData(record);
+  const data = record.draftData || {};
+  const rareBadges = getTicketRareBadges(record);
+
+  // 背景は「試合が行われたスタジアム」の写真
+  const stadiumImage = getStadiumImage(meta.stadium);
+
+  const mainColor = meta.venueType === 'HOME' ? cerezoTeam.main : opponent.main;
+  const accentColor = rareBadges.length ? '#60a5fa' : (opponent.main || '#be185d');
+
+  return (
+    <button
+      type="button"
+      className="ticket-single"
+      onClick={onOpenDetail}
+      aria-label={`${cerezoTeam.short} vs ${opponent.short} のチケット詳細を開く`}
+      style={{
+        '--ticket-main': mainColor,
+        '--ticket-accent': accentColor,
+        '--ticket-img': `url(${stadiumImage})`,
+      }}
+    >
+      <div className="ticket-front-single">
+        <div className="ticket-main-panel">
+          <div className="ticket-left-icon">
+            <div className="stadium-mark">
+              <TicketStadiumIllustration away={meta.venueType === 'AWAY'} />
+            </div>
+
+            <div className="ticket-home-away">
+              {meta.venueType === 'HOME' ? 'HOME GAME' : 'AWAY GAME'}
+            </div>
+          </div>
+
+          <div className="ticket-info-panel">
+            <div className="ticket-meta-line">
+              <span>{String(meta.date).slice(0, 4) || '2026'}</span>
+              <span>{meta.tournament}</span>
+              {meta.section && <span>第{meta.section}節</span>}
+            </div>
+
+            <div className="ticket-match-title">
+              <span>{cerezoTeam.short}</span>
+              <b>vs</b>
+              <span>{opponent.short}</span>
+            </div>
+
+            <div className="ticket-date-line">
+              {meta.date} {meta.time}
+            </div>
+
+            <div className="ticket-place-line">
+              <MapPin size={14} />
+              <span>{meta.stadium}</span>
+            </div>
+
+            {rareBadges[0] && (
+              <div className="ticket-rare-chip">
+                <Star size={13} fill="currentColor" />
+                {rareBadges[0]}
+              </div>
+            )}
+          </div>
+        </div>
+
+        <TicketStub
+          score={`${sanfreScore} - ${opponentScore}`}
+          result={result}
+          mvp={data.mvp || '未設定'}
+          rating={data.rating || 0}
+        />
+
+        <div className="ticket-barcode-rail">
+          <div className="barcode-lines"></div>
+          <div className="rail-text">CEREZO OSAKA</div>
+        </div>
+      </div>
+
+
+    </button>
+  );
+}
+
+function TicketStub({ score, result, mvp, rating }) {
+  return (
+    <div className="ticket-stub-panel">
+      <div className="ticket-score-text">{score} <span>{result === 'WIN' ? '○' : result === 'DRAW' ? '△' : '●'}</span></div>
+      <div className="ticket-result-text">{result}</div>
+      <div className="ticket-mom-label">MOM</div>
+      <div className="ticket-mom-name">{mvp}</div>
+      <TicketStars rating={rating} />
+    </div>
+  );
+}
+
+function TicketStars({ rating }) {
+  const count = Math.max(0, Math.min(5, Number(rating) || 0));
+  return (
+    <div className="ticket-stars" aria-label={`${count} stars`}>
+      {Array.from({ length: 5 }).map((_, index) => (
+        <Star key={index} size={16} fill={index < count ? 'currentColor' : 'none'} strokeWidth={2.4} />
+      ))}
+    </div>
+  );
+}
+
+function InfoMini({ icon, label, value, image }) {
+  return (
+    <div className="info-mini">
+      <div className="text-[#5b21b6] shrink-0">{icon}</div>
+      <div className="min-w-0 flex-1">
+        <div className="text-[11px] font-black text-[#5b21b6]">{label}</div>
+        <div className="text-[12px] font-black text-[#171425] truncate">{value}</div>
+      </div>
+      {image && <img src={image} alt={label} className="w-10 h-10 rounded-xl object-cover shrink-0" />}
     </div>
   );
 }
@@ -6404,9 +9831,9 @@ function BottomNav({ setView, view, onStartCreate }) {
       <button
         type="button"
         onClick={onStartCreate}
-        className="relative -top-5 w-16 h-16 rounded-full bg-[#e4007f] flex items-center justify-center shadow-lg shadow-pink-900/25"
+        className="relative -top-5 w-16 h-16 rounded-full bg-[#ec4899] flex items-center justify-center shadow-lg shadow-pink-900/25"
       >
-        <div className="w-12 h-12 rounded-full bg-[#e4007f] text-white flex flex-col items-center justify-center">
+        <div className="w-12 h-12 rounded-full bg-[#ec4899] text-white flex flex-col items-center justify-center">
           <Calendar size={20} />
           <span className="text-[9px] font-bold">記録する</span>
         </div>
@@ -6434,7 +9861,7 @@ function NavItem({ icon, label, active, onClick }) {
     <button
       type="button"
       onClick={onClick}
-      className={`flex flex-col items-center gap-1 ${active ? 'text-[#e4007f]' : 'text-gray-500'
+      className={`flex flex-col items-center gap-1 ${active ? 'text-[#ec4899]' : 'text-gray-500'
         }`}
     >
       {icon}
@@ -6443,7 +9870,7 @@ function NavItem({ icon, label, active, onClick }) {
   );
 }
 
-function CreateShell({ children, setView, backTo, step, onSaveDraft }) {
+function CreateShell({ children, setView, backTo, step, onSaveDraft, hideStepIndicator = false }) {
   return (
     <div className="min-h-screen bg-[#f8f7fb]">
       <BrandHeader back={backTo} setView={setView} />
@@ -6453,13 +9880,13 @@ function CreateShell({ children, setView, backTo, step, onSaveDraft }) {
           観戦記録を作成
         </h1>
 
-        <StepIndicator step={step} />
+        {!hideStepIndicator && <StepIndicator step={step} />}
         {onSaveDraft && (
           <div className="mt-3 flex justify-end">
             <button
               type="button"
               onClick={onSaveDraft}
-              className="bg-pink-50 text-[#e4007f] border border-pink-200 rounded-full px-3 py-2 text-[11px] font-black flex items-center gap-1.5 active:scale-95 shadow-sm"
+              className="bg-pink-50 text-[#ec4899] border border-pink-200 rounded-full px-3 py-2 text-[11px] font-black flex items-center gap-1.5 active:scale-95 shadow-sm"
             >
               <PenSquare size={13} />
               下書き保存
@@ -6484,7 +9911,7 @@ function StepIndicator({ step }) {
       <div className="flex items-center justify-between px-8 relative">
         <div className="absolute left-12 right-12 top-4 h-[2px] bg-gray-200"></div>
         <div
-          className="absolute left-12 top-4 h-[2px] bg-[#e4007f] transition-all duration-300"
+          className="absolute left-12 top-4 h-[2px] bg-[#ec4899] transition-all duration-300"
           style={{
             width:
               step === 1 ? '0%' :
@@ -6498,7 +9925,7 @@ function StepIndicator({ step }) {
           <div key={num} className="relative z-10 flex flex-col items-center">
             <div
               className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-black shadow-sm transition-all ${step >= num
-                ? 'bg-[#e4007f] text-white shadow-pink-900/30'
+                ? 'bg-[#ec4899] text-white shadow-pink-900/30'
                 : 'bg-white text-gray-400 border-2 border-gray-300'
                 }`}
             >
@@ -6512,7 +9939,7 @@ function StepIndicator({ step }) {
         {labels.map((label, i) => (
           <div
             key={label}
-            className={`text-[10px] font-black leading-tight ${step === i + 1 ? 'text-[#e4007f]' : 'text-gray-400'
+            className={`text-[10px] font-black leading-tight ${step === i + 1 ? 'text-[#ec4899]' : 'text-gray-400'
               }`}
           >
             {label}
@@ -6616,6 +10043,32 @@ function CreateStep1({ setView, draft, updateDraft, onSaveDraft }) {
     <CreateShell setView={setView} backTo="home" step={1} onSaveDraft={onSaveDraft}>
       <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-4 space-y-5">
 
+        <button
+          type="button"
+          onClick={() => {
+            updateDraft({
+              isQuick: true,
+              quickMemo: draft.quickMemo || '',
+            });
+            setView('quickRecord');
+          }}
+          className="w-full mb-5 bg-gradient-to-r from-[#831843] via-[#ec4899] to-[#1b063d] text-white rounded-[1.5rem] p-4 border border-pink-200/20 shadow-xl shadow-pink-900/20 active:scale-[0.98]"
+        >
+          <div className="flex items-start gap-3">
+            <div className="mt-0.5 w-6 h-6 rounded-lg border-2 border-white/70 flex items-center justify-center bg-white/10">
+              ✓
+            </div>
+
+            <div className="text-left">
+              <div className="text-sm font-black">
+                クイック記録で入力する
+              </div>
+              <div className="text-xs text-white/75 font-bold leading-5 mt-1">
+                結果だけ先に保存して、あとから写真・MVP・メモを追加できます。
+              </div>
+            </div>
+          </div>
+        </button>
         <InputBlock icon={<Calendar size={18} />} label="シーズン">
           <select
             value={draft.season || '2026-27'}
@@ -6629,14 +10082,27 @@ function CreateStep1({ setView, draft, updateDraft, onSaveDraft }) {
             ))}
           </select>
         </InputBlock>
+
+        <p className="text-[11px] text-gray-500 font-bold -mt-2 pl-1 leading-tight">
+          ※「節」を選択すると、試合日や対戦相手、スタジアムが自動で反映されます。
+        </p>
+
+        <InputBlock icon={<Flag size={18} />} label="節を選択">
+          <select
+            value={draft.matchSection || ''}
+            onChange={(e) => handleSelectMatch(e.target.value)}
+            className="field"
+          >
+            <option value="">選択してください</option>
+            {currentSeasonSchedule.map((match) => (
+              <option key={match.section} value={match.section}>
+                第{match.section}節 {match.displayDate} vs {match.opponent}
+              </option>
+            ))}
+          </select>
+        </InputBlock>
+
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-
-          {/* 節を選択のブロックのすぐ下、試合日のすぐ上 */}
-          <p className="text-[11px] text-gray-500 font-bold mb-2 pl-1 leading-tight">
-            ※「節」を選択すると、試合日や対戦相手、スタジアムが自動で反映されます。
-          </p>
-
-
           <InputBlock icon={<Calendar size={18} />} label="試合日">
             <label className="relative flex items-center justify-between w-full max-w-full box-border border border-gray-200 rounded-2xl bg-white px-4 py-4 overflow-hidden">
               <span
@@ -6645,7 +10111,7 @@ function CreateStep1({ setView, draft, updateDraft, onSaveDraft }) {
                 {draft.date ? draft.date.replaceAll('-', '/') : '日付を選択'}
               </span>
 
-              <Calendar size={24} className="text-[#e4007f] shrink-0" />
+              <Calendar size={24} className="text-[#ec4899] shrink-0" />
 
               <input
                 type="date"
@@ -6669,53 +10135,23 @@ function CreateStep1({ setView, draft, updateDraft, onSaveDraft }) {
           </InputBlock>
         </div>
 
-        <InputBlock icon={<Flag size={18} />} label="節を選択">
-          <select
-            value={draft.matchSection || ''}
-            onChange={(e) => handleSelectMatch(e.target.value)}
-            className="field"
-          >
-            <option value="">選択してください</option>
-            {currentSeasonSchedule.map((match) => (
-              <option key={match.section} value={match.section}>
-                第{match.section}節 {match.displayDate} vs {match.opponent}
-              </option>
-            ))}
-          </select>
-
-
-        </InputBlock>
-
-
         <InputBlock icon={<Users size={18} />} label="対戦カード">
           <div className="border border-gray-200 rounded-2xl p-4 bg-white">
             <div className="flex items-center justify-between gap-3">
 
               {/* サンフレ側 */}
               <div className="flex-1 text-center">
-                <div className="w-14 h-14 mx-auto rounded-2xl bg-[#e4007f] text-white flex items-center justify-center shadow-md">
+                <div className="w-14 h-14 mx-auto rounded-2xl bg-[#ec4899] text-white flex items-center justify-center shadow-md">
                   {/* ↓ strokeWidth={0} と className を右側に合わせる */}
                   <Shield size={30} fill="currentColor" strokeWidth={0} className="text-white" />
                 </div>
-                <div className="h-11 text-xs font-black mt-2 leading-tight flex items-center justify-center text-center">
-                  <span
-                    className="block max-w-[108px]"
-                    style={{
-                      display: '-webkit-box',
-                      WebkitLineClamp: 2,
-                      WebkitBoxOrient: 'vertical',
-                      overflow: 'hidden',
-                      wordBreak: 'keep-all',
-                      overflowWrap: 'break-word',
-                    }}
-                  >
-                    セレッソ大阪
-                  </span>
+                <div className="h-9 text-xs font-black mt-2 leading-snug flex items-center justify-center text-center">
+                  セレッソ大阪
                 </div>
               </div>
 
               <div className="px-2">
-                <div className="w-10 h-10 rounded-full bg-[#f8f7fb] border border-gray-200 flex items-center justify-center font-black text-[#e4007f]">
+                <div className="w-10 h-10 rounded-full bg-[#f8f7fb] border border-gray-200 flex items-center justify-center font-black text-[#ec4899]">
                   VS
                 </div>
               </div>
@@ -6734,24 +10170,14 @@ function CreateStep1({ setView, draft, updateDraft, onSaveDraft }) {
                   </div>
                 )}
 
-                <div className="h-11 text-xs font-black mt-2 leading-tight flex items-center justify-center text-center">
-                  <span
-                    className="block max-w-[108px] pr-4"
-                    style={{
-                      display: '-webkit-box',
-                      WebkitLineClamp: 2,
-                      WebkitBoxOrient: 'vertical',
-                      overflow: 'hidden',
-                      wordBreak: 'keep-all',
-                      overflowWrap: 'break-word',
-                    }}
-                  >
+                <div className="h-9 text-xs font-black mt-2 leading-snug flex items-center justify-center gap-1 text-center">
+                  <span className="line-clamp-2">
                     {selectedTeam ? selectedTeam.name : '対戦相手を選択'}
                   </span>
 
                   <ChevronRight
                     size={14}
-                    className="rotate-90 text-[#e4007f] shrink-0 -ml-3"
+                    className="rotate-90 text-[#ec4899] shrink-0"
                   />
                 </div>
               </button>
@@ -6778,7 +10204,7 @@ function CreateStep1({ setView, draft, updateDraft, onSaveDraft }) {
                         setTeamOpen(false);
                       }}
                       className={`h-[58px] flex items-center gap-2 rounded-xl border px-2 py-2 text-left transition ${draft.opponent === team.name
-                        ? 'border-[#e4007f] bg-pink-50'
+                        ? 'border-[#ec4899] bg-pink-50'
                         : 'border-gray-200 bg-white hover:bg-gray-50'
                         }`}
                     >
@@ -6807,8 +10233,8 @@ function CreateStep1({ setView, draft, updateDraft, onSaveDraft }) {
                 type="button"
                 onClick={() => changeVenueType(type)}
                 className={`py-3 rounded-xl font-black border transition ${draft.venueType === type
-                  ? 'bg-[#e4007f] text-white border-[#e4007f] shadow-lg shadow-pink-900/20'
-                  : 'bg-white text-[#e4007f] border-gray-200 hover:bg-pink-50'
+                  ? 'bg-[#ec4899] text-white border-[#ec4899] shadow-lg shadow-pink-900/20'
+                  : 'bg-white text-[#ec4899] border-gray-200 hover:bg-pink-50'
                   }`}
               >
                 {type === 'HOME' ? 'HOME' : 'AWAY'}
@@ -6822,14 +10248,14 @@ function CreateStep1({ setView, draft, updateDraft, onSaveDraft }) {
               type="number"
               value={draft.homeScore}
               onChange={(e) => updateDraft({ homeScore: e.target.value })}
-              className="w-24 h-16 border border-gray-200 rounded-xl text-center text-3xl font-black text-[#e4007f] flex items-center justify-center leading-none pt-1"
+              className="w-24 h-16 border border-gray-200 rounded-xl text-center text-3xl font-black text-[#ec4899] flex items-center justify-center leading-none pt-1"
             />
             <span className="font-black">-</span>
             <input
               type="number"
               value={draft.awayScore}
               onChange={(e) => updateDraft({ awayScore: e.target.value })}
-              className="w-24 h-16 border border-gray-200 rounded-xl text-center text-3xl font-black text-[#e4007f] flex items-center justify-center leading-none pt-1"
+              className="w-24 h-16 border border-gray-200 rounded-xl text-center text-3xl font-black text-[#ec4899] flex items-center justify-center leading-none pt-1"
             />
           </div>
         </InputBlock>
@@ -6838,7 +10264,7 @@ function CreateStep1({ setView, draft, updateDraft, onSaveDraft }) {
           <div className="relative">
             <MapPin
               size={18}
-              className="absolute left-4 top-1/2 -translate-y-1/2 text-[#e4007f] pointer-events-none z-10"
+              className="absolute left-4 top-1/2 -translate-y-1/2 text-[#ec4899] pointer-events-none z-10"
             />
             <select
               value={draft.stadium}
@@ -6852,7 +10278,7 @@ function CreateStep1({ setView, draft, updateDraft, onSaveDraft }) {
               {/* 北から順 */}
 
 
-              <option>ケーズデンキスタジアム水戸</option>
+              <option>水戸信用金庫スタジアム</option>
               <option>メルカリスタジアム</option>
               <option>三協フロンテア柏スタジアム</option>
               <option>フクダ電子アリーナ</option>
@@ -6863,7 +10289,7 @@ function CreateStep1({ setView, draft, updateDraft, onSaveDraft }) {
               <option>Uvanceとどろきスタジアム by Fujitsu</option>
               <option>日産スタジアム</option>
               <option>IAIスタジアム日本平</option>
-              <option>豊田スタジアム</option>
+              <option>パロマ瑞穂スタジアム</option>
               <option>サンガスタジアム by KYOCERA</option>
               <option>パナソニック スタジアム 吹田</option>
               <option>ノエビアスタジアム神戸</option>
@@ -6872,6 +10298,7 @@ function CreateStep1({ setView, draft, updateDraft, onSaveDraft }) {
               <option>PEACE STADIUM Connected by SoftBank</option>
 
               {/* 予備・よく使う会場 */}
+              <option>YANMAR HANASAKA STADIUM</option>
 
             </select>
           </div>
@@ -6973,6 +10400,298 @@ function CreateStep1({ setView, draft, updateDraft, onSaveDraft }) {
   );
 }
 
+function QuickRecordView({ setView, draft, updateDraft, onSave, onSaveDraft }) {
+  const selectedSeason = draft.season || '2026-27';
+  const selectedSeasonInfo = getSeasonInfo(selectedSeason);
+  const currentSeasonSchedule = getSeasonSchedule(selectedSeason);
+
+  const canSave =
+    draft.date &&
+    draft.opponent &&
+    draft.stadium &&
+    draft.homeScore !== '' &&
+    draft.awayScore !== '';
+
+  const opponentTeam =
+    opponentTeams.find((team) => team.name === draft.opponent) ||
+    { name: '相手', short: '相手', main: '#64748b', sub: '#cbd5e1' };
+
+  const handleSelectMatch = (sectionValue) => {
+    if (!sectionValue) {
+      updateDraft({
+        matchSection: '',
+        date: '',
+        opponent: '',
+        stadium: '',
+        venueType: 'HOME',
+      });
+      return;
+    }
+
+    const match = currentSeasonSchedule.find(
+      (item) => String(item.section) === String(sectionValue)
+    );
+
+    if (!match) return;
+
+    updateDraft({
+      isQuick: true,
+      season: selectedSeason,
+      matchSection: sectionValue,
+      tournament: selectedSeasonInfo.tournament,
+      date: match.date,
+      opponent: match.opponent,
+      stadium: match.stadium,
+      venueType: match.venueType,
+    });
+  };
+
+  const handleQuickSave = () => {
+    if (!canSave) {
+      alert('日付・対戦相手・スタジアム・スコアを入力してください');
+      return;
+    }
+
+    updateDraft({
+      isQuick: true,
+      companion: '',
+      memo: draft.memo || draft.quickMemo || '',
+      tags: draft.tags?.length ? draft.tags : ['クイック記録'],
+    });
+
+    setTimeout(() => {
+      onSave();
+    }, 0);
+  };
+
+  const goDetailInput = () => {
+    updateDraft({
+      isQuick: false,
+      companion: '',
+      memo: draft.memo || draft.quickMemo || '',
+    });
+    setView('step1');
+  };
+
+  return (
+    <CreateShell
+      setView={setView}
+      backTo="step1"
+      step={1}
+      onSaveDraft={onSaveDraft}
+      hideStepIndicator={true}
+    >
+      <div className="space-y-5">
+        <div className="bg-[#16051f] text-white rounded-[1.8rem] p-5 shadow-xl shadow-pink-900/20 border border-pink-200/10">
+          <div className="inline-flex items-center gap-2 bg-white/10 border border-white/10 rounded-full px-3 py-1 text-[11px] font-black text-pink-100">
+            <Clock size={13} />
+            QUICK RECORD
+          </div>
+
+          <h2 className="text-2xl font-black mt-4 leading-tight">
+            結果だけ、先に残す。
+          </h2>
+
+          <p className="text-xs text-white/70 font-bold leading-6 mt-2">
+            試合後すぐに最低限の記録だけ保存できます。
+            写真・MVP・フォーメーションはあとから追記できます。
+          </p>
+        </div>
+
+        <InputBlock icon={<Calendar size={18} />} label="シーズン">
+          <select
+            value={selectedSeason}
+            onChange={(e) => {
+              const seasonInfo = getSeasonInfo(e.target.value);
+              updateDraft({
+                season: e.target.value,
+                tournament: seasonInfo.tournament,
+                matchSection: '',
+                date: '',
+                opponent: '',
+                stadium: '',
+                venueType: 'HOME',
+              });
+            }}
+            className="field"
+          >
+            {seasonOptions.map((season) => (
+              <option key={season.key} value={season.key}>
+                {season.label}
+              </option>
+            ))}
+          </select>
+        </InputBlock>
+
+        <InputBlock icon={<Flag size={18} />} label="試合を選択">
+          <select
+            value={draft.matchSection || ''}
+            onChange={(e) => handleSelectMatch(e.target.value)}
+            className="field"
+          >
+            <option value="">選択してください</option>
+            {currentSeasonSchedule.map((match) => (
+              <option key={match.section} value={match.section}>
+                第{match.section}節 {match.displayDate} vs {match.opponent}
+              </option>
+            ))}
+          </select>
+        </InputBlock>
+
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <InputBlock icon={<Calendar size={18} />} label="日付">
+            <input
+              type="date"
+              value={draft.date || ''}
+              onChange={(e) => updateDraft({ date: e.target.value })}
+              className="field quick-date-field"
+            />
+          </InputBlock>
+
+          <InputBlock icon={<MapPin size={18} />} label="会場">
+            <select
+              value={draft.venueType || 'HOME'}
+              onChange={(e) => updateDraft({ venueType: e.target.value })}
+              className="field quick-date-field"
+            >
+              <option value="HOME">ホーム</option>
+              <option value="AWAY">アウェイ</option>
+            </select>
+          </InputBlock>
+        </div>
+
+        <InputBlock icon={<Shield size={18} />} label="対戦相手">
+          <select
+            value={draft.opponent || ''}
+            onChange={(e) => {
+              const team = opponentTeams.find((item) => item.name === e.target.value);
+
+              updateDraft({
+                opponent: e.target.value,
+                stadium:
+                  draft.venueType === 'HOME'
+                    ? cerezoTeam.stadium
+                    : team?.stadium || draft.stadium,
+              });
+            }}
+            className="field"
+          >
+            <option value="">選択してください</option>
+            {opponentTeams.map((team) => (
+              <option key={team.name} value={team.name}>
+                {team.name}
+              </option>
+            ))}
+          </select>
+        </InputBlock>
+
+        <InputBlock icon={<MapPin size={18} />} label="スタジアム">
+          <input
+            type="text"
+            value={draft.stadium || ''}
+            onChange={(e) => updateDraft({ stadium: e.target.value })}
+            placeholder="例：YANMAR HANASAKA STADIUM"
+            className="field"
+          />
+        </InputBlock>
+
+        <div className="bg-white rounded-[1.6rem] p-4 border border-gray-100 shadow-sm">
+          <div className="flex items-center gap-2 text-[#ec4899] font-black mb-4">
+            <Trophy size={18} />
+            試合結果
+          </div>
+
+          <div className="grid grid-cols-[1fr_auto_1fr] gap-3 items-end">
+            <div className="text-center">
+              <div className="mb-2 flex flex-col items-center">
+                <TeamBadge team={cerezoTeam} size="small" />
+                <div className="mt-1 text-[11px] font-black text-gray-600">
+                  C大阪
+                </div>
+              </div>
+
+              <input
+                type="number"
+                inputMode="numeric"
+                value={draft.homeScore || ''}
+                onChange={(e) => updateDraft({ homeScore: e.target.value })}
+                className="field text-center text-2xl font-black"
+                placeholder="0"
+              />
+            </div>
+
+            <div className="pb-3 text-2xl font-black text-gray-400">
+              -
+            </div>
+
+            <div className="text-center">
+              <div className="mb-2 flex flex-col items-center">
+                <TeamBadge team={opponentTeam} size="small" />
+                <div className="mt-1 text-[11px] font-black text-gray-600 truncate max-w-[92px]">
+                  {opponentTeam.short || '相手'}
+                </div>
+              </div>
+
+              <input
+                type="number"
+                inputMode="numeric"
+                value={draft.awayScore || ''}
+                onChange={(e) => updateDraft({ awayScore: e.target.value })}
+                className="field text-center text-2xl font-black"
+                placeholder="0"
+              />
+            </div>
+          </div>
+        </div>
+
+        <InputBlock icon={<PenSquare size={18} />} label="ひとことメモ">
+          <textarea
+            value={draft.quickMemo || ''}
+            onChange={(e) =>
+              updateDraft({
+                quickMemo: e.target.value,
+                memo: e.target.value,
+              })
+            }
+            placeholder="例：後半ATのゴールで叫んだ。あとで詳しく書く。"
+            className="field min-h-[92px] resize-none leading-6"
+          />
+        </InputBlock>
+      </div>
+
+      <BottomAction>
+        <button
+          type="button"
+          onClick={() => setView('step1')}
+          className="secondary-btn"
+        >
+          <ChevronLeft size={20} />
+          戻る
+        </button>
+
+        <button
+          type="button"
+          onClick={goDetailInput}
+          className="bg-white text-[#ec4899] border border-pink-200 rounded-2xl py-3 px-4 font-black flex items-center justify-center gap-2 active:scale-95"
+        >
+          詳しく入力
+        </button>
+
+        <button
+          type="button"
+          onClick={handleQuickSave}
+          className={`primary-btn flex-[1.2] ${!canSave ? 'opacity-50' : ''}`}
+        >
+          保存
+          <CheckCircle2 size={18} />
+        </button>
+      </BottomAction>
+
+      <StyleHelper />
+    </CreateShell>
+  );
+}
+
 function CreateStep2({ setView, draft, updateDraft, records = [], onSaveDraft }) {
   const [tagInput, setTagInput] = useState('');
 
@@ -7064,7 +10783,7 @@ function CreateStep2({ setView, draft, updateDraft, records = [], onSaveDraft })
       <div className="space-y-4">
         {/* 満足度 */}
         <Card>
-          <div className="flex items-center gap-2 text-[#e4007f] font-black mb-4">
+          <div className="flex items-center gap-2 text-[#ec4899] font-black mb-4">
             <Star size={18} fill="currentColor" /> 満足度を教えてください
           </div>
 
@@ -7091,7 +10810,7 @@ function CreateStep2({ setView, draft, updateDraft, records = [], onSaveDraft })
                 {draft.rating ? `${draft.rating}.0` : '-'}
               </div>
 
-              <div className="text-[11px] text-[#e4007f] font-black mt-2 max-w-[120px] leading-snug">
+              <div className="text-[11px] text-[#ec4899] font-black mt-2 max-w-[120px] leading-snug">
                 {draft.rating
                   ? ratingMessages[draft.rating]
                   : 'タップして満足度を選択'}
@@ -7104,14 +10823,14 @@ function CreateStep2({ setView, draft, updateDraft, records = [], onSaveDraft })
 
         {/* 今日のMVP */}
         <Card>
-          <div className="flex items-center gap-2 text-[#e4007f] font-black mb-4">
+          <div className="flex items-center gap-2 text-[#ec4899] font-black mb-4">
             <Trophy size={18} fill="currentColor" />
             今日のMVP
           </div>
 
           <div className="flex items-center gap-4">
             {selectedMvp ? (
-              <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-[#e4007f] to-[#a00059] text-white flex flex-col items-center justify-center shadow-md shrink-0">
+              <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-[#ec4899] to-[#831843] text-white flex flex-col items-center justify-center shadow-md shrink-0">
                 <div className="text-[10px] font-black tracking-widest text-white/80">
                   No.
                 </div>
@@ -7136,7 +10855,7 @@ function CreateStep2({ setView, draft, updateDraft, records = [], onSaveDraft })
               <select
                 value={draft.mvp}
                 onChange={(e) => updateDraft({ mvp: e.target.value })}
-                className="w-full border border-gray-200 rounded-xl p-3 font-black text-[#171425] outline-none focus:border-[#e4007f] focus:ring-4 focus:ring-pink-100 bg-white"
+                className="w-full border border-gray-200 rounded-xl p-3 font-black text-[#171425] outline-none focus:border-[#ec4899] focus:ring-4 focus:ring-pink-100 bg-white"
               >
                 <option value="">選択してください</option>
                 {seasonPlayerOptions.map((player) => (
@@ -7148,7 +10867,7 @@ function CreateStep2({ setView, draft, updateDraft, records = [], onSaveDraft })
 
               {selectedMvp ? (
                 <>
-                  <div className="mt-2 text-sm font-black text-[#e4007f]">
+                  <div className="mt-2 text-sm font-black text-[#ec4899]">
                     {selectedMvp.name}
                   </div>
                   <div className="text-xs text-gray-500 font-bold">
@@ -7176,14 +10895,14 @@ function CreateStep2({ setView, draft, updateDraft, records = [], onSaveDraft })
 
         {/* 思い出メモ */}
         <Card>
-          <div className="flex items-center gap-2 text-[#e4007f] font-black mb-3">
+          <div className="flex items-center gap-2 text-[#ec4899] font-black mb-3">
             <PenSquare size={17} /> 思い出メモ
           </div>
 
           <textarea
             value={draft.memo}
             onChange={(e) => updateDraft({ memo: e.target.value })}
-            className="w-full h-36 outline-none resize-none text-sm leading-relaxed border border-gray-200 rounded-2xl p-4 focus:border-[#e4007f] focus:ring-4 focus:ring-pink-100"
+            className="w-full h-36 outline-none resize-none text-sm leading-relaxed border border-gray-200 rounded-2xl p-4 focus:border-[#ec4899] focus:ring-4 focus:ring-pink-100"
             placeholder="試合の感想、印象に残ったプレー、スタジアムの雰囲気など..."
           />
 
@@ -7194,7 +10913,7 @@ function CreateStep2({ setView, draft, updateDraft, records = [], onSaveDraft })
 
         {/* タグ */}
         <Card>
-          <div className="flex items-center gap-2 text-[#e4007f] font-black mb-4">
+          <div className="flex items-center gap-2 text-[#ec4899] font-black mb-4">
             <TagIcon size={18} />
             タグを追加
           </div>
@@ -7205,7 +10924,7 @@ function CreateStep2({ setView, draft, updateDraft, records = [], onSaveDraft })
                 key={tag}
                 type="button"
                 onClick={() => removeTag(tag)}
-                className="border border-[#e4007f] text-[#e4007f] rounded-full px-3 py-1.5 text-xs font-black"
+                className="border border-[#ec4899] text-[#ec4899] rounded-full px-3 py-1.5 text-xs font-black"
               >
                 #{tag} ×
               </button>
@@ -7230,7 +10949,7 @@ function CreateStep2({ setView, draft, updateDraft, records = [], onSaveDraft })
             <button
               type="button"
               onClick={addTag}
-              className="bg-[#e4007f] text-white px-4 rounded-2xl text-xs font-black"
+              className="bg-[#ec4899] text-white px-4 rounded-2xl text-xs font-black"
             >
               追加
             </button>
@@ -7240,7 +10959,7 @@ function CreateStep2({ setView, draft, updateDraft, records = [], onSaveDraft })
         {/* 写真 */}
         <Card>
           <div className="flex items-center justify-between mb-4">
-            <div className="flex items-center gap-2 text-[#e4007f] font-black">
+            <div className="flex items-center gap-2 text-[#ec4899] font-black">
               <ImageIcon size={18} />
               写真を追加
             </div>
@@ -7268,7 +10987,7 @@ function CreateStep2({ setView, draft, updateDraft, records = [], onSaveDraft })
             ))}
 
             {(draft.photos || []).length < 10 && (
-              <label className="h-24 rounded-2xl border-2 border-dashed border-pink-200 bg-pink-50/50 text-[#e4007f] flex flex-col items-center justify-center font-black cursor-pointer hover:bg-pink-100 transition">
+              <label className="h-24 rounded-2xl border-2 border-dashed border-pink-200 bg-pink-50/50 text-[#ec4899] flex flex-col items-center justify-center font-black cursor-pointer hover:bg-pink-100 transition">
                 <Plus size={24} />
                 <span className="text-xs mt-1">写真追加</span>
                 <input
@@ -7334,7 +11053,7 @@ function ScorersCard({ draft, updateDraft }) {
   return (
     <Card>
       <div className="flex items-center justify-between mb-4">
-        <div className="flex items-center gap-2 text-[#e4007f] font-black">
+        <div className="flex items-center gap-2 text-[#ec4899] font-black">
           <Trophy size={18} />
           得点者
         </div>
@@ -7342,7 +11061,7 @@ function ScorersCard({ draft, updateDraft }) {
         <button
           type="button"
           onClick={addScorer}
-          className="text-xs font-black text-[#e4007f] bg-pink-50 border border-pink-100 px-3 py-2 rounded-full active:scale-95"
+          className="text-xs font-black text-[#ec4899] bg-pink-50 border border-pink-100 px-3 py-2 rounded-full active:scale-95"
         >
           追加
         </button>
@@ -7360,7 +11079,7 @@ function ScorersCard({ draft, updateDraft }) {
               className="bg-[#f8f7fb] border border-gray-100 rounded-2xl p-3"
             >
               <div className="flex items-center gap-2 mb-3">
-                <div className="w-8 h-8 rounded-xl bg-[#e4007f] text-white flex items-center justify-center text-xs font-black shrink-0">
+                <div className="w-8 h-8 rounded-xl bg-[#ec4899] text-white flex items-center justify-center text-xs font-black shrink-0">
                   {index + 1}
                 </div>
 
@@ -7427,16 +11146,16 @@ function SimplePositionBoard({ draft, updateDraft, records = [] }) {
     draft.venueType === 'AWAY' || draft.venueType === 'アウェイ';
 
   const selectedUniformClass = isAwayUniform
-    ? 'bg-white text-[#e4007f] border-pink-200 ring-2 ring-white/70'
-    : 'bg-[#e4007f] text-white border-yellow-300';
+    ? 'bg-white text-[#ec4899] border-pink-200 ring-2 ring-white/70'
+    : 'bg-[#ec4899] text-white border-yellow-300';
 
   const activeUniformClass = isAwayUniform
-    ? 'bg-white text-[#e4007f] border-yellow-300 ring-4 ring-yellow-200/70'
-    : 'bg-yellow-300 text-[#e4007f] border-white ring-4 ring-yellow-200/60';
+    ? 'bg-white text-[#ec4899] border-yellow-300 ring-4 ring-yellow-200/70'
+    : 'bg-yellow-300 text-[#ec4899] border-white ring-4 ring-yellow-200/60';
 
   const modalSelectedUniformClass = isAwayUniform
-    ? 'bg-white text-[#e4007f] border border-pink-200'
-    : 'bg-[#e4007f] text-white';
+    ? 'bg-white text-[#ec4899] border border-pink-200'
+    : 'bg-[#ec4899] text-white';
   const previousPositionRecord = records.find((record) => {
     const data = record.draftData || {};
 
@@ -7578,7 +11297,7 @@ function SimplePositionBoard({ draft, updateDraft, records = [] }) {
   return (
     <Card>
       <div className="flex items-center justify-between mb-4">
-        <div className="flex items-center gap-2 text-[#e4007f] font-black">
+        <div className="flex items-center gap-2 text-[#ec4899] font-black">
           <Shirt size={18} />
           スタメンポジション
         </div>
@@ -7586,7 +11305,7 @@ function SimplePositionBoard({ draft, updateDraft, records = [] }) {
         <select
           value={formation}
           onChange={(e) => changeFormation(e.target.value)}
-          className="text-xs font-black text-[#e4007f] bg-pink-50 border border-pink-100 rounded-full px-3 py-2 outline-none"
+          className="text-xs font-black text-[#ec4899] bg-pink-50 border border-pink-100 rounded-full px-3 py-2 outline-none"
         >
           {Object.keys(formationLayouts).map((name) => (
             <option key={name} value={name}>
@@ -7604,15 +11323,15 @@ function SimplePositionBoard({ draft, updateDraft, records = [] }) {
         onClick={applyPreviousPosition}
         disabled={!hasPreviousPosition}
         className={`w-full mb-4 rounded-2xl border p-3 flex items-center gap-3 text-left active:scale-[0.98] ${hasPreviousPosition
-          ? 'bg-pink-50 border-pink-100 text-[#e4007f]'
+          ? 'bg-pink-50 border-pink-100 text-[#ec4899]'
           : 'bg-gray-50 border-gray-100 text-gray-400'
           }`}
       >
         <div
           className={`w-6 h-6 rounded-lg border-2 flex items-center justify-center shrink-0 ${isUsingPreviousPosition
-            ? 'bg-[#e4007f] border-[#e4007f] text-white'
+            ? 'bg-[#ec4899] border-[#ec4899] text-white'
             : hasPreviousPosition
-              ? 'bg-white border-[#e4007f] text-transparent'
+              ? 'bg-white border-[#ec4899] text-transparent'
               : 'bg-white border-gray-300 text-transparent'
             }`}
         >
@@ -7690,7 +11409,7 @@ function SimplePositionBoard({ draft, updateDraft, records = [] }) {
           <div className="w-full max-w-md bg-white rounded-t-[2rem] p-5 shadow-2xl max-h-[70vh] overflow-hidden">
             <div className="flex items-center justify-between mb-4">
               <div>
-                <div className="text-[11px] text-[#e4007f] font-black tracking-widest">
+                <div className="text-[11px] text-[#ec4899] font-black tracking-widest">
                   SELECT PLAYER
                 </div>
                 <div className="text-xl font-black text-[#171425] mt-1">
@@ -7746,7 +11465,7 @@ function SimplePositionBoard({ draft, updateDraft, records = [] }) {
                     <div
                       className={`w-11 h-11 rounded-2xl flex flex-col items-center justify-center ${selectedHere
                         ? modalSelectedUniformClass
-                        : 'bg-[#f8f7fb] text-[#e4007f]'
+                        : 'bg-[#f8f7fb] text-[#ec4899]'
                         }`}
                     >
                       <Shirt size={16} fill="currentColor" strokeWidth={0} />
@@ -7766,7 +11485,7 @@ function SimplePositionBoard({ draft, updateDraft, records = [] }) {
                     </div>
 
                     {selectedHere && (
-                      <CheckCircle2 size={20} className="text-[#e4007f]" />
+                      <CheckCircle2 size={20} className="text-[#ec4899]" />
                     )}
                   </button>
                 );
@@ -7863,7 +11582,7 @@ function CreateStep3({ setView, draft, updateDraft, onSaveDraft }) {
       <div className="space-y-4">
         {/* 金額 */}
         <Card>
-          <div className="flex items-center gap-2 text-[#e4007f] font-black mb-3">
+          <div className="flex items-center gap-2 text-[#ec4899] font-black mb-3">
             <Wallet size={18} />
             金額を入力
             <span className="text-xs text-gray-400">（任意）</span>
@@ -7880,7 +11599,7 @@ function CreateStep3({ setView, draft, updateDraft, onSaveDraft }) {
                 className="flex items-center justify-between border-b border-dashed border-gray-200 py-3"
               >
                 <div className="flex items-center gap-3 font-black text-[#171425]">
-                  <span className="text-[#e4007f]">{item.icon}</span>
+                  <span className="text-[#ec4899]">{item.icon}</span>
                   {item.label}
                 </div>
 
@@ -7893,7 +11612,7 @@ function CreateStep3({ setView, draft, updateDraft, onSaveDraft }) {
                     value={draft.expenses?.[item.id] ?? ''}
                     onChange={(e) => updateExpense(item.id, e.target.value)}
                     placeholder="0"
-                    className="w-24 text-right outline-none font-black text-[#e4007f] bg-pink-50 rounded-lg px-2 py-1 focus:ring-4 focus:ring-pink-100"
+                    className="w-24 text-right outline-none font-black text-[#ec4899] bg-pink-50 rounded-lg px-2 py-1 focus:ring-4 focus:ring-pink-100"
                   />
                 </div>
               </div>
@@ -7908,7 +11627,7 @@ function CreateStep3({ setView, draft, updateDraft, onSaveDraft }) {
               </div>
             </div>
 
-            <div className="text-3xl font-black text-[#e4007f] tracking-tight">
+            <div className="text-3xl font-black text-[#ec4899] tracking-tight">
               ¥{total.toLocaleString()}
             </div>
           </div>
@@ -7917,7 +11636,7 @@ function CreateStep3({ setView, draft, updateDraft, onSaveDraft }) {
         {/* タイムライン */}
         <Card>
           <div className="flex justify-between items-center mb-3">
-            <div className="flex items-center gap-2 text-[#e4007f] font-black">
+            <div className="flex items-center gap-2 text-[#ec4899] font-black">
               <Clock size={18} />
               タイムラインを入力
               <span className="text-xs text-gray-400">（任意）</span>
@@ -7926,7 +11645,7 @@ function CreateStep3({ setView, draft, updateDraft, onSaveDraft }) {
             <button
               type="button"
               onClick={addTimeline}
-              className="border border-[#e4007f] text-[#e4007f] rounded-full px-3 py-2 text-xs font-black flex items-center gap-1 hover:bg-pink-50"
+              className="border border-[#ec4899] text-[#ec4899] rounded-full px-3 py-2 text-xs font-black flex items-center gap-1 hover:bg-pink-50"
             >
               <Plus size={15} />
               追加
@@ -7937,7 +11656,7 @@ function CreateStep3({ setView, draft, updateDraft, onSaveDraft }) {
             ペンで編集、ごみ箱で削除できます。項目を長押しして動かすと順番を入れ替えられます。
           </p>
 
-          <div className="relative ml-3 border-l-2 border-[#e4007f] space-y-4">
+          <div className="relative ml-3 border-l-2 border-[#ec4899] space-y-4">
             {draft.timeline.map((item, index) => {
               const isEditing = editingTimelineId === item.id;
 
@@ -7952,7 +11671,7 @@ function CreateStep3({ setView, draft, updateDraft, onSaveDraft }) {
                   className={`relative pl-6 transition ${dragIndex === index ? 'opacity-40' : 'opacity-100'
                     }`}
                 >
-                  <div className="absolute -left-[9px] top-4 w-4 h-4 rounded-full border-2 border-[#e4007f] bg-white"></div>
+                  <div className="absolute -left-[9px] top-4 w-4 h-4 rounded-full border-2 border-[#ec4899] bg-white"></div>
 
                   <div className="bg-white border border-gray-200 rounded-2xl p-3 shadow-sm">
                     <div className="flex items-center gap-3">
@@ -7965,10 +11684,10 @@ function CreateStep3({ setView, draft, updateDraft, onSaveDraft }) {
                           type="time"
                           value={item.time}
                           onChange={(e) => updateTimeline(item.id, { time: e.target.value })}
-                          className="w-20 border border-gray-200 rounded-lg px-2 py-1 text-sm font-black outline-none focus:border-[#e4007f]"
+                          className="w-20 border border-gray-200 rounded-lg px-2 py-1 text-sm font-black outline-none focus:border-[#ec4899]"
                         />
                       ) : (
-                        <div className="w-16 font-black text-[#e4007f]">
+                        <div className="w-16 font-black text-[#ec4899]">
                           {item.time}
                         </div>
                       )}
@@ -7978,7 +11697,7 @@ function CreateStep3({ setView, draft, updateDraft, onSaveDraft }) {
                           type="text"
                           value={item.desc}
                           onChange={(e) => updateTimeline(item.id, { desc: e.target.value })}
-                          className="flex-1 min-w-0 border border-gray-200 rounded-lg px-2 py-1 text-sm font-bold outline-none focus:border-[#e4007f]"
+                          className="flex-1 min-w-0 border border-gray-200 rounded-lg px-2 py-1 text-sm font-bold outline-none focus:border-[#ec4899]"
                         />
                       ) : (
                         <div className="flex-1 min-w-0 font-bold text-sm truncate">
@@ -7991,7 +11710,7 @@ function CreateStep3({ setView, draft, updateDraft, onSaveDraft }) {
                         onClick={() =>
                           setEditingTimelineId(isEditing ? null : item.id)
                         }
-                        className="interactive-icon text-[#e4007f]"
+                        className="interactive-icon text-[#ec4899]"
                       >
                         {isEditing ? <CheckCircle2 size={18} /> : <Pencil size={17} />}
                       </button>
@@ -8035,18 +11754,18 @@ function ConfirmPositionBoard({ draft }) {
     draft.venueType === 'AWAY' || draft.venueType === 'アウェイ';
 
   const selectedUniformClass = isAwayUniform
-    ? 'bg-white text-[#e4007f] border-pink-200 ring-2 ring-white/70'
-    : 'bg-[#e4007f] text-white border-yellow-300';
+    ? 'bg-white text-[#ec4899] border-pink-200 ring-2 ring-white/70'
+    : 'bg-[#ec4899] text-white border-yellow-300';
 
   return (
     <Card>
       <div className="flex items-center justify-between mb-4">
-        <div className="flex items-center gap-2 text-[#e4007f] font-black">
+        <div className="flex items-center gap-2 text-[#ec4899] font-black">
           <Shirt size={18} />
           スタメンポジション
         </div>
 
-        <div className="text-xs font-black text-[#e4007f] bg-pink-50 border border-pink-100 rounded-full px-3 py-1">
+        <div className="text-xs font-black text-[#ec4899] bg-pink-50 border border-pink-100 rounded-full px-3 py-1">
           {formation}
         </div>
       </div>
@@ -8118,7 +11837,7 @@ function ConfirmView({ setView, draft, onSave, onSaveDraft }) {
     <CreateShell setView={setView} backTo="step3" step={4} onSaveDraft={onSaveDraft}>
       <div className="space-y-4">
         {/* 試合結果メインカード */}
-        <div className="relative overflow-hidden rounded-[1.6rem] bg-gradient-to-br from-[#a00059] via-[#e4007f] to-[#ff7ab8] text-white shadow-xl shadow-pink-900/25">
+        <div className="relative overflow-hidden rounded-[1.6rem] bg-gradient-to-br from-[#831843] via-[#ec4899] to-[#6d28d9] text-white shadow-xl shadow-pink-900/25">
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_15%,rgba(255,255,255,0.18),transparent_28%),radial-gradient(circle_at_85%_20%,rgba(250,204,21,0.18),transparent_25%)]"></div>
           <div className="absolute right-[-40px] bottom-[-60px] w-40 h-40 border border-white/10 rounded-full"></div>
 
@@ -8134,7 +11853,7 @@ function ConfirmView({ setView, draft, onSave, onSaveDraft }) {
                 </div>
               </div>
 
-              <div className="bg-yellow-300 text-[#a00059] text-xs font-black px-3 py-1.5 rounded-full shadow">
+              <div className="bg-yellow-300 text-[#831843] text-xs font-black px-3 py-1.5 rounded-full shadow">
                 {draft.homeScore > draft.awayScore ? 'WIN' : draft.homeScore === draft.awayScore ? 'DRAW' : 'LOSE'}
               </div>
             </div>
@@ -8143,7 +11862,7 @@ function ConfirmView({ setView, draft, onSave, onSaveDraft }) {
               <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-3">
                 <div className="text-center">
                   <div className="w-12 h-12 mx-auto flex items-center justify-center">
-                    <TeamBadge team={sanfrecceTeam} size="small" />
+                    <TeamBadge team={cerezoTeam} size="small" />
                   </div>
                   <div className="text-xs font-black mt-2 whitespace-nowrap">
                     セレッソ大阪
@@ -8181,7 +11900,7 @@ function ConfirmView({ setView, draft, onSave, onSaveDraft }) {
         </div>
         {hasSanfrecceGoal && (
           <Card>
-            <div className="flex items-center gap-2 text-[#e4007f] font-black mb-4">
+            <div className="flex items-center gap-2 text-[#ec4899] font-black mb-4">
               <Trophy size={18} />
               得点者確認
             </div>
@@ -8196,7 +11915,7 @@ function ConfirmView({ setView, draft, onSave, onSaveDraft }) {
                       key={scorer.id}
                       className="flex items-center gap-3 bg-[#f8f7fb] border border-gray-100 rounded-2xl p-3"
                     >
-                      <div className="w-10 h-10 rounded-xl bg-[#e4007f] text-white flex items-center justify-center font-black">
+                      <div className="w-10 h-10 rounded-xl bg-[#ec4899] text-white flex items-center justify-center font-black">
                         {player ? player.number : index + 1}
                       </div>
 
@@ -8210,7 +11929,7 @@ function ConfirmView({ setView, draft, onSave, onSaveDraft }) {
                         </div>
                       </div>
 
-                      <div className="text-lg font-black text-[#e4007f]">
+                      <div className="text-lg font-black text-[#ec4899]">
                         GOAL
                       </div>
                     </div>
@@ -8241,7 +11960,7 @@ function ConfirmView({ setView, draft, onSave, onSaveDraft }) {
           <div className="grid grid-cols-3 gap-3">
             <div className="text-center">
               <div className="text-xs text-gray-500 font-black mb-2">満足度</div>
-              <div className="text-2xl font-black text-[#e4007f]">{draft.rating}.0</div>
+              <div className="text-2xl font-black text-[#ec4899]">{draft.rating}.0</div>
               <div className="flex justify-center mt-1">
                 {[1, 2, 3, 4, 5].map((star) => (
                   <Star
@@ -8256,18 +11975,18 @@ function ConfirmView({ setView, draft, onSave, onSaveDraft }) {
 
             <div className="text-center border-x border-gray-100">
               <div className="text-xs text-gray-500 font-black mb-2">今日のMVP</div>
-              <div className="w-12 h-12 mx-auto rounded-2xl bg-gradient-to-br from-[#e4007f] to-[#a00059] text-white flex flex-col items-center justify-center shadow-md">
+              <div className="w-12 h-12 mx-auto rounded-2xl bg-gradient-to-br from-[#ec4899] to-[#831843] text-white flex flex-col items-center justify-center shadow-md">
                 <div className="text-[9px] font-black text-white/70">No.</div>
                 <div className="text-xl font-black leading-none">{selectedMvp.number}</div>
               </div>
-              <div className="text-[11px] font-black text-[#e4007f] mt-2 truncate">
+              <div className="text-[11px] font-black text-[#ec4899] mt-2 truncate">
                 {selectedMvp.name}
               </div>
             </div>
 
             <div className="text-center">
               <div className="text-xs text-gray-500 font-black mb-2">合計費用</div>
-              <div className="text-xl font-black text-[#e4007f] leading-tight">
+              <div className="text-xl font-black text-[#ec4899] leading-tight">
                 ¥{total.toLocaleString()}
               </div>
               <div className="text-[10px] text-gray-400 font-bold mt-1">
@@ -8279,7 +11998,7 @@ function ConfirmView({ setView, draft, onSave, onSaveDraft }) {
 
         {/* 思い出メモ */}
         <Card>
-          <div className="flex items-center gap-2 text-[#e4007f] font-black mb-3">
+          <div className="flex items-center gap-2 text-[#ec4899] font-black mb-3">
             <PenSquare size={17} />
             思い出メモ
           </div>
@@ -8290,7 +12009,7 @@ function ConfirmView({ setView, draft, onSave, onSaveDraft }) {
 
         {/* タグ */}
         <Card>
-          <div className="flex items-center gap-2 text-[#e4007f] font-black mb-3">
+          <div className="flex items-center gap-2 text-[#ec4899] font-black mb-3">
             <TagIcon size={17} />
             タグ
           </div>
@@ -8300,7 +12019,7 @@ function ConfirmView({ setView, draft, onSave, onSaveDraft }) {
               draft.tags.map((tag) => (
                 <span
                   key={tag}
-                  className="bg-pink-100 text-[#e4007f] text-xs font-black px-3 py-1.5 rounded-full"
+                  className="bg-pink-100 text-[#ec4899] text-xs font-black px-3 py-1.5 rounded-full"
                 >
                   #{tag}
                 </span>
@@ -8314,7 +12033,7 @@ function ConfirmView({ setView, draft, onSave, onSaveDraft }) {
         {/* 写真 */}
         <Card>
           <div className="flex items-center justify-between mb-3">
-            <div className="flex items-center gap-2 text-[#e4007f] font-black">
+            <div className="flex items-center gap-2 text-[#ec4899] font-black">
               <ImageIcon size={17} />
               写真
             </div>
@@ -8343,7 +12062,7 @@ function ConfirmView({ setView, draft, onSave, onSaveDraft }) {
 
         {/* 金額内訳 */}
         <Card>
-          <div className="flex items-center gap-2 text-[#e4007f] font-black mb-3">
+          <div className="flex items-center gap-2 text-[#ec4899] font-black mb-3">
             <Wallet size={17} />
             金額の内訳
           </div>
@@ -8355,8 +12074,8 @@ function ConfirmView({ setView, draft, onSave, onSaveDraft }) {
           <ConfirmExpenseRow label="その他" value={draft.expenses.other} />
 
           <div className="border-t mt-3 pt-3 flex justify-between items-center">
-            <div className="font-black text-[#e4007f]">合計</div>
-            <div className="text-2xl font-black text-[#e4007f]">
+            <div className="font-black text-[#ec4899]">合計</div>
+            <div className="text-2xl font-black text-[#ec4899]">
               ¥{total.toLocaleString()}
             </div>
           </div>
@@ -8364,18 +12083,18 @@ function ConfirmView({ setView, draft, onSave, onSaveDraft }) {
 
         {/* タイムライン */}
         <Card>
-          <div className="flex items-center gap-2 text-[#e4007f] font-black mb-4">
+          <div className="flex items-center gap-2 text-[#ec4899] font-black mb-4">
             <Clock size={17} />
             タイムライン
           </div>
 
           {draft.timeline.length > 0 ? (
-            <div className="relative ml-3 border-l-2 border-[#e4007f] space-y-4">
+            <div className="relative ml-3 border-l-2 border-[#ec4899] space-y-4">
               {draft.timeline.map((item) => (
                 <div key={item.id} className="relative pl-6">
-                  <div className="absolute -left-[9px] top-1 w-4 h-4 rounded-full border-2 border-[#e4007f] bg-white"></div>
+                  <div className="absolute -left-[9px] top-1 w-4 h-4 rounded-full border-2 border-[#ec4899] bg-white"></div>
                   <div className="bg-[#f8f7fb] rounded-2xl p-3 border border-gray-100">
-                    <div className="text-xs font-black text-[#e4007f]">{item.time}</div>
+                    <div className="text-xs font-black text-[#ec4899]">{item.time}</div>
                     <div className="text-sm font-bold mt-1">{item.desc}</div>
                   </div>
                 </div>
@@ -8406,7 +12125,7 @@ function ConfirmView({ setView, draft, onSave, onSaveDraft }) {
 function ConfirmMiniCard({ icon, label, value }) {
   return (
     <div className="bg-[#f8f7fb] rounded-2xl p-3 border border-gray-100">
-      <div className="flex items-center gap-1 text-[#e4007f] text-xs font-black mb-1">
+      <div className="flex items-center gap-1 text-[#ec4899] text-xs font-black mb-1">
         {icon}
         {label}
       </div>
@@ -8458,7 +12177,7 @@ function TeamBadge({ team, size = 'normal' }) {
 function InputBlock({ icon, label, children }) {
   return (
     <div>
-      <label className="flex items-center gap-2 text-[#e4007f] font-black mb-2">
+      <label className="flex items-center gap-2 text-[#ec4899] font-black mb-2">
         {icon} {label}
       </label>
       {children}
@@ -8488,7 +12207,7 @@ function ExpenseRow({ icon, label, value }) {
   return (
     <div className="flex items-center justify-between border-b border-dashed border-gray-200 py-3">
       <div className="flex items-center gap-3 font-black">
-        <span className="text-[#e4007f]">{icon}</span>
+        <span className="text-[#ec4899]">{icon}</span>
         {label}
       </div>
       <div className="font-black">¥ {value.toLocaleString()}</div>
@@ -8499,6 +12218,14 @@ function ExpenseRow({ icon, label, value }) {
 function StyleHelper() {
   return (
     <style>{`
+      .ticket-list-hint {
+  margin: -2px 0 10px;
+  text-align: center;
+  color: rgba(255,255,255,0.38);
+  font-size: 8px;
+  font-weight: 900;
+  letter-spacing: 0.14em;
+}
       .interactive-icon {
   transition: transform 0.18s ease, filter 0.18s ease, opacity 0.18s ease;
   cursor: pointer;
@@ -8544,12 +12271,25 @@ button:hover {
   font-size: 12px;
   min-height: 40px;
 }
+
+      .quick-date-field {
+        min-width: 0;
+        height: 56px;
+        font-size: 16px;
+        line-height: 1.2;
+        -webkit-appearance: none;
+        appearance: none;
+      }
+
+      .quick-date-field::-webkit-date-and-time-value {
+        text-align: left;
+      }
       .field:focus {
-        border-color: #e4007f;
+        border-color: #ec4899;
         box-shadow: 0 0 0 3px rgba(75, 28, 137, 0.12);
       }
       .primary-btn {
-        background: #e4007f;
+        background: #ec4899;
         color: white;
         border-radius: 999px;
         padding: 14px 18px;
@@ -8562,8 +12302,8 @@ button:hover {
       }
       .secondary-btn {
         background: white;
-        color: #e4007f;
-        border: 1.5px solid #e4007f;
+        color: #ec4899;
+        border: 1.5px solid #ec4899;
         border-radius: 999px;
         padding: 14px 18px;
         font-weight: 900;
@@ -8572,6 +12312,1417 @@ button:hover {
         align-items: center;
         gap: 6px;
         flex: 1;
+      }
+
+
+      .ticket-tab-scroll::-webkit-scrollbar {
+        display: none;
+      }
+
+      .ticket-tab-scroll {
+        scrollbar-width: none;
+      }
+
+      .ticket-single {
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  text-align: left;
+  cursor: pointer;
+}
+
+.ticket-single:active {
+  transform: scale(0.995);
+}
+
+.ticket-front-single {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr 104px 48px;
+  min-height: 168px;
+  border-radius: 22px;
+  overflow: hidden;
+  color: white;
+  border: 1.5px solid color-mix(in srgb, var(--ticket-accent) 74%, white 26%);
+  background: #1b093a;
+  box-shadow: 0 18px 36px rgba(0, 0, 0, 0.34);
+}
+
+.ticket-front-single::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(
+      90deg,
+      color-mix(in srgb, var(--ticket-main) 72%, black 28%) 0%,
+      rgba(35, 11, 73, 0.87) 41%,
+      rgba(10, 3, 27, 0.70) 100%
+    ),
+    var(--ticket-img);
+  background-size: cover;
+  background-position: center;
+  opacity: 0.98;
+}
+
+.ticket-front-single::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 16% 18%, rgba(255,255,255,0.16), transparent 18%),
+    linear-gradient(120deg, rgba(255,255,255,0.08), transparent 34%, rgba(255,255,255,0.05) 100%);
+  pointer-events: none;
+}
+
+.ticket-main-panel {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: 88px 1fr;
+  min-width: 0;
+}
+
+.ticket-left-icon {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border-right: 1px solid rgba(255,255,255,0.12);
+  background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(17, 6, 43, 0.16));
+  padding: 10px 8px 8px;
+}
+
+.stadium-mark {
+  position: relative;
+  width: 72px;
+  height: 68px;
+  display: grid;
+  place-items: center;
+  color: white;
+  filter: drop-shadow(0 10px 18px rgba(0,0,0,0.28));
+}
+
+.stadium-svg {
+  width: 70px;
+  height: 70px;
+  overflow: visible;
+}
+
+.badge-crown,
+.badge-shield,
+.badge-shield-inner,
+.badge-stripe,
+.badge-ball,
+.badge-ball-lines,
+.badge-wing,
+.badge-spark {
+  fill: none;
+  stroke: url(#ticketBadgeStroke);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.badge-crown {
+  stroke-width: 2.8;
+  fill: rgba(255,255,255,0.07);
+}
+
+.badge-shield {
+  stroke-width: 4;
+  fill: rgba(255,255,255,0.08);
+}
+
+.badge-shield-inner {
+  stroke-width: 2.2;
+  fill: url(#ticketBadgeFill);
+}
+
+.badge-stripe {
+  stroke-width: 3;
+  opacity: 0.85;
+}
+
+.badge-ball {
+  stroke-width: 2.3;
+  fill: rgba(255,255,255,0.10);
+}
+
+.badge-ball-lines {
+  stroke-width: 1.5;
+  opacity: 0.9;
+}
+
+.badge-wing {
+  stroke-width: 2.2;
+  opacity: 0.65;
+}
+
+.badge-spark {
+  stroke: currentColor;
+  stroke-width: 2;
+  fill: rgba(255,255,255,0.16);
+  opacity: 0.9;
+}
+
+.ticket-home-away {
+  margin-top: 0;
+  font-size: 9px;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  color: rgba(255,255,255,0.7);
+}
+
+.ticket-info-panel {
+  position: relative;
+  padding: 15px 12px 11px;
+  min-width: 0;
+}
+
+.ticket-meta-line {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  font-size: 11px;
+  font-weight: 900;
+  color: rgba(255,255,255,0.72);
+  white-space: nowrap;
+}
+
+.ticket-match-title {
+  display: flex;
+  align-items: baseline;
+  gap: 9px;
+  min-width: 0;
+  margin-top: 7px;
+  font-size: 25px;
+  line-height: 1;
+  font-weight: 950;
+  letter-spacing: -0.04em;
+  white-space: nowrap;
+}
+
+.ticket-match-title span {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ticket-match-title b {
+  font-size: 15px;
+  color: rgba(255,255,255,0.7);
+  letter-spacing: 0;
+}
+
+.ticket-date-line {
+  margin-top: 10px;
+  font-size: 13px;
+  font-weight: 900;
+  color: rgba(255,255,255,0.92);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ticket-place-line {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 6px;
+  font-size: 11px;
+  font-weight: 800;
+  color: rgba(255,255,255,0.75);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ticket-rare-chip {
+  position: absolute;
+  left: 12px;
+  bottom: 12px;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  max-width: 150px;
+  border: 1px solid rgba(255,255,255,0.28);
+  background: rgba(255,255,255,0.12);
+  padding: 5px 10px;
+  border-radius: 10px;
+  color: white;
+  font-size: 10px;
+  font-weight: 900;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ticket-stub-panel {
+  position: relative;
+  z-index: 3;
+  background: linear-gradient(180deg, #ffffff 0%, #f8f5ff 100%);
+  color: #151123;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 12px 8px;
+  border-left: 1.5px dashed rgba(75,28,137,0.35);
+}
+
+.ticket-stub-panel::before,
+.ticket-stub-panel::after {
+  content: "";
+  position: absolute;
+  left: -12px;
+  width: 24px;
+  height: 24px;
+  border-radius: 999px;
+  background: #08031d;
+  z-index: 5;
+}
+
+.ticket-stub-panel::before { top: -12px; }
+.ticket-stub-panel::after { bottom: -12px; }
+
+.ticket-score-text {
+  font-size: 25px;
+  line-height: 1;
+  font-weight: 950;
+  letter-spacing: 0.02em;
+}
+
+.ticket-score-text span {
+  color: #5b21b6;
+}
+
+.ticket-result-text {
+  margin-top: 8px;
+  color: #5b21b6;
+  font-size: 13px;
+  font-weight: 950;
+}
+
+.ticket-mom-label {
+  margin-top: 8px;
+  font-size: 10px;
+  color: #171425;
+  font-weight: 950;
+}
+
+.ticket-mom-name {
+  max-width: 90px;
+  margin-top: 2px;
+  color: #171425;
+  font-size: 12px;
+  font-weight: 950;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ticket-stars {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  margin-top: 8px;
+  color: #5b21b6;
+}
+
+.ticket-barcode-rail {
+  position: relative;
+  z-index: 4;
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--ticket-accent, #be185d) 88%, white 12%),
+    color-mix(in srgb, var(--ticket-main, #ec4899) 78%, black 22%)
+  );
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.barcode-lines {
+  width: 18px;
+  height: 112px;
+  background: repeating-linear-gradient(
+    90deg,
+    rgba(0,0,0,0.75) 0 2px,
+    transparent 2px 4px,
+    rgba(0,0,0,0.75) 4px 5px,
+    transparent 5px 8px
+  );
+  opacity: 0.55;
+}
+
+.rail-text {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 130px;
+  transform: translate(-50%, -50%) rotate(90deg);
+  transform-origin: center;
+  text-align: center;
+  color: white;
+  font-size: 8px;
+  line-height: 1;
+  font-weight: 950;
+  letter-spacing: 0.08em;
+  white-space: nowrap;
+}
+
+      .ticket-front::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background:
+          linear-gradient(90deg, color-mix(in srgb, var(--ticket-main) 70%, black 30%) 0%, rgba(35, 11, 73, 0.88) 42%, rgba(10, 3, 27, 0.68) 100%),
+          var(--ticket-img);
+        background-size: cover;
+        background-position: center;
+        opacity: 0.95;
+      }
+
+      .ticket-front::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background:
+          radial-gradient(circle at 16% 18%, rgba(255,255,255,0.16), transparent 18%),
+          linear-gradient(120deg, rgba(255,255,255,0.08), transparent 34%, rgba(255,255,255,0.06) 100%);
+        pointer-events: none;
+      }
+
+      .ticket-main-panel {
+        position: relative;
+        z-index: 2;
+        display: grid;
+        grid-template-columns: 88px 1fr;
+        min-width: 0;
+      }
+
+      .ticket-left-icon {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        border-right: 1px solid rgba(255,255,255,0.12);
+        background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(17, 6, 43, 0.16));
+        padding: 10px 8px 8px;
+      }
+
+      .stadium-mark {
+        position: relative;
+        width: 68px;
+        height: 62px;
+        display: grid;
+        place-items: center;
+        color: white;
+        filter: drop-shadow(0 8px 16px rgba(0,0,0,0.28));
+      }
+
+      .stadium-svg {
+        width: 76px;
+        height: 60px;
+        overflow: visible;
+      }
+
+      .stadium-shell,
+      .stadium-tier,
+      .stadium-bowl,
+      .stadium-pitch,
+      .stadium-center-line,
+      .stadium-center-circle,
+      .stadium-light,
+      .stadium-light-bar,
+      .stadium-flag,
+      .stadium-shadow,
+      .stadium-away-spark {
+        fill: none;
+        stroke: url(#ticketStadiumStroke);
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+
+      .stadium-shell { stroke-width: 4.2; }
+      .stadium-tier { stroke-width: 2.4; opacity: 0.9; }
+      .stadium-bowl { stroke-width: 3.4; opacity: 0.96; }
+      .stadium-pitch { stroke-width: 2.2; opacity: 0.82; }
+      .stadium-center-line { stroke-width: 1.9; opacity: 0.8; }
+      .stadium-center-circle { stroke-width: 1.7; opacity: 0.72; }
+      .stadium-light { stroke-width: 2.5; opacity: 0.94; }
+      .stadium-light-bar { stroke-width: 2.8; opacity: 0.85; }
+      .stadium-flag { stroke-width: 2.1; fill: rgba(255,255,255,0.12); }
+      .stadium-shadow { stroke: currentColor; stroke-width: 5.4; opacity: 0.18; }
+      .stadium-away-spark { stroke: currentColor; stroke-width: 2.4; fill: rgba(255,255,255,0.18); opacity: 0.9; }
+
+      .ticket-home-away {
+        margin-top: 0;
+        font-size: 9px;
+        font-weight: 900;
+        letter-spacing: 0.08em;
+        color: rgba(255,255,255,0.7);
+      }
+
+      .ticket-info-panel {
+        padding: 15px 12px 11px;
+        min-width: 0;
+      }
+
+      .ticket-meta-line {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        font-size: 11px;
+        font-weight: 900;
+        color: rgba(255,255,255,0.72);
+        white-space: nowrap;
+      }
+
+      .ticket-match-title {
+        display: flex;
+        align-items: baseline;
+        gap: 9px;
+        min-width: 0;
+        margin-top: 7px;
+        font-size: 25px;
+        line-height: 1;
+        font-weight: 950;
+        letter-spacing: -0.04em;
+        white-space: nowrap;
+      }
+
+      .ticket-match-title span {
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .ticket-match-title b {
+        font-size: 15px;
+        color: rgba(255,255,255,0.7);
+        letter-spacing: 0;
+      }
+
+      .ticket-date-line {
+        margin-top: 10px;
+        font-size: 13px;
+        font-weight: 900;
+        color: rgba(255,255,255,0.92);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .ticket-place-line {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        margin-top: 6px;
+        font-size: 11px;
+        font-weight: 800;
+        color: rgba(255,255,255,0.75);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .ticket-rare-chip {
+        position: absolute;
+        left: 100px;
+        bottom: 12px;
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        max-width: 150px;
+        border: 1px solid rgba(255,255,255,0.28);
+        background: rgba(255,255,255,0.12);
+        padding: 5px 10px;
+        border-radius: 10px;
+        color: white;
+        font-size: 10px;
+        font-weight: 900;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .ticket-stub-panel {
+        position: relative;
+        z-index: 3;
+        background: linear-gradient(180deg, #ffffff 0%, #f8f5ff 100%);
+        color: #151123;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        padding: 12px 8px;
+        border-left: 1.5px dashed rgba(75,28,137,0.35);
+      }
+
+      .ticket-stub-panel::before,
+      .ticket-stub-panel::after,
+      .ticket-back::before,
+      .ticket-back::after {
+        content: "";
+        position: absolute;
+        left: -12px;
+        width: 24px;
+        height: 24px;
+        border-radius: 999px;
+        background: #08031d;
+        z-index: 5;
+      }
+
+      .ticket-stub-panel::before,
+      .ticket-back::before { top: -12px; }
+      .ticket-stub-panel::after,
+      .ticket-back::after { bottom: -12px; }
+
+      .ticket-score-text {
+        font-size: 25px;
+        line-height: 1;
+        font-weight: 950;
+        letter-spacing: 0.02em;
+      }
+
+      .ticket-score-text span {
+        color: #5b21b6;
+      }
+
+      .ticket-result-text {
+        margin-top: 8px;
+        color: #5b21b6;
+        font-size: 13px;
+        font-weight: 950;
+      }
+
+      .ticket-mom-label {
+        margin-top: 8px;
+        font-size: 10px;
+        color: #171425;
+        font-weight: 950;
+      }
+
+      .ticket-mom-name {
+        max-width: 90px;
+        margin-top: 2px;
+        color: #171425;
+        font-size: 12px;
+        font-weight: 950;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .ticket-stars {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 2px;
+        margin-top: 8px;
+        color: #5b21b6;
+      }
+
+      .ticket-barcode-rail,
+      .ticket-back-rail {
+        position: relative;
+        z-index: 4;
+        background: linear-gradient(180deg, color-mix(in srgb, var(--ticket-accent, #be185d) 88%, white 12%), color-mix(in srgb, var(--ticket-main, #ec4899) 78%, black 22%));
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .barcode-lines {
+        width: 18px;
+        height: 112px;
+        background: repeating-linear-gradient(90deg, rgba(0,0,0,0.75) 0 2px, transparent 2px 4px, rgba(0,0,0,0.75) 4px 5px, transparent 5px 8px);
+        opacity: 0.55;
+      }
+
+      .rail-text {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        width: 130px;
+        transform: translate(-50%, -50%) rotate(90deg);
+        transform-origin: center;
+        text-align: center;
+        color: white;
+        font-size: 8px;
+        line-height: 1;
+        font-weight: 950;
+        letter-spacing: 0.08em;
+        white-space: nowrap;
+      }
+
+      .ticket-back {
+        transform: rotateY(180deg) translateZ(1px);
+        display: grid;
+        grid-template-columns: 1fr 48px;
+        background: linear-gradient(180deg, #ffffff 0%, #faf7ff 55%, #f5efff 100%);
+        color: #171425;
+        border: 1.5px solid #d8c9ff;
+      }
+
+      .ticket-back::after {
+        box-shadow: inset 0 0 0 1px rgba(124,58,237,0.04);
+      }
+
+      .ticket-back-body {
+        display: grid;
+        grid-template-columns: minmax(94px, 0.95fr) minmax(132px, 1.25fr) minmax(84px, 0.82fr);
+        gap: 10px;
+        padding: 12px 12px 40px;
+        min-width: 0;
+        height: 100%;
+      }
+
+      .ticket-back-score,
+      .ticket-back-info .info-mini {
+        min-width: 0;
+      }
+
+      .ticket-back-score {
+        display: flex;
+        flex-direction: column;
+        min-width: 0;
+        padding-right: 2px;
+      }
+
+      .back-top-meta {
+        min-width: 0;
+      }
+
+      .back-date {
+        color: #5b21b6;
+        font-size: 10px;
+        font-weight: 950;
+        letter-spacing: 0.04em;
+        white-space: nowrap;
+      }
+
+      .back-meta {
+        margin-top: 3px;
+        color: #5b21b6;
+        font-size: 9px;
+        font-weight: 950;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .back-match {
+        margin-top: 10px;
+        display: flex;
+        align-items: baseline;
+        gap: 4px;
+        color: #2a164f;
+        font-size: 19px;
+        line-height: 1.05;
+        font-weight: 950;
+        letter-spacing: -0.06em;
+        white-space: nowrap;
+        overflow: hidden;
+      }
+
+      .back-match span {
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .back-match b {
+        color: #be185d;
+        font-size: 12px;
+        letter-spacing: 0;
+        font-weight: 950;
+        flex-shrink: 0;
+      }
+
+      .back-score {
+        margin-top: 12px;
+        color: #12091f;
+        font-size: 28px;
+        line-height: 1;
+        font-weight: 950;
+        letter-spacing: 0.02em;
+        white-space: nowrap;
+      }
+
+      .back-score span {
+        color: #5b21b6;
+        font-size: 22px;
+      }
+
+      .back-score-list {
+  margin-top: 8px;
+  border-top: 1px solid #eee7ff;
+  padding-top: 6px;
+}
+
+
+      .back-list-label {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        color: #5b21b6;
+        font-size: 11px;
+        font-weight: 950;
+        letter-spacing: 0.02em;
+      }
+
+      .back-list-row {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+  margin-top: 4px;
+  font-size: 9px;
+  line-height: 1.1;
+  min-width: 0;
+}
+
+      .back-list-row span {
+        color: #6d28d9;
+        font-weight: 950;
+        flex-shrink: 0;
+      }
+
+      .back-list-row b {
+  color: #171425;
+  font-weight: 900;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.back-list-row.is-more b {
+  color: #5b21b6;
+}
+
+      .ticket-back-photo {
+        position: relative;
+        border-radius: 18px;
+        overflow: hidden;
+        box-shadow: 0 10px 22px rgba(75,28,137,0.14);
+        min-width: 0;
+        background: #efe8ff;
+      }
+
+      .ticket-back-photo {
+  position: relative;
+  height: 100%;
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 10px 22px rgba(75,28,137,0.14);
+  min-width: 0;
+  background: #efe8ff;
+}
+
+.ticket-back-photo img {
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  object-fit: contain;
+  display: block;
+  background: #efe8ff;
+}
+
+      .ticket-photo-badge {
+        position: absolute;
+        left: 10px;
+        top: 10px;
+        padding: 4px 8px;
+        border-radius: 999px;
+        background: rgba(17, 6, 43, 0.62);
+        color: white;
+        font-size: 9px;
+        font-weight: 950;
+        letter-spacing: 0.08em;
+        backdrop-filter: blur(6px);
+      }
+
+      .ticket-back-info {
+        display: grid;
+        gap: 10px;
+        align-content: start;
+        min-width: 0;
+      }
+
+      .info-mini {
+        min-width: 0;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        border-radius: 14px;
+        background: rgba(255,255,255,0.88);
+        border: 1px solid #eee6ff;
+        padding: 9px 9px;
+        box-shadow: 0 8px 18px rgba(31, 12, 61, 0.05);
+      }
+
+      .ticket-back-footer {
+        position: absolute;
+        left: 12px;
+        right: 60px;
+        bottom: 0;
+        height: 36px;
+        display: grid;
+        grid-template-columns: 1fr 122px;
+        border-top: 1px solid #eee7ff;
+        color: #171425;
+        background: rgba(255,255,255,0.7);
+        backdrop-filter: blur(4px);
+      }
+
+      .tap-back-line,
+      .satisfaction-line {
+        min-width: 0;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 10px;
+        font-weight: 900;
+      }
+
+      .tap-back-line {
+        color: #6b5c8f;
+        justify-content: center;
+        font-size: 10px;
+      }
+
+      .satisfaction-line span {
+        color: #5b21b6;
+        font-size: 10px;
+        font-weight: 950;
+        flex-shrink: 0;
+      }
+
+      .satisfaction-line {
+        justify-content: center;
+        border-left: 1px solid #eee7ff;
+      }
+
+      .satisfaction-line .ticket-stars {
+        margin-top: 0;
+      }
+
+      .ticket-back-rail {
+        background: linear-gradient(180deg, #be185d, #ec4899);
+      }
+
+      @media (max-width: 430px) {
+  .ticket-front-single {
+    grid-template-columns: 1fr 92px 46px;
+    min-height: 154px;
+  }
+
+  .ticket-main-panel {
+    grid-template-columns: 76px 1fr;
+  }
+
+  .ticket-left-icon {
+    padding: 9px 6px 7px;
+  }
+
+  .stadium-mark {
+  width: 60px;
+  height: 54px;
+}
+
+.stadium-svg {
+  width: 68px;
+  height: 52px;
+}
+
+  .ticket-info-panel {
+    padding: 13px 10px 9px;
+  }
+
+  .ticket-meta-line {
+    font-size: 10px;
+    gap: 6px;
+  }
+
+  .ticket-match-title {
+    font-size: 21px;
+    gap: 6px;
+  }
+
+  .ticket-date-line {
+    font-size: 11px;
+  }
+
+  .ticket-place-line {
+    font-size: 9px;
+  }
+
+  .ticket-score-text {
+    font-size: 22px;
+  }
+
+  .ticket-mom-name {
+    font-size: 11px;
+    max-width: 80px;
+  }
+
+  .ticket-stars svg {
+    width: 13px;
+    height: 13px;
+  }
+
+  .ticket-rare-chip {
+    left: 10px;
+    bottom: 10px;
+    font-size: 8px;
+    max-width: 122px;
+  }
+
+  .barcode-lines {
+    height: 104px;
+  }
+
+  .rail-text {
+    width: 120px;
+    font-size: 7px;
+  }
+}
+        .ticket-front { grid-template-columns: 1fr 92px 46px; }
+        .ticket-main-panel { grid-template-columns: 76px 1fr; }
+        .ticket-left-icon { padding: 9px 6px 7px; }
+        .stadium-mark { width: 58px; height: 52px; }
+        .stadium-svg { width: 64px; height: 50px; }
+        .ticket-info-panel { padding: 13px 10px 9px; }
+        .ticket-meta-line { font-size: 10px; gap: 6px; }
+        .ticket-match-title { font-size: 21px; gap: 6px; }
+        .ticket-date-line { font-size: 11px; }
+        .ticket-place-line { font-size: 9px; }
+        .ticket-score-text { font-size: 22px; }
+        .ticket-mom-name { font-size: 11px; max-width: 80px; }
+        .ticket-stars svg { width: 13px; height: 13px; }
+        .ticket-rare-chip { left: 84px; bottom: 10px; font-size: 8px; max-width: 122px; }
+        .barcode-lines { height: 104px; }
+        .rail-text { width: 120px; font-size: 7px; }
+        .ticket-back { grid-template-columns: 1fr 46px; }
+        .ticket-back-body { grid-template-columns: minmax(74px, 0.9fr) minmax(98px, 1.18fr) minmax(70px, 0.78fr); gap: 6px; padding: 8px 8px 34px; }
+        .back-date { font-size: 9px; }
+        .back-meta { font-size: 7px; }
+        .back-match { font-size: 15px; gap: 3px; }
+        .back-match b { font-size: 10px; }
+        .back-score { font-size: 22px; margin-top: 8px; }
+        .back-score span { font-size: 17px; }
+        .back-list-label { font-size: 8px; }
+        .back-list-row {
+  margin-top: 3px;
+  gap: 4px;
+  font-size: 7px;
+  line-height: 1.05;
+}
+        .ticket-back-photo { border-radius: 14px; }
+        .ticket-back-photo img {
+  min-height: 0;
+  height: 100%;
+  object-fit: contain;
+}
+        .ticket-back-info { gap: 8px; }
+        .info-mini { padding: 6px 5px; gap: 4px; border-radius: 10px; }
+        .info-mini .text-\[11px\] { font-size: 8px; }
+        .info-mini .text-\[12px\] { font-size: 9px; }
+        .ticket-back-footer { left: 8px; right: 56px; height: 30px; grid-template-columns: 1fr 90px; }
+        .tap-back-line, .satisfaction-line { gap: 4px; font-size: 8px; }
+        .satisfaction-line span { font-size: 8px; }
+      }
+
+
+      /* ===== Ticket Collection Final Fix: front-only premium ticket ===== */
+      .ticket-single {
+        display: block !important;
+        width: 100% !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        border: 0 !important;
+        background: transparent !important;
+        text-align: left !important;
+        cursor: pointer !important;
+      }
+
+      .ticket-single:active {
+        transform: scale(0.995);
+      }
+
+      .ticket-front-single {
+        position: relative !important;
+        display: grid !important;
+        grid-template-columns: minmax(0, 1fr) 104px 48px !important;
+        min-height: 168px !important;
+        border-radius: 22px !important;
+        overflow: hidden !important;
+        color: white !important;
+        background: #1b093a !important;
+        border: 1.5px solid color-mix(in srgb, var(--ticket-accent) 74%, white 26%) !important;
+        box-shadow: 0 18px 36px rgba(0, 0, 0, 0.34) !important;
+      }
+
+      .ticket-front-single::before {
+        content: "" !important;
+        position: absolute !important;
+        inset: 0 !important;
+        background:
+          linear-gradient(
+            90deg,
+            color-mix(in srgb, var(--ticket-main) 74%, black 26%) 0%,
+            rgba(35, 11, 73, 0.90) 42%,
+            rgba(10, 3, 27, 0.70) 100%
+          ),
+          var(--ticket-img) !important;
+        background-size: cover !important;
+        background-position: center !important;
+        opacity: 0.98 !important;
+      }
+
+      .ticket-front-single::after {
+        content: "" !important;
+        position: absolute !important;
+        inset: 0 !important;
+        background:
+          radial-gradient(circle at 16% 18%, rgba(255,255,255,0.16), transparent 18%),
+          linear-gradient(120deg, rgba(255,255,255,0.08), transparent 35%, rgba(255,255,255,0.05) 100%) !important;
+        pointer-events: none !important;
+      }
+
+      .ticket-front-single .ticket-main-panel {
+        position: relative !important;
+        z-index: 2 !important;
+        display: grid !important;
+        grid-template-columns: 88px minmax(0, 1fr) !important;
+        min-width: 0 !important;
+      }
+
+      .ticket-front-single .ticket-left-icon {
+        position: relative !important;
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: center !important;
+        align-items: center !important;
+        border-right: 1px solid rgba(255,255,255,0.13) !important;
+        background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(17, 6, 43, 0.18)) !important;
+        padding: 10px 8px 8px !important;
+      }
+
+      .ticket-front-single .stadium-mark {
+        width: 68px !important;
+        height: 62px !important;
+        display: grid !important;
+        place-items: center !important;
+        color: white !important;
+        filter: drop-shadow(0 8px 16px rgba(0,0,0,0.28)) !important;
+      }
+
+      .ticket-front-single .stadium-svg {
+        width: 76px !important;
+        height: 60px !important;
+        overflow: visible !important;
+      }
+
+      .ticket-front-single .ticket-home-away {
+        margin-top: 0 !important;
+        font-size: 9px !important;
+        font-weight: 900 !important;
+        letter-spacing: 0.08em !important;
+        color: rgba(255,255,255,0.72) !important;
+      }
+
+      .ticket-front-single .ticket-info-panel {
+        position: relative !important;
+        padding: 15px 12px 11px !important;
+        min-width: 0 !important;
+      }
+
+      .ticket-front-single .ticket-meta-line {
+        display: flex !important;
+        gap: 10px !important;
+        align-items: center !important;
+        font-size: 11px !important;
+        font-weight: 900 !important;
+        color: rgba(255,255,255,0.74) !important;
+        white-space: nowrap !important;
+      }
+
+      .ticket-front-single .ticket-match-title {
+        display: flex !important;
+        align-items: baseline !important;
+        gap: 9px !important;
+        min-width: 0 !important;
+        margin-top: 7px !important;
+        font-size: 25px !important;
+        line-height: 1 !important;
+        font-weight: 950 !important;
+        letter-spacing: -0.04em !important;
+        white-space: nowrap !important;
+      }
+
+      .ticket-front-single .ticket-match-title span {
+        min-width: 0 !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+      }
+
+      .ticket-front-single .ticket-match-title b {
+        font-size: 15px !important;
+        color: rgba(255,255,255,0.72) !important;
+        letter-spacing: 0 !important;
+      }
+
+      .ticket-front-single .ticket-date-line {
+        margin-top: 10px !important;
+        font-size: 13px !important;
+        font-weight: 900 !important;
+        color: rgba(255,255,255,0.93) !important;
+        white-space: nowrap !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+      }
+
+      .ticket-front-single .ticket-place-line {
+        display: flex !important;
+        align-items: center !important;
+        gap: 4px !important;
+        margin-top: 6px !important;
+        font-size: 11px !important;
+        font-weight: 800 !important;
+        color: rgba(255,255,255,0.78) !important;
+        white-space: nowrap !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+      }
+
+      .ticket-front-single .ticket-place-line span {
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+        white-space: nowrap !important;
+      }
+
+      .ticket-front-single .ticket-rare-chip {
+        position: absolute !important;
+        left: 12px !important;
+        bottom: 12px !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        gap: 5px !important;
+        max-width: 150px !important;
+        border: 1px solid rgba(255,255,255,0.28) !important;
+        background: rgba(255,255,255,0.12) !important;
+        padding: 5px 10px !important;
+        border-radius: 10px !important;
+        color: white !important;
+        font-size: 10px !important;
+        font-weight: 900 !important;
+        white-space: nowrap !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+      }
+
+      .ticket-front-single .ticket-stub-panel {
+        position: relative !important;
+        z-index: 3 !important;
+        background: linear-gradient(180deg, #ffffff 0%, #f8f5ff 100%) !important;
+        color: #151123 !important;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        justify-content: center !important;
+        text-align: center !important;
+        padding: 12px 8px !important;
+        border-left: 1.5px dashed rgba(75,28,137,0.35) !important;
+      }
+
+      .ticket-front-single .ticket-stub-panel::before,
+      .ticket-front-single .ticket-stub-panel::after {
+        content: "" !important;
+        position: absolute !important;
+        left: -12px !important;
+        width: 24px !important;
+        height: 24px !important;
+        border-radius: 999px !important;
+        background: #08031d !important;
+        z-index: 5 !important;
+      }
+
+      .ticket-front-single .ticket-stub-panel::before { top: -12px !important; }
+      .ticket-front-single .ticket-stub-panel::after { bottom: -12px !important; }
+
+      .ticket-front-single .ticket-score-text {
+        font-size: 25px !important;
+        line-height: 1 !important;
+        font-weight: 950 !important;
+        letter-spacing: 0.02em !important;
+      }
+
+      .ticket-front-single .ticket-score-text span {
+        color: #5b21b6 !important;
+      }
+
+      .ticket-front-single .ticket-result-text {
+        margin-top: 8px !important;
+        color: #5b21b6 !important;
+        font-size: 13px !important;
+        font-weight: 950 !important;
+      }
+
+      .ticket-front-single .ticket-mom-label {
+        margin-top: 8px !important;
+        font-size: 10px !important;
+        color: #171425 !important;
+        font-weight: 950 !important;
+      }
+
+      .ticket-front-single .ticket-mom-name {
+        max-width: 90px !important;
+        margin-top: 2px !important;
+        color: #171425 !important;
+        font-size: 12px !important;
+        font-weight: 950 !important;
+        white-space: nowrap !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+      }
+
+      .ticket-front-single .ticket-stars {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        gap: 2px !important;
+        margin-top: 8px !important;
+        color: #5b21b6 !important;
+      }
+
+      .ticket-front-single .ticket-barcode-rail {
+        position: relative !important;
+        z-index: 4 !important;
+        background: linear-gradient(
+          180deg,
+          color-mix(in srgb, var(--ticket-accent, #be185d) 88%, white 12%),
+          color-mix(in srgb, var(--ticket-main, #ec4899) 78%, black 22%)
+        ) !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+      }
+
+      .ticket-front-single .barcode-lines {
+        width: 18px !important;
+        height: 112px !important;
+        background: repeating-linear-gradient(
+          90deg,
+          rgba(0,0,0,0.75) 0 2px,
+          transparent 2px 4px,
+          rgba(0,0,0,0.75) 4px 5px,
+          transparent 5px 8px
+        ) !important;
+        opacity: 0.55 !important;
+      }
+
+      .ticket-front-single .rail-text {
+        position: absolute !important;
+        left: 50% !important;
+        top: 50% !important;
+        width: 130px !important;
+        transform: translate(-50%, -50%) rotate(90deg) !important;
+        transform-origin: center !important;
+        text-align: center !important;
+        color: white !important;
+        font-size: 8px !important;
+        line-height: 1 !important;
+        font-weight: 950 !important;
+        letter-spacing: 0.08em !important;
+        white-space: nowrap !important;
+      }
+
+      @media (max-width: 430px) {
+        .ticket-front-single {
+          grid-template-columns: minmax(0, 1fr) 92px 46px !important;
+          min-height: 154px !important;
+        }
+
+        .ticket-front-single .ticket-main-panel {
+          grid-template-columns: 76px minmax(0, 1fr) !important;
+        }
+
+        .ticket-front-single .ticket-left-icon {
+          padding: 9px 6px 7px !important;
+        }
+
+        .ticket-front-single .stadium-mark {
+          width: 58px !important;
+          height: 52px !important;
+        }
+
+        .ticket-front-single .stadium-svg {
+          width: 64px !important;
+          height: 50px !important;
+        }
+
+        .ticket-front-single .ticket-info-panel {
+          padding: 13px 10px 9px !important;
+        }
+
+        .ticket-front-single .ticket-meta-line {
+          font-size: 10px !important;
+          gap: 6px !important;
+        }
+
+        .ticket-front-single .ticket-match-title {
+          font-size: 21px !important;
+          gap: 6px !important;
+        }
+
+        .ticket-front-single .ticket-date-line {
+          font-size: 11px !important;
+        }
+
+        .ticket-front-single .ticket-place-line {
+          font-size: 9px !important;
+        }
+
+        .ticket-front-single .ticket-score-text {
+          font-size: 22px !important;
+        }
+
+        .ticket-front-single .ticket-mom-name {
+          font-size: 11px !important;
+          max-width: 80px !important;
+        }
+
+        .ticket-front-single .ticket-stars svg {
+          width: 13px !important;
+          height: 13px !important;
+        }
+
+        .ticket-front-single .ticket-rare-chip {
+          left: 10px !important;
+          bottom: 10px !important;
+          font-size: 8px !important;
+          max-width: 122px !important;
+        }
+
+        .ticket-front-single .barcode-lines {
+          height: 104px !important;
+        }
+
+        .ticket-front-single .rail-text {
+          width: 120px !important;
+          font-size: 7px !important;
+        }
+      }
+
       }
     `}</style>
   );
