@@ -31,7 +31,7 @@ const defaultDraft = {
   venueType: 'HOME',
   rating: 0,
   mvp: '',
-  formation: '3-4-2-1',
+  formation: '4-2-3-1',
   lineup: {},
   scorers: [],
   memo: '',
@@ -59,7 +59,7 @@ const cerezoTeam = {
   name: 'セレッソ大阪',
   short: 'C大阪',
   main: '#ec4899',
-  sub: '#1d4ed8',
+  sub: '#d6b36a',
   stadium: 'YANMAR HANASAKA STADIUM',
 };
 
@@ -901,44 +901,44 @@ const formationLayouts = {
 };
 const playerOptions = [
   // GK
-  { name: '大迫 敬介', number: '1', position: 'GK' },
-  { name: '田中 雄大', number: '21', position: 'GK' },
-  { name: '小川 煌', number: '43', position: 'GK' },
-  { name: '大内 一生', number: '99', position: 'GK' },
-  { name: 'ヒル 袈依廉', number: '38', position: 'GK', seasons: ['100year'] },
+  { name: '福井 光輝', number: '1', position: 'GK' },
+  { name: '中村 航輔', number: '23', position: 'GK' },
+  { name: 'イシボウ 拳', number: '46', position: 'GK' },
 
   // DF
-  { name: '山崎 大地', number: '3', position: 'DF' },
-  { name: '荒木 隼人', number: '4', position: 'DF' },
-  { name: '新井 直人', number: '5', position: 'DF' },
-  { name: '中野 就斗', number: '15', position: 'DF' },
-  { name: '志知 孝明', number: '16', position: 'DF' },
-  { name: '佐々木 翔', number: '19', position: 'DF' },
-  { name: '塩谷 司', number: '33', position: 'DF' },
-  { name: 'キム ジュソン', number: '37', position: 'DF' },
+  { name: '中村 拓海', number: '2', position: 'DF' },
+  { name: '田中 隼人', number: '3', position: 'DF' },
+  { name: '井上 黎生人', number: '4', position: 'DF' },
+  { name: '登里 享平', number: '6', position: 'DF' },
+  { name: '奥田 勇斗', number: '16', position: 'DF' },
+  { name: 'ディオン クールズ', number: '27', position: 'DF' },
+  { name: 'エゼモクエ チメヅエ海', number: '43', position: 'DF' },
+  { name: '畠中 槙之輔', number: '44', position: 'DF' },
+  { name: '大畑 歩夢', number: '66', position: 'DF' },
+  { name: '鷹啄 トラビス', number: '97', position: 'DF' },
 
   // MF
-  { name: '川辺 駿', number: '6', position: 'MF' },
-  { name: '東 俊希', number: '7', position: 'MF' },
-  { name: '松本 泰志', number: '14', position: 'MF' },
-  { name: '菅 大輝', number: '18', position: 'MF' },
-  { name: '茶島 雄介', number: '25', position: 'MF', seasons: ['100year'] },
-  { name: 'トルガイ アルスラン', number: '30', position: 'MF', seasons: ['100year'] },
-  { name: '越道 草太', number: '32', position: 'MF' },
-  { name: '中島 洋太朗', number: '35', position: 'MF' },
-  { name: '小原 基樹', number: '40', position: 'MF', seasons: ['100year'] },
-  { name: '小林 志紋', number: '45', position: 'MF' },
-  { name: '野口 蓮斗', number: '46', position: 'MF', seasons: ['2026-27'] },
+  { name: '喜田 陽', number: '5', position: 'MF' },
+  { name: '上門 知樹', number: '7', position: 'MF' },
+  { name: '香川 真司', number: '8', position: 'MF' },
+  { name: '田中 駿汰', number: '10', position: 'MF' },
+  { name: '横山 夢樹', number: '14', position: 'MF' },
+  { name: '阪田 澪哉', number: '17', position: 'MF' },
+  { name: '石渡 ネルソン', number: '18', position: 'MF' },
+  { name: '本間 至恩', number: '19', position: 'MF' },
+  { name: '久保 瑛史', number: '26', position: 'MF' },
+  { name: '大迫 塁', number: '34', position: 'MF' },
+  { name: '吉野 恭平', number: '35', position: 'MF' },
+  { name: '塩尻 哲平', number: '42', position: 'MF' },
+  { name: '柴山 昌也', number: '48', position: 'MF' },
+  { name: 'ルーカス フェルナンデス', number: '77', position: 'MF' },
 
   // FW
-  { name: 'ジャーメイン 良', number: '9', position: 'FW', seasons: ['100year'] },
-  { name: '鈴木 章斗', number: '10', position: 'FW' },
-  { name: '加藤 陸次樹', number: '11', position: 'FW' },
-  { name: '木下 康介', number: '17', position: 'FW', seasons: ['100year'] },
-  { name: '鮎川 峻', number: '23', position: 'FW' },
-  { name: '浅野 拓磨', number: '29', position: 'FW', seasons: ['2026-27'] },
-  { name: '中村 草太', number: '39', position: 'FW' },
-  { name: '前田 直輝', number: '41', position: 'FW' },
+  { name: '櫻川 ソロモン', number: '9', position: 'FW' },
+  { name: 'チアゴ アンドラーデ', number: '11', position: 'FW' },
+  { name: '金本 毅騎', number: '39', position: 'FW' },
+  { name: '永添 航輝', number: '45', position: 'FW' },
+  { name: 'クシーニー イェンギ', number: '99', position: 'FW' },
 
 ];
 
@@ -2295,7 +2295,7 @@ function StadiumExploreView({ records, setView }) {
                 <linearGradient id="sanfRoute" x1="0" y1="0" x2="1" y2="1">
                   <stop offset="0%" stopColor="#ec4899" />
                   <stop offset="45%" stopColor="#be185d" />
-                  <stop offset="100%" stopColor="#38bdf8" />
+                  <stop offset="100%" stopColor="#d6b36a" />
                 </linearGradient>
               </defs>
 
@@ -3259,9 +3259,9 @@ function ExploreStyleHelper() {
 }
 
 .explore-node.active .explore-node-core {
-  background: #38bdf8;
+  background: #d6b36a;
   box-shadow:
-    0 0 24px rgba(56,189,248,1),
+    0 0 24px rgba(214,179,106,1),
     0 0 50px rgba(236,72,153,0.55);
 }
 
@@ -9341,7 +9341,7 @@ const getTicketOpponent = (record) => {
     name: opponentName || '対戦相手',
     short: opponentName ? opponentName.replace('セレッソ大阪', '').trim() : '相手',
     main: '#ec4899',
-    sub: '#60a5fa',
+    sub: '#d6b36a',
   };
 };
 
