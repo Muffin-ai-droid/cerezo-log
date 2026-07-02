@@ -464,7 +464,7 @@ const hundredYearSchedule = [
     day: '土',
     time: '15:00',
     opponent: 'サンフレッチェ広島',
-    stadium: 'ヨドコウ桜スタジアム',
+    stadium: 'YANMAR HANASAKA STADIUM',
     venueType: 'HOME',
   },
   {
@@ -484,7 +484,7 @@ const hundredYearSchedule = [
     day: '金',
     time: '15:00',
     opponent: '清水エスパルス',
-    stadium: 'ヨドコウ桜スタジアム',
+    stadium: 'YANMAR HANASAKA STADIUM',
     venueType: 'HOME',
   },
   {
@@ -504,7 +504,7 @@ const hundredYearSchedule = [
     day: '火',
     time: '18:30',
     opponent: 'ファジアーノ岡山',
-    stadium: 'ヨドコウ桜スタジアム',
+    stadium: 'YANMAR HANASAKA STADIUM',
     venueType: 'HOME',
   },
   {
@@ -514,7 +514,7 @@ const hundredYearSchedule = [
     day: '土',
     time: '15:00',
     opponent: 'ヴィッセル神戸',
-    stadium: 'ヨドコウ桜スタジアム',
+    stadium: 'YANMAR HANASAKA STADIUM',
     venueType: 'HOME',
   },
   {
@@ -818,7 +818,7 @@ const stadiumImages = {
   'PEACE STADIUM Connected by SoftBank':
     'https://upload.wikimedia.org/wikipedia/commons/thumb/1/1e/PEACE-STADIUM-Connected-by-SoftBank_6-Oct-2024.jpg/1280px-PEACE-STADIUM-Connected-by-SoftBank_6-Oct-2024.jpg',
 
-  'ヨドコウ桜スタジアム':
+  'YANMAR HANASAKA STADIUM':
     'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e8/NagaiBallField220226.jpg/1280px-NagaiBallField220226.jpg',
   'ヤンマースタジアム長居':
     'https://upload.wikimedia.org/wikipedia/commons/thumb/7/72/Nagai_Stadium.JPG/1280px-Nagai_Stadium.JPG',
