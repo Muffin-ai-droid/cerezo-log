@@ -1577,7 +1577,7 @@ function BrandHeader({ back, setView = () => { }, records }) {
   return (
     <header className="relative h-[85px] bg-[#831843] text-white z-[60] shadow-lg shadow-pink-900/30 overflow-visible border-b-[3px] border-[#d6b36a]/60">
       {/* 背景グラデーション */}
-      <div className="absolute inset-0 bg-gradient-to-r from-[#be185d] via-[#831843] to-[#1e1b4b]"></div>
+      <div className="absolute inset-0 bg-gradient-to-r from-[#be185d] via-[#831843] to-[#92400e]"></div>
 
       {/* うっすら光 */}
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_42%_42%,rgba(255,255,255,0.16),transparent_22%),radial-gradient(circle_at_82%_70%,rgba(214,179,106,0.13),transparent_14%)]"></div>
@@ -1952,7 +1952,7 @@ const stadiumExploreData = [
   },
   {
     name: 'YANMAR HANASAKA STADIUM',
-    short: 'ヤンスタ',
+    short: 'ハナスタ',
     prefecture: '大阪府大阪市',
     x: 38,
     y: 68,
@@ -2818,8 +2818,8 @@ function ExploreStyleHelper() {
         color: white;
         overflow: hidden;
         background:
-          radial-gradient(circle at 20% 12%, rgba(168, 85, 247, 0.34), transparent 30%),
-          radial-gradient(circle at 78% 42%, rgba(59, 130, 246, 0.2), transparent 28%),
+          radial-gradient(circle at 20% 12%, rgba(236, 72, 153, 0.30), transparent 30%),
+          radial-gradient(circle at 78% 42%, rgba(214, 179, 106, 0.22), transparent 28%),
           linear-gradient(180deg, #03040d 0%, #0b0820 42%, #06030f 100%);
       }
 
@@ -2923,7 +2923,7 @@ function ExploreStyleHelper() {
         height: 180px;
         left: -70px;
         top: 170px;
-        background: #7e22ce;
+        background: #ec4899;
       }
 
       .explore-orb-two {
@@ -2931,7 +2931,7 @@ function ExploreStyleHelper() {
         height: 180px;
         right: -80px;
         top: 470px;
-        background: #2563eb;
+        background: #d6b36a;
       }
 
       .explore-topbar {
@@ -3019,7 +3019,7 @@ function ExploreStyleHelper() {
         border-radius: 18px;
         background:
           radial-gradient(circle at 50% 18%, rgba(255,255,255,0.28), transparent 24%),
-          linear-gradient(160deg, #6d28d9, #2e1065);
+          linear-gradient(160deg, #ec4899, #92400e);
         border: 1px solid rgba(251,207,232,0.42);
         display: flex;
         align-items: center;
@@ -3135,7 +3135,7 @@ function ExploreStyleHelper() {
 
       .explore-chip.active {
         color: #fff;
-        background: linear-gradient(180deg, rgba(147,51,234,0.72), rgba(88,28,135,0.72));
+        background: linear-gradient(180deg, rgba(236,72,153,0.72), rgba(214,179,106,0.72));
         border-color: rgba(251,207,232,0.55);
         box-shadow: 0 0 22px rgba(236,72,153,0.36);
       }
@@ -3345,7 +3345,7 @@ function ExploreStyleHelper() {
         overflow: hidden;
         background:
           radial-gradient(circle at 23% 72%, rgba(236,72,153,0.26), transparent 16%),
-          radial-gradient(circle at 68% 44%, rgba(59,130,246,0.18), transparent 18%),
+          radial-gradient(circle at 68% 44%, rgba(214,179,106,0.18), transparent 18%),
           linear-gradient(180deg, rgba(8,8,26,0.96), rgba(3,4,13,0.96));
       }
 
@@ -3445,8 +3445,8 @@ function ExploreStyleHelper() {
 }
 
 .explore-node.result-lose .explore-node-core {
-  background: linear-gradient(135deg, #312e81, #0f172a);
-  box-shadow: 0 0 18px rgba(59,130,246,0.65);
+  background: linear-gradient(135deg, #831843, #451a03);
+  box-shadow: 0 0 18px rgba(214,179,106,0.45);
 }
 
 .explore-node.featured .explore-node-core {
@@ -3893,7 +3893,7 @@ function ExploreStyleHelper() {
 }
 
 .explore-memory-card.memory-lose {
-  border-color: rgba(59,130,246,0.32);
+  border-color: rgba(214,179,106,0.28);
 }
 
 .memory-photo-wrap {
@@ -4093,7 +4093,7 @@ function ExploreStyleHelper() {
   overflow: hidden;
   background:
     radial-gradient(circle at 23% 72%, rgba(236,72,153,0.16), transparent 16%),
-    radial-gradient(circle at 68% 44%, rgba(59,130,246,0.12), transparent 18%),
+    radial-gradient(circle at 68% 44%, rgba(214,179,106,0.13), transparent 18%),
     linear-gradient(180deg, rgba(8,8,26,0.96), rgba(3,4,13,0.96));
 }
 
@@ -4356,7 +4356,7 @@ function HomeView({
       <div className="px-6 mt-5">
         <button
           onClick={onStartCreate}
-          className="interactive-card w-full bg-gradient-to-r from-[#ec4899] to-[#5d20a8] text-white py-4 rounded-full font-black shadow-xl shadow-pink-900/25 flex items-center justify-center gap-2 active:scale-95 transition"
+          className="interactive-card w-full bg-gradient-to-r from-[#ec4899] to-[#d6b36a] text-white py-4 rounded-full font-black shadow-xl shadow-pink-900/25 flex items-center justify-center gap-2 active:scale-95 transition"
         >
           <Plus size={18} strokeWidth={3} />
           新たに桜色を彩る
@@ -4493,7 +4493,7 @@ function MatchScheduleModal({ onClose, records = [] }) {
         className="w-full max-w-sm max-h-[82vh] bg-white rounded-[1.8rem] shadow-2xl overflow-hidden"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="bg-gradient-to-r from-[#2b0b63] to-[#ec4899] text-white p-5">
+        <div className="bg-gradient-to-r from-[#831843] to-[#d6b36a] text-white p-5">
           <div className="flex items-center justify-between">
             <div>
               <div className="text-[11px] font-black text-yellow-300 tracking-widest">
@@ -4707,13 +4707,13 @@ function RecordDetailView({ record, setView, backTo, onEdit, onToggleFavorite, o
 
       <section className="px-5 py-6 space-y-4">
         {/* メインカード */}
-        <div className="relative overflow-hidden rounded-[1.8rem] bg-gradient-to-br from-[#831843] via-[#ec4899] to-[#6d28d9] text-white shadow-xl shadow-pink-900/25">
+        <div className="relative overflow-hidden rounded-[1.8rem] bg-gradient-to-br from-[#831843] via-[#ec4899] to-[#d6b36a] text-white shadow-xl shadow-pink-900/25">
           <img
             src={record.img}
             alt={record.stadium}
             className="absolute inset-0 w-full h-full object-cover opacity-35"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#21054b] via-[#3b1378]/80 to-[#831843]/70"></div>
+          <div className="absolute inset-0 bg-gradient-to-t from-[#7c2d12] via-[#92400e]/80 to-[#831843]/70"></div>
 
           <div className="relative z-10 p-5">
             <div className="flex items-center justify-between mb-5">
@@ -4975,7 +4975,7 @@ function RecordDetailView({ record, setView, backTo, onEdit, onToggleFavorite, o
           <button
             type="button"
             onClick={() => setView('shareCard')}
-            className="w-full flex items-center justify-between gap-3 rounded-2xl bg-gradient-to-r from-[#ec4899] to-[#6d28d9] text-white p-4 shadow-lg shadow-pink-900/20 active:scale-[0.99]"
+            className="w-full flex items-center justify-between gap-3 rounded-2xl bg-gradient-to-r from-[#ec4899] to-[#d6b36a] text-white p-4 shadow-lg shadow-pink-900/20 active:scale-[0.99]"
           >
             <div className="flex items-center gap-3 text-left">
               <div className="w-11 h-11 rounded-2xl bg-white/15 border border-white/20 flex items-center justify-center">
@@ -5053,7 +5053,7 @@ function ShareCardView({ record, setView, backTo = 'recordDetail' }) {
           : '✦';
 
   const resultTheme = {
-    bg: 'from-[#831843]/96 via-[#ec4899]/92 to-[#1e1b4b]/96',
+    bg: 'from-[#831843]/96 via-[#ec4899]/92 to-[#92400e]/96',
     chip: 'bg-pink-200 text-[#831843] border-pink-100',
     accent: 'text-yellow-300',
     glow: 'bg-pink-300/25',
@@ -5076,8 +5076,10 @@ function ShareCardView({ record, setView, backTo = 'recordDetail' }) {
 
   const displayStadium =
     record.stadium === 'YANMAR HANASAKA STADIUM'
-      ? 'Eピース'
-      : record.stadium || 'スタジアム未設定';
+      ? 'YANMAR'
+      : record.stadium === 'エディオンピースウイング広島'
+        ? 'Eピース'
+        : record.stadium || 'スタジアム未設定';
 
   const displayMvp = selectedMvp
     ? `No.${selectedMvp.number} ${selectedMvp.name}`
@@ -5305,7 +5307,7 @@ function ShareCardView({ record, setView, backTo = 'recordDetail' }) {
       const bg = ctx.createLinearGradient(0, 0, width, height);
       bg.addColorStop(0, '#831843');
       bg.addColorStop(0.45, '#ec4899');
-      bg.addColorStop(1, '#170330');
+      bg.addColorStop(1, '#92400e');
 
       ctx.fillStyle = bg;
       ctx.fillRect(0, 0, width, height);
@@ -5562,7 +5564,7 @@ function ShareCardView({ record, setView, backTo = 'recordDetail' }) {
             className="relative overflow-hidden rounded-[2rem] min-h-[560px] text-white shadow-2xl shadow-pink-900/25 bg-[#831843]"
           >
             {/* 背景 */}
-            <div className="absolute inset-0 bg-gradient-to-br from-[#170330] via-[#ec4899] to-[#831843]"></div>
+            <div className="absolute inset-0 bg-gradient-to-br from-[#831843] via-[#ec4899] to-[#d6b36a]"></div>
 
             {/* 光 */}
             <div className="absolute -top-24 -right-24 w-64 h-64 rounded-full bg-[#d6b36a]/20 blur-3xl"></div>
@@ -6693,7 +6695,7 @@ function StatsView({ records, setView }) {
           </>
         )}
         {/* メイン統計 */}
-        <div className="relative overflow-hidden rounded-[1.8rem] bg-gradient-to-br from-[#831843] via-[#ec4899] to-[#6d28d9] text-white p-5 shadow-xl shadow-pink-900/25 mb-4">
+        <div className="relative overflow-hidden rounded-[1.8rem] bg-gradient-to-br from-[#831843] via-[#ec4899] to-[#d6b36a] text-white p-5 shadow-xl shadow-pink-900/25 mb-4">
           <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_80%_20%,rgba(250,204,21,0.2),transparent_28%)]"></div>
 
           <div className="relative z-10">
@@ -7190,7 +7192,7 @@ const profileShieldBadges = [
     label: '100',
     condition: '観戦記録を100試合保存する',
     description: 'セレッソと歩んだ歴史そのもの。',
-    bg: 'linear-gradient(135deg, #ede9fe, #be185d, #2e1065)',
+    bg: 'linear-gradient(135deg, #fce7f3, #be185d, #d6b36a)',
     text: '#ffffff',
     border: 'rgba(255,255,255,0.75)',
   },
@@ -7290,7 +7292,7 @@ function MyPageView({ records, setView, profile }) {
               setView('profileSettings');
             }
           }}
-          className="relative overflow-hidden rounded-[1.8rem] bg-gradient-to-br from-[#831843] via-[#ec4899] to-[#6d28d9] text-white p-5 shadow-xl shadow-pink-900/25 mb-5 cursor-pointer active:scale-[0.98] transition"
+          className="relative overflow-hidden rounded-[1.8rem] bg-gradient-to-br from-[#831843] via-[#ec4899] to-[#d6b36a] text-white p-5 shadow-xl shadow-pink-900/25 mb-5 cursor-pointer active:scale-[0.98] transition"
         >
           <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_85%_10%,rgba(250,204,21,0.22),transparent_28%)]"></div>
           <div className="pointer-events-none absolute -right-10 -bottom-12 w-36 h-36 rounded-full border border-white/10"></div>
@@ -7549,13 +7551,13 @@ function MyPageView({ records, setView, profile }) {
 
 const stadiumMapPoints = [
   {
-    name: 'YANMAR HANASAKA STADIUM',
+    name: 'エディオンピースウイング広島',
     short: 'Eピース',
     area: '広島',
-    x: 27,
-    y: 63,
+    x: 25,
+    y: 65,
     lx: 22,
-    ly: 58,
+    ly: 60,
   },
   {
     name: 'JFE晴れの国スタジアム',
@@ -8292,7 +8294,7 @@ function ProfileSettingsView({ profile, setView, onSaveProfile }) {
             プレビュー
           </div>
 
-          <div className="relative overflow-hidden rounded-[1.5rem] bg-gradient-to-br from-[#831843] via-[#ec4899] to-[#6d28d9] text-white p-4">
+          <div className="relative overflow-hidden rounded-[1.5rem] bg-gradient-to-br from-[#831843] via-[#ec4899] to-[#d6b36a] text-white p-4">
             <div className="flex items-center gap-3">
               <div className="w-16 h-16 rounded-2xl bg-white text-[#ec4899] flex items-center justify-center border-2 border-yellow-300/70 overflow-hidden">
                 {form.photo ? (
@@ -8361,7 +8363,7 @@ function ShieldListModal({ recordsCount, onClose }) {
         onClick={(e) => e.stopPropagation()}
         className="w-full max-w-sm bg-white rounded-[2rem] shadow-2xl overflow-hidden"
       >
-        <div className="bg-gradient-to-br from-[#831843] via-[#ec4899] to-[#6d28d9] text-white p-5">
+        <div className="bg-gradient-to-br from-[#831843] via-[#ec4899] to-[#d6b36a] text-white p-5">
           <div className="flex items-center justify-between">
             <div>
               <div className="text-xs font-black text-yellow-300 tracking-[0.2em]">
@@ -9621,8 +9623,8 @@ function TicketCollectionView({ records, setView, onOpenDetail }) {
   return (
     <div className="min-h-screen bg-[#08031d] text-white pb-24">
       <div className="relative overflow-hidden min-h-screen">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_0%,rgba(139,92,246,0.38),transparent_35%),radial-gradient(circle_at_95%_22%,rgba(214,179,106,0.18),transparent_32%),linear-gradient(180deg,#100533_0%,#070218_45%,#050111_100%)]"></div>
-        <div className="absolute inset-x-0 top-0 h-48 bg-[linear-gradient(120deg,rgba(255,255,255,0.08)_0%,transparent_38%,rgba(126,34,206,0.16)_100%)]"></div>
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_0%,rgba(236,72,153,0.34),transparent_35%),radial-gradient(circle_at_95%_22%,rgba(214,179,106,0.18),transparent_32%),linear-gradient(180deg,#831843_0%,#be185d_45%,#451a03_100%)]"></div>
+        <div className="absolute inset-x-0 top-0 h-48 bg-[linear-gradient(120deg,rgba(255,255,255,0.08)_0%,transparent_38%,rgba(214,179,106,0.18)_100%)]"></div>
 
         <div className="relative z-10 px-4 pt-5">
           <div className="flex items-center justify-between mb-5">
@@ -9820,7 +9822,7 @@ function TicketFilterButton({ active, onClick, children }) {
       type="button"
       onClick={onClick}
       className={`shrink-0 rounded-full px-5 py-2.5 text-sm font-black border active:scale-95 ${active
-        ? 'bg-gradient-to-r from-[#be185d] to-[#5b21b6] text-white border-pink-300/30 shadow-lg shadow-pink-950/30'
+        ? 'bg-gradient-to-r from-[#be185d] to-[#d6b36a] text-white border-pink-300/30 shadow-lg shadow-pink-950/30'
         : 'bg-white/7 text-white/65 border-white/10'
         }`}
     >
@@ -10252,7 +10254,7 @@ function CreateStep1({ setView, draft, updateDraft, onSaveDraft }) {
             });
             setView('quickRecord');
           }}
-          className="w-full mb-5 bg-gradient-to-r from-[#831843] via-[#ec4899] to-[#1b063d] text-white rounded-[1.5rem] p-4 border border-pink-200/20 shadow-xl shadow-pink-900/20 active:scale-[0.98]"
+          className="w-full mb-5 bg-gradient-to-r from-[#831843] via-[#ec4899] to-[#92400e] text-white rounded-[1.5rem] p-4 border border-pink-200/20 shadow-xl shadow-pink-900/20 active:scale-[0.98]"
         >
           <div className="flex items-start gap-3">
             <div className="mt-0.5 w-6 h-6 rounded-lg border-2 border-white/70 flex items-center justify-center bg-white/10">
@@ -12037,7 +12039,7 @@ function ConfirmView({ setView, draft, onSave, onSaveDraft }) {
     <CreateShell setView={setView} backTo="step3" step={4} onSaveDraft={onSaveDraft}>
       <div className="space-y-4">
         {/* 試合結果メインカード */}
-        <div className="relative overflow-hidden rounded-[1.6rem] bg-gradient-to-br from-[#831843] via-[#ec4899] to-[#6d28d9] text-white shadow-xl shadow-pink-900/25">
+        <div className="relative overflow-hidden rounded-[1.6rem] bg-gradient-to-br from-[#831843] via-[#ec4899] to-[#d6b36a] text-white shadow-xl shadow-pink-900/25">
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_15%,rgba(255,255,255,0.18),transparent_28%),radial-gradient(circle_at_85%_20%,rgba(250,204,21,0.18),transparent_25%)]"></div>
           <div className="absolute right-[-40px] bottom-[-60px] w-40 h-40 border border-white/10 rounded-full"></div>
 
