@@ -171,7 +171,7 @@ const matchSchedule = [
     day: '水',
     time: '19:00',
     opponent: '名古屋グランパス',
-    stadium: '豊田スタジアム',
+    stadium: 'パロマ瑞穂スタジアム',
     venueType: 'AWAY',
   },
   {
@@ -271,7 +271,7 @@ const matchSchedule = [
     day: '土日',
     time: '未定',
     opponent: 'ガンバ大阪',
-    stadium: '未定',
+    stadium: 'YANMAR HANASAKA STADIUM',
     venueType: 'HOME',
   },
   {
@@ -444,7 +444,7 @@ const hundredYearSchedule = [
     day: '金',
     time: '16:00',
     opponent: 'ガンバ大阪',
-    stadium: 'ヤンマースタジアム長居',
+    stadium: 'YANMAR HANASAKA STADIUM',
     venueType: 'HOME',
   },
   {
@@ -524,7 +524,7 @@ const hundredYearSchedule = [
     day: '金',
     time: '15:00',
     opponent: '名古屋グランパス',
-    stadium: '豊田スタジアム',
+    stadium: 'パロマ瑞穂スタジアム',
     venueType: 'AWAY',
   },
   {
@@ -818,12 +818,6 @@ const stadiumImages = {
   'PEACE STADIUM Connected by SoftBank':
     'https://upload.wikimedia.org/wikipedia/commons/thumb/1/1e/PEACE-STADIUM-Connected-by-SoftBank_6-Oct-2024.jpg/1280px-PEACE-STADIUM-Connected-by-SoftBank_6-Oct-2024.jpg',
 
-  'YANMAR HANASAKA STADIUM':
-    'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e8/NagaiBallField220226.jpg/1280px-NagaiBallField220226.jpg',
-  'ヤンマースタジアム長居':
-    'https://upload.wikimedia.org/wikipedia/commons/thumb/7/72/Nagai_Stadium.JPG/1280px-Nagai_Stadium.JPG',
-  '豊田スタジアム':
-    'https://upload.wikimedia.org/wikipedia/commons/thumb/4/42/Nagoya_Grampus_game_in_Toyota_Stadium_100814.JPG/1280px-Nagoya_Grampus_game_in_Toyota_Stadium_100814.JPG',
   'MUFGスタジアム':
     'https://images.unsplash.com/photo-1522778119026-d647f0596c20?auto=format&fit=crop&w=600&q=80',
   '未定':
@@ -1581,7 +1575,7 @@ function BrandHeader({ back, setView = () => { }, records }) {
   };
 
   return (
-    <header className="relative h-[85px] bg-[#831843] text-white z-[60] shadow-lg shadow-pink-900/30 overflow-visible border-b-[3px] border-[#60a5fa]/60">
+    <header className="relative h-[85px] bg-[#831843] text-white z-[60] shadow-lg shadow-pink-900/30 overflow-visible border-b-[3px] border-[#d6b36a]/60">
       {/* 背景グラデーション */}
       <div className="absolute inset-0 bg-gradient-to-r from-[#be185d] via-[#831843] to-[#1e1b4b]"></div>
 
@@ -1590,17 +1584,17 @@ function BrandHeader({ back, setView = () => { }, records }) {
 
       {/* 左の斜め装飾：薄め */}
       <div className="absolute -left-12 top-0 h-full w-20 skew-x-[-28deg] bg-white/8"></div>
-      <div className="absolute left-4 top-0 h-full w-1.5 skew-x-[-28deg] bg-[#60a5fa]/28"></div>
+      <div className="absolute left-4 top-0 h-full w-1.5 skew-x-[-28deg] bg-[#d6b36a]/28"></div>
       <div className="absolute left-10 top-0 h-full w-14 skew-x-[-28deg] bg-pink-300/8"></div>
 
       {/* 右の斜め装飾：薄め */}
       <div className="absolute -right-10 top-0 h-full w-24 skew-x-[-30deg] bg-pink-300/8"></div>
-      <div className="absolute right-8 top-0 h-full w-1.5 skew-x-[-30deg] bg-[#60a5fa]/28"></div>
+      <div className="absolute right-8 top-0 h-full w-1.5 skew-x-[-30deg] bg-[#d6b36a]/28"></div>
       <div className="absolute right-16 top-0 h-full w-px skew-x-[-30deg] bg-white/12"></div>
 
       {/* 下の金ライン */}
-      <div className="absolute left-0 right-0 bottom-0 h-[3px] bg-gradient-to-r from-pink-500 via-[#60a5fa] to-pink-600"></div>
-      <div className="absolute left-1/2 bottom-[-5px] h-4 w-24 -translate-x-1/2 rounded-full bg-[#60a5fa]/20 blur-xl"></div>
+      <div className="absolute left-0 right-0 bottom-0 h-[3px] bg-gradient-to-r from-pink-500 via-[#d6b36a] to-pink-600"></div>
+      <div className="absolute left-1/2 bottom-[-5px] h-4 w-24 -translate-x-1/2 rounded-full bg-[#d6b36a]/20 blur-xl"></div>
 
       <div className="relative z-10 h-full px-5 flex items-center">
         {back && (
@@ -1622,7 +1616,7 @@ function BrandHeader({ back, setView = () => { }, records }) {
               </span>
 
               <span
-                className="text-[25px] italic font-black tracking-[-0.08em] text-[#60a5fa] drop-shadow-[0_4px_10px_rgba(0,0,0,0.35)]"
+                className="text-[25px] italic font-black tracking-[-0.08em] text-[#d6b36a] drop-shadow-[0_4px_10px_rgba(0,0,0,0.35)]"
                 style={{ fontFamily: "'Brush Script MT', 'Segoe Script', cursive" }}
               >
                 log
@@ -1630,9 +1624,9 @@ function BrandHeader({ back, setView = () => { }, records }) {
             </div>
 
             <div className="mt-1 flex items-center gap-2">
-              <div className="h-px w-16 bg-[#60a5fa]/70"></div>
-              <div className="text-[#60a5fa] text-[10px] leading-none">✦</div>
-              <div className="h-px w-16 bg-[#60a5fa]/70"></div>
+              <div className="h-px w-16 bg-[#d6b36a]/70"></div>
+              <div className="text-[#d6b36a] text-[10px] leading-none">✦</div>
+              <div className="h-px w-16 bg-[#d6b36a]/70"></div>
             </div>
 
             <div className="mt-1 text-[7px] font-bold tracking-[0.24em] text-white/80 whitespace-nowrap">
@@ -1651,7 +1645,7 @@ function BrandHeader({ back, setView = () => { }, records }) {
               className="relative w-8 h-8 rounded-full bg-white/8 border border-white/15 flex items-center justify-center active:scale-95"
             >
               <Bell size={20} strokeWidth={2.1} />
-              <span className="absolute top-1 right-1 w-1.5 h-1.5 rounded-full bg-[#60a5fa]"></span>
+              <span className="absolute top-1 right-1 w-1.5 h-1.5 rounded-full bg-[#d6b36a]"></span>
             </button>
 
             <div className="h-8 w-px bg-white/30"></div>
@@ -1940,8 +1934,8 @@ const stadiumExploreData = [
   },
   {
     name: 'パロマ瑞穂スタジアム',
-    short: '豊田',
-    prefecture: '愛知県豊田市',
+    short: '瑞穂',
+    prefecture: '愛知県名古屋市',
     x: 48,
     y: 62,
     type: 'away',
@@ -1994,14 +1988,13 @@ const stadiumExploreData = [
     league: 'J1',
   },
   {
-    name: 'YANMAR HANASAKA STADIUM',
+    name: 'エディオンピースウイング広島',
     short: 'Eピース',
     prefecture: '広島県広島市',
     x: 25,
     y: 65,
-    type: 'home',
+    type: 'away',
     league: 'J1',
-    featured: true,
   },
   {
     name: 'ベスト電器スタジアム',
@@ -2050,11 +2043,11 @@ const getMemoryResult = (record) => {
 
   const data = record.draftData || {};
 
-  const sanfreScore = Number(data.homeScore ?? 0);
+  const cerezoScore = Number(data.homeScore ?? 0);
   const opponentScore = Number(data.awayScore ?? 0);
 
-  if (sanfreScore > opponentScore) return 'win';
-  if (sanfreScore === opponentScore) return 'draw';
+  if (cerezoScore > opponentScore) return 'win';
+  if (cerezoScore === opponentScore) return 'draw';
   return 'lose';
 };
 
@@ -2182,10 +2175,16 @@ function StadiumExploreView({ records, setView }) {
   const latestRecordedStadium =
     decoratedStadiums.find((stadium) => stadium.name === latestRecordedStadiumName) || null;
 
-  const selected =
+  const selectedCandidate =
     decoratedStadiums.find((stadium) => stadium.name === selectedStadium?.name) ||
     latestRecordedStadium ||
     recommendStadium;
+
+  const selected =
+    filteredStadiums.find((stadium) => stadium.name === selectedCandidate?.name) ||
+    filteredStadiums[0] ||
+    selectedCandidate ||
+    decoratedStadiums[0];
 
 
   const selectedMemories = selected?.memories || [];
@@ -3434,7 +3433,7 @@ function ExploreStyleHelper() {
 }
 
 .explore-node.result-win .explore-node-core {
-  background: linear-gradient(135deg, #ec4899, #60a5fa);
+  background: linear-gradient(135deg, #ec4899, #d6b36a);
   box-shadow:
     0 0 18px rgba(236,72,153,0.95),
     0 0 26px rgba(214,179,106,0.7);
@@ -4159,7 +4158,7 @@ function HomeView({
 
   return (
     <div>
-      <section className="relative bg-[#381078] text-white overflow-visible">
+      <section className="relative bg-[#9d174d] text-white overflow-visible">
         <BrandHeader setView={setView} records={records} />
 
         {/* メインビジュアル */}
@@ -4170,7 +4169,7 @@ function HomeView({
             alt="stadium"
           />
 
-          <div className="absolute inset-0 bg-gradient-to-b from-[#26095a]/40 via-[#3b1378]/65 to-[#3b1378]/95"></div>
+          <div className="absolute inset-0 bg-gradient-to-b from-[#831843]/30 via-[#be185d]/68 to-[#9d174d]/95"></div>
           <div className="absolute inset-0 bg-[linear-gradient(120deg,rgba(255,255,255,0.08)_0%,transparent_35%,transparent_65%,rgba(250,204,21,0.12)_100%)]"></div>
 
           <div className="absolute left-5 right-5 top-8">
@@ -4759,7 +4758,7 @@ function RecordDetailView({ record, setView, backTo, onEdit, onToggleFavorite, o
                     {awayScore}
                   </div>
 
-                  <div className="mt-2 text-[10px] font-black text-[#60a5fa] tracking-[0.32em]">
+                  <div className="mt-2 text-[10px] font-black text-[#d6b36a] tracking-[0.32em]">
                     FULL TIME
                   </div>
 
@@ -5313,7 +5312,7 @@ function ShareCardView({ record, setView, backTo = 'recordDetail' }) {
 
       // 光の装飾
       ctx.globalAlpha = 0.22;
-      ctx.fillStyle = '#60a5fa';
+      ctx.fillStyle = '#d6b36a';
       ctx.beginPath();
       ctx.arc(930, 140, 210, 0, Math.PI * 2);
       ctx.fill();
@@ -5566,13 +5565,13 @@ function ShareCardView({ record, setView, backTo = 'recordDetail' }) {
             <div className="absolute inset-0 bg-gradient-to-br from-[#170330] via-[#ec4899] to-[#831843]"></div>
 
             {/* 光 */}
-            <div className="absolute -top-24 -right-24 w-64 h-64 rounded-full bg-[#60a5fa]/20 blur-3xl"></div>
+            <div className="absolute -top-24 -right-24 w-64 h-64 rounded-full bg-[#d6b36a]/20 blur-3xl"></div>
             <div className="absolute -bottom-28 -left-24 w-72 h-72 rounded-full bg-pink-300/20 blur-3xl"></div>
 
             {/* 斜め装飾 */}
             <div className="absolute -right-16 top-0 h-full w-28 rotate-[14deg] bg-white/8"></div>
-            <div className="absolute -right-2 top-0 h-full w-2 rotate-[14deg] bg-[#60a5fa]/70"></div>
-            <div className="absolute left-0 top-0 h-full w-2 bg-[#60a5fa]"></div>
+            <div className="absolute -right-2 top-0 h-full w-2 rotate-[14deg] bg-[#d6b36a]/70"></div>
+            <div className="absolute left-0 top-0 h-full w-2 bg-[#d6b36a]"></div>
 
             {/* うっすら大文字 */}
             <div className="absolute -bottom-5 right-3 text-[74px] font-black tracking-[-0.08em] text-white/5 leading-none">
@@ -5583,7 +5582,7 @@ function ShareCardView({ record, setView, backTo = 'recordDetail' }) {
               {/* 上部 */}
               <div className="flex items-start justify-between gap-3">
                 <div>
-                  <div className="text-[10px] font-black tracking-[0.32em] text-[#60a5fa]">
+                  <div className="text-[10px] font-black tracking-[0.32em] text-[#d6b36a]">
                     MATCHDAY MEMORY
                   </div>
 
@@ -5591,10 +5590,10 @@ function ShareCardView({ record, setView, backTo = 'recordDetail' }) {
                     CEREZO LOG
                   </div>
 
-                  <div className="mt-1 h-[2px] w-20 bg-[#60a5fa] rounded-full"></div>
+                  <div className="mt-1 h-[2px] w-20 bg-[#d6b36a] rounded-full"></div>
                 </div>
 
-                <div className="rounded-full bg-[#60a5fa] text-[#831843] px-3 py-1 text-[11px] font-black border border-white/30 shadow-lg">
+                <div className="rounded-full bg-[#d6b36a] text-[#831843] px-3 py-1 text-[11px] font-black border border-white/30 shadow-lg">
                   {resultLabel} {resultSymbol}
                 </div>
               </div>
@@ -5628,7 +5627,7 @@ function ShareCardView({ record, setView, backTo = 'recordDetail' }) {
                       {awayScore}
                     </div>
 
-                    <div className="mt-2 text-[10px] font-black text-[#60a5fa] tracking-[0.32em]">
+                    <div className="mt-2 text-[10px] font-black text-[#d6b36a] tracking-[0.32em]">
                       FULL TIME
                     </div>
                   </div>
@@ -5656,7 +5655,7 @@ function ShareCardView({ record, setView, backTo = 'recordDetail' }) {
               {/* 詳細情報 */}
               <div className="mt-5 grid gap-3">
                 <div className="rounded-2xl bg-white/10 border border-white/15 px-4 py-3">
-                  <div className="text-[10px] font-black text-[#60a5fa] tracking-[0.22em] mb-1">
+                  <div className="text-[10px] font-black text-[#d6b36a] tracking-[0.22em] mb-1">
                     STADIUM
                   </div>
                   <div className="text-[15px] font-black leading-snug">
@@ -5665,7 +5664,7 @@ function ShareCardView({ record, setView, backTo = 'recordDetail' }) {
                 </div>
 
                 <div className="rounded-2xl bg-white/10 border border-white/15 px-4 py-3">
-                  <div className="text-[10px] font-black text-[#60a5fa] tracking-[0.22em] mb-1">
+                  <div className="text-[10px] font-black text-[#d6b36a] tracking-[0.22em] mb-1">
                     MY MVP
                   </div>
                   <div className="text-[15px] font-black leading-snug">
@@ -5675,7 +5674,7 @@ function ShareCardView({ record, setView, backTo = 'recordDetail' }) {
 
                 {data.memo ? (
                   <div className="rounded-2xl bg-white/10 border border-white/15 px-4 py-3">
-                    <div className="text-[10px] font-black text-[#60a5fa] tracking-[0.22em] mb-1">
+                    <div className="text-[10px] font-black text-[#d6b36a] tracking-[0.22em] mb-1">
                       MEMORY
                     </div>
                     <div className="text-sm font-bold leading-6 text-white/90">
@@ -5692,7 +5691,7 @@ function ShareCardView({ record, setView, backTo = 'recordDetail' }) {
                   <div className="text-[10px] font-black text-white/45 tracking-[0.25em]">
                     CAPTURE EVERY MATCH MEMORY
                   </div>
-                  <div className="text-[13px] font-black text-[#60a5fa] mt-1">
+                  <div className="text-[13px] font-black text-[#d6b36a] mt-1">
                     CEREZO OSAKA
                   </div>
                 </div>
@@ -6931,8 +6930,8 @@ function VenueCompareGraph({ homeSummary, awaySummary }) {
           label="AWAY"
           summary={awaySummary}
           maxGames={maxGames}
-          barClass="bg-[#60a5fa]"
-          badgeClass="bg-[#efe0b4] text-[#7a5519] border border-[#60a5fa]/40"
+          barClass="bg-[#d6b36a]"
+          badgeClass="bg-[#efe0b4] text-[#7a5519] border border-[#d6b36a]/40"
         />
       </div>
     </Card>
@@ -7180,7 +7179,7 @@ const profileShieldBadges = [
     label: '50',
     condition: '観戦記録を50試合保存する',
     description: '桜色の記憶を積み重ねた本格サポーターの証。',
-    bg: 'linear-gradient(135deg, #fef3c7, #60a5fa, #92400e)',
+    bg: 'linear-gradient(135deg, #fef3c7, #d6b36a, #92400e)',
     text: '#fff7ed',
     border: 'rgba(255,255,255,0.7)',
   },
@@ -7589,7 +7588,7 @@ const stadiumMapPoints = [
 
   {
     name: 'YANMAR HANASAKA STADIUM',
-    short: 'ヤンマー',
+    short: 'YANMAR',
     area: '大阪',
     x: 37,
     y: 64,
@@ -7607,7 +7606,7 @@ const stadiumMapPoints = [
   },
   {
     name: 'パロマ瑞穂スタジアム',
-    short: '豊田',
+    short: '瑞穂',
     area: '愛知',
     x: 46,
     y: 61,
@@ -9033,7 +9032,7 @@ const getBadgeStats = (records) => {
 
   const home = records.filter((record) => {
     const data = record.draftData || {};
-    return data.venueType === 'HOME' || record.stadium?.includes('エディオン');
+    return data.venueType === 'HOME' || record.stadium === cerezoTeam.stadium || record.stadium?.includes('YANMAR HANASAKA');
   }).length;
 
   const away = records.filter((record) => {
@@ -9513,7 +9512,7 @@ const getTicketScoreData = (record) => {
   const data = record.draftData || {};
   const scoreMatch = record.score?.match(/(\d+)\s*-\s*(\d+)/);
 
-  const sanfreScore = data.homeScore !== undefined && data.homeScore !== ''
+  const cerezoScore = data.homeScore !== undefined && data.homeScore !== ''
     ? Number(data.homeScore)
     : Number(scoreMatch?.[1] || 0);
 
@@ -9521,13 +9520,13 @@ const getTicketScoreData = (record) => {
     ? Number(data.awayScore)
     : Number(scoreMatch?.[2] || 0);
 
-  const result = sanfreScore > opponentScore
+  const result = cerezoScore > opponentScore
     ? 'WIN'
-    : sanfreScore === opponentScore
+    : cerezoScore === opponentScore
       ? 'DRAW'
       : 'LOSE';
 
-  return { sanfreScore, opponentScore, result };
+  return { cerezoScore, opponentScore, result };
 };
 
 const getTicketOpponent = (record) => {
@@ -9562,7 +9561,7 @@ const getTicketMatchMeta = (record) => {
         : 'J1リーグ';
 
   const section = data.matchSection || scheduleMatch?.section || '';
-  const venueType = data.venueType || scheduleMatch?.venueType || (record.stadium?.includes('エディオン') ? 'HOME' : 'AWAY');
+  const venueType = data.venueType || scheduleMatch?.venueType || ((record.stadium === cerezoTeam.stadium || record.stadium?.includes('YANMAR HANASAKA')) ? 'HOME' : 'AWAY');
   const date = data.date ? data.date.replaceAll('-', '.') : record.date || '';
   const time = scheduleMatch?.time && scheduleMatch.time !== '未定' ? `${scheduleMatch.time} KICK OFF` : '';
   const stadium = data.stadium || record.stadium || scheduleMatch?.stadium || '';
@@ -9584,7 +9583,7 @@ const getTicketMatchMeta = (record) => {
 
 const getTicketRareBadges = (record) => {
   const data = record.draftData || {};
-  const { result, sanfreScore } = getTicketScoreData(record);
+  const { result, cerezoScore } = getTicketScoreData(record);
   const tags = data.tags || (record.tag ? [record.tag] : []);
   const badges = [];
 
@@ -9592,7 +9591,7 @@ const getTicketRareBadges = (record) => {
   if (tags.some((tag) => String(tag).includes('逆転'))) badges.push('劇的逆転勝利');
   if (tags.some((tag) => String(tag).includes('ダービー'))) badges.push('ダービー');
   if (data.weather && String(data.weather).includes('雨')) badges.push('雨の観戦');
-  if (result === 'WIN' && sanfreScore >= 4) badges.push('ゴールラッシュ');
+  if (result === 'WIN' && cerezoScore >= 4) badges.push('ゴールラッシュ');
   if ((data.photos || []).length >= 3) badges.push('フォトメモリー');
   if (moneyToNumber(data.expenses?.ticket) + moneyToNumber(data.expenses?.goods) + moneyToNumber(data.expenses?.food) + moneyToNumber(data.expenses?.transport) + moneyToNumber(data.expenses?.other) >= 20000) badges.push('豪遊遠征');
 
@@ -9893,7 +9892,7 @@ function TicketStadiumIllustration({ away = false }) {
 function MemoryTicketCard({ record, onOpenDetail }) {
   const meta = getTicketMatchMeta(record);
   const opponent = meta.opponent;
-  const { sanfreScore, opponentScore, result } = getTicketScoreData(record);
+  const { cerezoScore, opponentScore, result } = getTicketScoreData(record);
   const data = record.draftData || {};
   const rareBadges = getTicketRareBadges(record);
 
@@ -9901,7 +9900,7 @@ function MemoryTicketCard({ record, onOpenDetail }) {
   const stadiumImage = getStadiumImage(meta.stadium);
 
   const mainColor = meta.venueType === 'HOME' ? cerezoTeam.main : opponent.main;
-  const accentColor = rareBadges.length ? '#60a5fa' : (opponent.main || '#be185d');
+  const accentColor = rareBadges.length ? '#d6b36a' : (opponent.main || '#be185d');
 
   return (
     <button
@@ -9959,7 +9958,7 @@ function MemoryTicketCard({ record, onOpenDetail }) {
         </div>
 
         <TicketStub
-          score={`${sanfreScore} - ${opponentScore}`}
+          score={`${cerezoScore} - ${opponentScore}`}
           result={result}
           mvp={data.mvp || '未設定'}
           rating={data.rating || 0}
@@ -12032,7 +12031,7 @@ function ConfirmView({ setView, draft, onSave, onSaveDraft }) {
     playerOptions.find((player) => player.name === draft.mvp) ||
     playerOptions[0];
 
-  const hasSanfrecceGoal = Number(draft.homeScore || 0) > 0;
+  const hasCerezoGoal = Number(draft.homeScore || 0) > 0;
 
   return (
     <CreateShell setView={setView} backTo="step3" step={4} onSaveDraft={onSaveDraft}>
@@ -12099,7 +12098,7 @@ function ConfirmView({ setView, draft, onSave, onSaveDraft }) {
             </div>
           </div>
         </div>
-        {hasSanfrecceGoal && (
+        {hasCerezoGoal && (
           <Card>
             <div className="flex items-center gap-2 text-[#ec4899] font-black mb-4">
               <Trophy size={18} />
